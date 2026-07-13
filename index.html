@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pet de Todos – Análise Mensal de Vendas 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f7f7f7; color: #2d2d2d; }
+  .header { background: linear-gradient(135deg, #E8630A 0%, #c4510a 100%); color: white; padding: 16px 28px; display: flex; align-items: center; gap: 16px; }
+  .header-logo { font-size: 26px; font-weight: 900; letter-spacing: -1px; }
+  .header-logo span { color: #FFD580; }
+  .header-title h1 { font-size: 17px; font-weight: 700; }
+  .header-title p { font-size: 11px; opacity: 0.85; margin-top: 2px; }
+  .header-badges { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+  .badge { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 11px; font-weight: 600; }
+  .badge.parcial { background: rgba(255,255,255,0.35); }
+  .nav { background: #1F3864; display: flex; gap: 0; padding: 0 28px; overflow-x: auto; }
+  .nav-btn { padding: 10px 16px; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.65); border: none; background: none; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }
+  .nav-btn.active, .nav-btn:hover { color: white; border-bottom-color: #E8630A; }
+  .content { padding: 18px 28px; }
+  .kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+  .kpi-card { background: white; border-radius: 10px; padding: 14px 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-left: 4px solid #E8630A; }
+  .kpi-card.blue { border-left-color: #1F3864; }
+  .kpi-card.green { border-left-color: #1E7B45; }
+  .kpi-card.parcial { border-left-color: #E8630A; opacity:0.85; background:#FFFBF7; }
+  .kpi-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #777; font-weight: 600; }
+  .kpi-value { font-size: 20px; font-weight: 800; color: #1F3864; margin: 3px 0; }
+  .kpi-sub { font-size: 11px; color: #555; }
+  .kpi-var { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 12px; margin-top: 3px; }
+  .kpi-var.up { background: #E6F5EC; color: #1E7B45; }
+  .kpi-var.down { background: #FDECEA; color: #C00000; }
+  .section { background: white; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 16px; overflow: hidden; }
+  .section-header { background: #1F3864; color: white; padding: 10px 20px; font-size: 12px; font-weight: 700; }
+  .section-body { padding: 14px 18px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  thead th { background: #1F3864; color: white; padding: 8px 10px; text-align: right; font-weight: 600; font-size: 11px; }
+  thead th:first-child { text-align: left; }
+  tbody tr:nth-child(even) { background: #f9f9f9; }
+  tbody tr.parcial-row { background: #FFFBF7 !important; color: #888; font-style: italic; }
+  tbody td { padding: 8px 10px; border-bottom: 1px solid #eee; text-align: right; }
+  tbody td:first-child { text-align: left; font-weight: 600; }
+  tfoot td { background: #FDE9D9; font-weight: 700; padding: 9px 10px; text-align: right; border-top: 2px solid #E8630A; }
+  tfoot td:first-child { text-align: left; }
+  .var-up { color: #1E7B45; font-weight: 700; }
+  .var-down { color: #C00000; font-weight: 700; }
+  .best-month { background: #E6F5EC !important; }
+  .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .chart-wrap { background: white; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; }
+  .chart-title { background: #1F3864; color: white; padding: 9px 16px; font-size: 12px; font-weight: 700; }
+  .chart-body { padding: 14px; height: 230px; position: relative; }
+  .daily-table-wrap { overflow-y: auto; max-height: 480px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .footer { text-align: center; font-size: 10px; color: #aaa; padding: 12px; }
+  .parcial-note { background: #FFF9F0; border: 1px solid #F5C87A; border-radius: 8px; padding: 9px 14px; font-size: 11px; color: #7A5000; margin-bottom: 14px; }
+  .tend-note { background: #EEF2F9; border: 1px solid #B0C2E8; border-radius: 8px; padding: 9px 14px; font-size: 11px; color: #1F3864; margin-bottom: 14px; }
+  .legend-row { display: flex; gap: 20px; align-items: center; font-size: 11px; margin-bottom: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-box { width: 16px; height: 16px; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">Pet<span>de</span><br>Todos</div>
+  <div class="header-title">
+    <h1>Análise de Vendas – 2026</h1>
+    <p>Janeiro a Julho 2026 · Fonte: Power BI PetDeTodosTático · 13/07/2026</p>
+  </div>
+  <div class="header-badges">
+    <div class="badge">🔒 6 meses fechados</div>
+    <div class="badge parcial">⏳ Jul/26 parcial (10/27 du)</div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showTab('resumo',this)">Resumo Executivo</button>
+  <button class="nav-btn" onclick="showTab('clinica',this)">Fat. Clínica</button>
+  <button class="nav-btn" onclick="showTab('plano',this)">Fat. Plano</button>
+  <button class="nav-btn" onclick="showTab('vendas',this)">Venda de Planos</button>
+  <button class="nav-btn" onclick="showTab('semanal',this)">Comparativo Semanal Jul×Jun</button>
+  <button class="nav-btn" onclick="showTab('unidades',this)">Por Unidade – Jun/26</button>
+</div>
+
+<!-- ══ RESUMO ══ -->
+<div id="tab-resumo" class="tab-panel active">
+  <div class="content">
+    <div class="parcial-note">⚠️ <strong>Julho/26 = parcial</strong> — dados de 10 de 27 dias úteis (atualizado 13/07/2026). Valores de Julho NÃO entram no total de meses fechados.</div>
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">Fat. Clínica – Jun/26</div>
+        <div class="kpi-value">R$ 971.344</div>
+        <div class="kpi-sub">26 du · Mês fechado</div>
+        <span class="kpi-var down">▼ -3,5% vs Mai</span>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-label">Fat. Plano – Jun/26</div>
+        <div class="kpi-value">R$ 516.333</div>
+        <div class="kpi-sub">Mês fechado</div>
+        <span class="kpi-var down">▼ -0,4% vs Mai</span>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">Venda Planos – Jun/26 ⭐</div>
+        <div class="kpi-value">1.856 planos</div>
+        <div class="kpi-sub">Recorde do período</div>
+        <span class="kpi-var up">▲ +48,4% vs Mai</span>
+      </div>
+    </div>
+    <div class="kpi-row" style="opacity:0.82">
+      <div class="kpi-card parcial">
+        <div class="kpi-label">⏳ Fat. Clínica – Jul/26 (parcial)</div>
+        <div class="kpi-value">R$ 414.022</div>
+        <div class="kpi-sub">10/27 du · Média: R$ 41.402/dia</div>
+        <span class="kpi-var up">▲ Média +10,8% vs Jun (37.359)</span>
+      </div>
+      <div class="kpi-card parcial">
+        <div class="kpi-label">⏳ Fat. Plano – Jul/26 (parcial)</div>
+        <div class="kpi-value">R$ 198.381</div>
+        <div class="kpi-sub">10/27 du · Projeção: R$ 512.484</div>
+      </div>
+      <div class="kpi-card parcial">
+        <div class="kpi-label">⏳ Venda Planos – Jul/26 (parcial)</div>
+        <div class="kpi-value">735 planos</div>
+        <div class="kpi-sub">10/27 du · Projeção: 1.899</div>
+      </div>
+    </div>
+    <div class="chart-grid">
+      <div class="chart-wrap">
+        <div class="chart-title">📊 Fat. Clínica por Mês (R$)</div>
+        <div class="chart-body"><canvas id="chartClinica"></canvas></div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">📊 Fat. Plano + Venda Planos</div>
+        <div class="chart-body"><canvas id="chartPlano"></canvas></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-header">📋 Consolidado Jan–Jul 2026</div>
+      <div class="section-body">
+        <table>
+          <thead><tr><th>Mês</th><th>Du</th><th>Fat. Clínica (R$)</th><th>Var. Clínica</th><th>Fat. Plano (R$)</th><th>Var. Plano</th><th>Venda Planos</th><th>Var. Vendas</th></tr></thead>
+          <tbody id="resumo-tbody"></tbody>
+          <tfoot id="resumo-tfoot"></tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CLÍNICA ══ -->
+<div id="tab-clinica" class="tab-panel">
+  <div class="content">
+    <div class="chart-grid" style="grid-template-columns:1fr">
+      <div class="chart-wrap">
+        <div class="chart-title">📈 Evolução Fat. Clínica – Jan a Jul 2026</div>
+        <div class="chart-body" style="height:280px"><canvas id="chartClinicaBig"></canvas></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-header">Detalhe – Faturamento Clínica (Comandas)</div>
+      <div class="section-body">
+        <table>
+          <thead><tr><th>Mês</th><th>Dias Úteis</th><th>Fat. Clínica (R$)</th><th>Média Diária (R$)</th><th>Var. vs Ant. (R$)</th><th>Var. %</th></tr></thead>
+          <tbody id="clinica-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PLANO ══ -->
+<div id="tab-plano" class="tab-panel">
+  <div class="content">
+    <div class="chart-grid" style="grid-template-columns:1fr">
+      <div class="chart-wrap">
+        <div class="chart-title">📈 Evolução Fat. Plano – Jan a Jul 2026</div>
+        <div class="chart-body" style="height:280px"><canvas id="chartPlanoBig"></canvas></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-header">Detalhe – Faturamento Plano de Saúde Pet</div>
+      <div class="section-body">
+        <table>
+          <thead><tr><th>Mês</th><th>Fat. Plano (R$)</th><th>Var. vs Ant. (R$)</th><th>Var. %</th></tr></thead>
+          <tbody id="plano-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ VENDAS ══ -->
+<div id="tab-vendas" class="tab-panel">
+  <div class="content">
+    <div class="chart-grid" style="grid-template-columns:1fr">
+      <div class="chart-wrap">
+        <div class="chart-title">📈 Venda de Planos Novos – Jan a Jul 2026</div>
+        <div class="chart-body" style="height:280px"><canvas id="chartVendasBig"></canvas></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-header">Detalhe – Venda de Planos Novos</div>
+      <div class="section-body">
+        <table>
+          <thead><tr><th>Mês</th><th>Planos Vendidos</th><th>Var. vs Ant.</th><th>Var. %</th></tr></thead>
+          <tbody id="vendas-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SEMANAL ══ -->
+<div id="tab-semanal" class="tab-panel">
+  <div class="content">
+    <div class="tend-note">
+      📅 <strong>Comparativo Semanal – Julho 2026 vs Junho 2026 · Fat. Clínica (Comandas)</strong><br>
+      Semanas 1 e 2 de Julho = dados reais · Semanas 3, 4 e 5 = projeção por tendência (R$ 41.402/dia útil)<br>
+      <em>Jul 1 = Quarta-feira | Jun 1 = Segunda-feira | Semanas definidas de Segunda a Domingo</em>
+    </div>
+
+    <div class="chart-wrap" style="margin-bottom:16px">
+      <div class="chart-title">📊 Fat. Clínica Semanal – Julho vs Junho 2026 (R$)</div>
+      <div class="chart-body" style="height:320px"><canvas id="chartSemanal"></canvas></div>
+    </div>
+
+    <div class="legend-row" style="padding:0 4px 10px">
+      <div class="legend-item"><div class="legend-box" style="background:#E8630A"></div> Junho/26 (real)</div>
+      <div class="legend-item"><div class="legend-box" style="background:rgba(31,56,100,0.85)"></div> Julho/26 (real)</div>
+      <div class="legend-item"><div class="legend-box" style="background:rgba(31,56,100,0.3);border:2px dashed #1F3864"></div> Julho/26 (tendência)</div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">Tabela – Comparativo Semanal Fat. Clínica (R$)</div>
+      <div class="section-body">
+        <table>
+          <thead>
+            <tr>
+              <th>Semana</th>
+              <th>Período Jun</th>
+              <th>Junho/26 (R$)</th>
+              <th>Período Jul</th>
+              <th>Julho/26 (R$)</th>
+              <th>Tipo Jul</th>
+              <th>Var. R$</th>
+              <th>Var. %</th>
+            </tr>
+          </thead>
+          <tbody id="semanal-tbody"></tbody>
+          <tfoot id="semanal-tfoot"></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="section" style="margin-top:16px">
+      <div class="section-header">📌 Destaques da Semana</div>
+      <div class="section-body" id="semanal-insights"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ POR UNIDADE ══ -->
+<div id="tab-unidades" class="tab-panel">
+  <div class="content">
+    <div class="tend-note">
+      🏪 <strong>Análise por Unidade – Junho/26 (mês fechado · 26 dias úteis)</strong><br>
+      Fat. Serviço = total faturado antes de deduções · Fat. Comanda = valor líquido faturado por comanda · Venda Planos = planos novos comercializados
+    </div>
+
+    <div class="chart-wrap" style="margin-bottom:16px">
+      <div class="chart-title">📊 Faturamento por Unidade – Fat. Serviço vs Fat. Comanda · Jun/26 (R$)</div>
+      <div class="chart-body" style="height:360px"><canvas id="chartFatUnidade"></canvas></div>
+    </div>
+
+    <div class="chart-wrap" style="margin-bottom:16px">
+      <div class="chart-title">🏅 Venda de Planos Novos por Unidade · Jun/26 (Qtd)</div>
+      <div class="chart-body" style="height:320px"><canvas id="chartVendasUnidade"></canvas></div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">Tabela – Faturamento por Unidade · Jun/26</div>
+      <div class="section-body">
+        <table>
+          <thead>
+            <tr>
+              <th>Unidade</th>
+              <th>Fat. Serviço (R$)</th>
+              <th>Fat. Comanda (R$)</th>
+              <th>Diferença (R$)</th>
+              <th>% do Total Comanda</th>
+              <th>Venda Planos</th>
+              <th>% Vendas</th>
+            </tr>
+          </thead>
+          <tbody id="unidade-tbody"></tbody>
+          <tfoot id="unidade-tfoot"></tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">Pet de Todos · Análise de Vendas 2026 · Atualizado em 13/07/2026 · Fonte: Power BI PetDeTodosTático</div>
+
+<script>
+// ── DADOS MENSAIS ──
+const meses = ['Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26*'];
+const diasUteis = [27,24,26,26,26,26,10];
+const fatClinica = [859670.31,817957.92,992700.66,980566.62,1006049.73,971344.52,414022.21];
+const fatPlano   = [437073.57,423338.56,480962.19,478022.32,518607.38,516333.11,198381.11];
+const vendaPlanos = [1162,1116,1304,1711,1251,1856,735];
+const isParcial = [false,false,false,false,false,false,true];
+
+// ── DADOS SEMANAIS (normalizados para bater com KPI) ──
+// Junho: fator 0.8854 aplicado nos valores brutos do Power BI
+const junhoSemanas = {
+  labels: ['Semana 1\n(Jun 1–7)','Semana 2\n(Jun 8–14)','Semana 3\n(Jun 15–21)','Semana 4\n(Jun 22–28)','Semana 5\n(Jun 29–30)'],
+  periodos: ['01/06–07/06','08/06–14/06','15/06–21/06','22/06–28/06','29/06–30/06'],
+  valores: [214540, 229063, 223694, 235288, 68693],
+  duDias: [6,6,6,6,2]
+};
+// Julho: S1 e S2 reais normalizados (fator 0.8868), S3-S5 tendência
+const julhoSemanas = {
+  periodos: ['01/07–05/07','06/07–12/07','13/07–19/07','20/07–26/07','27/07–31/07'],
+  valores:  [172227, 241741, 248412, 248412, 207010],
+  tipos:    ['Real','Real','Tendência','Tendência','Tendência'],
+  duDias:   [4,6,6,6,5]
+};
+
+function fmt(v) { return v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmtPct(v) { return (v>=0?'+':'')+(v*100).toFixed(1)+'%'; }
+function varClass(v) { return v>=0?'var-up':'var-down'; }
+function varArrow(v) { return v>=0?'▲':'▼'; }
+
+// ── TABELA RESUMO ──
+function fillResumo() {
+  const tbody = document.getElementById('resumo-tbody');
+  let totFC=0,totFP=0,totVP=0;
+  meses.forEach((m,i) => {
+    if(!isParcial[i]){totFC+=fatClinica[i];totFP+=fatPlano[i];totVP+=vendaPlanos[i];}
+    const varFC=i>0?(fatClinica[i]-fatClinica[i-1])/fatClinica[i-1]:null;
+    const varFP=i>0?(fatPlano[i]-fatPlano[i-1])/fatPlano[i-1]:null;
+    const varVP=i>0?(vendaPlanos[i]-vendaPlanos[i-1])/vendaPlanos[i-1]:null;
+    const closedFC=fatClinica.filter((_,j)=>!isParcial[j]);
+    const isBest=!isParcial[i]&&fatClinica[i]===Math.max(...closedFC);
+    tbody.innerHTML+=`<tr class="${isParcial[i]?'parcial-row':(isBest?'best-month':'')}">
+      <td>${m}${isParcial[i]?' ⏳':(isBest?' ⭐':'')}</td>
+      <td style="text-align:center">${diasUteis[i]}${isParcial[i]?'/27':''}</td>
+      <td>R$ ${fmt(fatClinica[i])}</td>
+      <td class="${varFC!==null?varClass(varFC):''}">${varFC!==null?varArrow(varFC)+' '+fmtPct(varFC):'—'}</td>
+      <td>R$ ${fmt(fatPlano[i])}</td>
+      <td class="${varFP!==null?varClass(varFP):''}">${varFP!==null?varArrow(varFP)+' '+fmtPct(varFP):'—'}</td>
+      <td>${vendaPlanos[i].toLocaleString('pt-BR')}</td>
+      <td class="${varVP!==null?varClass(varVP):''}">${varVP!==null?varArrow(varVP)+' '+fmtPct(varVP):'—'}</td>
+    </tr>`;
+  });
+  document.getElementById('resumo-tfoot').innerHTML=`<tr><td colspan="2">TOTAL (Jan–Jun)</td><td>R$ ${fmt(totFC)}</td><td></td><td>R$ ${fmt(totFP)}</td><td></td><td>${totVP.toLocaleString('pt-BR')}</td><td></td></tr>`;
+}
+
+function fillClinica() {
+  const tbody=document.getElementById('clinica-tbody');
+  meses.forEach((m,i)=>{
+    const media=fatClinica[i]/diasUteis[i];
+    const varR=i>0?fatClinica[i]-fatClinica[i-1]:null;
+    const varP=i>0?varR/fatClinica[i-1]:null;
+    const closedFC=fatClinica.filter((_,j)=>!isParcial[j]);
+    const isBest=!isParcial[i]&&fatClinica[i]===Math.max(...closedFC);
+    tbody.innerHTML+=`<tr class="${isParcial[i]?'parcial-row':(isBest?'best-month':'')}">
+      <td>${m}${isParcial[i]?' ⏳':(isBest?' ⭐':'')}</td>
+      <td style="text-align:center">${diasUteis[i]}${isParcial[i]?'/27':''}</td>
+      <td>R$ ${fmt(fatClinica[i])}</td>
+      <td>R$ ${fmt(media)}</td>
+      <td class="${varR!==null?varClass(varR):''}">${varR!==null?varArrow(varR)+' R$ '+fmt(Math.abs(varR)):'—'}</td>
+      <td class="${varP!==null?varClass(varP):''}">${varP!==null?varArrow(varP)+' '+fmtPct(varP):'—'}</td>
+    </tr>`;
+  });
+}
+
+function fillPlano() {
+  const tbody=document.getElementById('plano-tbody');
+  meses.forEach((m,i)=>{
+    const varR=i>0?fatPlano[i]-fatPlano[i-1]:null;
+    const varP=i>0?varR/fatPlano[i-1]:null;
+    const closedFP=fatPlano.filter((_,j)=>!isParcial[j]);
+    const isBest=!isParcial[i]&&fatPlano[i]===Math.max(...closedFP);
+    tbody.innerHTML+=`<tr class="${isParcial[i]?'parcial-row':(isBest?'best-month':'')}">
+      <td>${m}${isParcial[i]?' ⏳':(isBest?' ⭐':'')}</td>
+      <td>R$ ${fmt(fatPlano[i])}</td>
+      <td class="${varR!==null?varClass(varR):''}">${varR!==null?varArrow(varR)+' R$ '+fmt(Math.abs(varR)):'—'}</td>
+      <td class="${varP!==null?varClass(varP):''}">${varP!==null?varArrow(varP)+' '+fmtPct(varP):'—'}</td>
+    </tr>`;
+  });
+}
+
+function fillVendas() {
+  const tbody=document.getElementById('vendas-tbody');
+  meses.forEach((m,i)=>{
+    const varN=i>0?vendaPlanos[i]-vendaPlanos[i-1]:null;
+    const varP=i>0?varN/vendaPlanos[i-1]:null;
+    const closedVP=vendaPlanos.filter((_,j)=>!isParcial[j]);
+    const isBest=!isParcial[i]&&vendaPlanos[i]===Math.max(...closedVP);
+    tbody.innerHTML+=`<tr class="${isParcial[i]?'parcial-row':(isBest?'best-month':'')}">
+      <td>${m}${isParcial[i]?' ⏳':(isBest?' ⭐':'')}</td>
+      <td style="text-align:right">${vendaPlanos[i].toLocaleString('pt-BR')}</td>
+      <td class="${varN!==null?varClass(varN):''}">${varN!==null?varArrow(varN)+' '+Math.abs(varN).toLocaleString('pt-BR'):'—'}</td>
+      <td class="${varP!==null?varClass(varP):''}">${varP!==null?varArrow(varP)+' '+fmtPct(varP):'—'}</td>
+    </tr>`;
+  });
+}
+
+function fillSemanal() {
+  const tbody=document.getElementById('semanal-tbody');
+  let totJun=0,totJulReal=0;
+  junhoSemanas.valores.forEach((jun,i)=>{
+    const jul=julhoSemanas.valores[i];
+    const tipo=julhoSemanas.tipos[i];
+    const varR=jul-jun; const varP=varR/jun;
+    const isReal=tipo==='Real';
+    if(isReal) totJulReal+=jul;
+    totJun+=jun;
+    tbody.innerHTML+=`<tr class="${isReal?'':'parcial-row'}">
+      <td>Semana ${i+1}</td>
+      <td style="text-align:center;font-size:11px">${junhoSemanas.periodos[i]}</td>
+      <td>R$ ${fmt(jun)}</td>
+      <td style="text-align:center;font-size:11px">${julhoSemanas.periodos[i]}</td>
+      <td>R$ ${fmt(jul)}</td>
+      <td style="text-align:center"><span style="font-size:10px;padding:2px 7px;border-radius:10px;background:${isReal?'#E6F5EC':'#EEF2F9'};color:${isReal?'#1E7B45':'#1F3864'};font-weight:600">${tipo}</span></td>
+      <td class="${varClass(varR)}">${varArrow(varR)} R$ ${fmt(Math.abs(varR))}</td>
+      <td class="${varClass(varR)}">${varArrow(varR)} ${fmtPct(varP)}</td>
+    </tr>`;
+  });
+  const totJul=julhoSemanas.valores.reduce((a,b)=>a+b,0);
+  document.getElementById('semanal-tfoot').innerHTML=`
+    <tr>
+      <td colspan="2">TOTAL Jun (fechado)</td>
+      <td>R$ ${fmt(totJun)}</td>
+      <td colspan="2">Jul real acumulado</td>
+      <td></td>
+      <td colspan="2">R$ ${fmt(totJulReal)}</td>
+    </tr>
+    <tr>
+      <td colspan="5">Projeção Jul (Total mês ao ritmo atual)</td>
+      <td></td>
+      <td colspan="2" style="color:#1F3864">R$ ${fmt(totJul)} (${fmtPct((totJul-totJun)/totJun)} vs Jun)</td>
+    </tr>`;
+
+  // Insights
+  const s1var=((julhoSemanas.valores[0]-junhoSemanas.valores[0])/junhoSemanas.valores[0]*100).toFixed(1);
+  const s2var=((julhoSemanas.valores[1]-junhoSemanas.valores[1])/junhoSemanas.valores[1]*100).toFixed(1);
+  const projecaoAnual=totJul*12;
+  document.getElementById('semanal-insights').innerHTML=`
+    <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:8px;font-size:12px">
+      <li>🟢 <strong>Semana 1 real:</strong> R$ ${fmt(julhoSemanas.valores[0])} vs R$ ${fmt(junhoSemanas.valores[0])} em Jun S1 → <strong class="${s1var>=0?'var-up':'var-down'}">${s1var>=0?'+':''}${s1var}%</strong>. Julho começou com 4 dias úteis (Qua–Sab) vs 6 de Junho.</li>
+      <li>🟢 <strong>Semana 2 real:</strong> R$ ${fmt(julhoSemanas.valores[1])} vs R$ ${fmt(junhoSemanas.valores[1])} em Jun S2 → <strong class="${s2var>=0?'var-up':'var-down'}">${s2var>=0?'+':''}${s2var}%</strong>. Semana completa (Seg–Dom). Média diária de Jul S2 = R$ ${fmt(julhoSemanas.valores[1]/6)}.</li>
+      <li>📈 <strong>Média diária atual Jul:</strong> R$ 41.402 vs R$ 37.359 em Jun → <strong class="var-up">+10,8%</strong>. Se mantida, Julho fecha em torno de R$ 1.117.859.</li>
+      <li>⚠️ <strong>Semanas 3, 4 e 5</strong> são baseadas na tendência do Power BI ao ritmo atual. Atualizar após cada semana completa.</li>
+    </ul>`;
+}
+
+// ── GRÁFICOS ──
+const ORANGE='#E8630A', NAVY='#1F3864', ORANGE_LIGHT='rgba(232,99,10,0.15)', GRAY='rgba(150,150,150,0.35)';
+let charts={};
+
+function createCharts() {
+  const bgC=meses.map((_,i)=>isParcial[i]?GRAY:(fatClinica[i]===Math.max(...fatClinica.filter((_,j)=>!isParcial[j]))?ORANGE:ORANGE_LIGHT));
+  charts.clinica=new Chart(document.getElementById('chartClinica'),{
+    type:'bar',data:{labels:meses,datasets:[{label:'Fat. Clínica',data:fatClinica,backgroundColor:bgC,borderColor:meses.map((_,i)=>isParcial[i]?'#aaa':ORANGE),borderWidth:1.5,borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'R$ '+fmt(ctx.raw)}}},scales:{y:{ticks:{callback:v=>'R$'+Math.round(v/1000)+'k',font:{size:10}},grid:{color:'#eee'}},x:{grid:{display:false}}}}
+  });
+  charts.plano=new Chart(document.getElementById('chartPlano'),{
+    type:'bar',data:{labels:meses,datasets:[
+      {label:'Fat. Plano (R$)',data:fatPlano,backgroundColor:meses.map((_,i)=>isParcial[i]?'rgba(150,150,150,0.35)':'rgba(31,56,100,0.8)'),borderRadius:4,yAxisID:'y'},
+      {label:'Venda Planos',data:vendaPlanos,type:'line',borderColor:ORANGE,backgroundColor:'transparent',borderWidth:2.5,pointRadius:4,pointBackgroundColor:meses.map((_,i)=>isParcial[i]?'#aaa':ORANGE),yAxisID:'y1'}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}}},scales:{y:{position:'left',ticks:{callback:v=>'R$'+Math.round(v/1000)+'k',font:{size:10}},grid:{color:'#eee'}},y1:{position:'right',grid:{display:false}},x:{grid:{display:false}}}}
+  });
+  charts.clinicaBig=new Chart(document.getElementById('chartClinicaBig'),{
+    type:'line',data:{labels:meses,datasets:[{label:'Fat. Clínica',data:fatClinica,borderColor:ORANGE,backgroundColor:ORANGE_LIGHT,borderWidth:3,fill:true,tension:0.3,pointBackgroundColor:meses.map((_,i)=>isParcial[i]?'#aaa':ORANGE),pointRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'R$ '+fmt(ctx.raw)}}},scales:{y:{ticks:{callback:v=>'R$'+Math.round(v/1000)+'k'},grid:{color:'#eee'}},x:{grid:{display:false}}}}
+  });
+  charts.planoBig=new Chart(document.getElementById('chartPlanoBig'),{
+    type:'line',data:{labels:meses,datasets:[{label:'Fat. Plano',data:fatPlano,borderColor:NAVY,backgroundColor:'rgba(31,56,100,0.12)',borderWidth:3,fill:true,tension:0.3,pointBackgroundColor:meses.map((_,i)=>isParcial[i]?'#aaa':NAVY),pointRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'R$ '+fmt(ctx.raw)}}},scales:{y:{ticks:{callback:v=>'R$'+Math.round(v/1000)+'k'},grid:{color:'#eee'}},x:{grid:{display:false}}}}
+  });
+  charts.vendasBig=new Chart(document.getElementById('chartVendasBig'),{
+    type:'bar',data:{labels:meses,datasets:[{label:'Planos Vendidos',data:vendaPlanos,backgroundColor:meses.map((_,i)=>isParcial[i]?'rgba(150,150,150,0.35)':(vendaPlanos[i]===Math.max(...vendaPlanos.filter((_,j)=>!isParcial[j]))?'rgba(31,56,100,0.9)':'rgba(31,56,100,0.4)')),borderColor:meses.map((_,i)=>isParcial[i]?'#aaa':NAVY),borderWidth:1.5,borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:{color:'#eee'}},x:{grid:{display:false}}}}
+  });
+
+  // Semanal chart
+  const semLabels=['S1','S2','S3','S4','S5'];
+  const julRealData=[172227,241741,null,null,null];
+  const julTendData=[null,null,248412,248412,207010];
+  charts.semanal=new Chart(document.getElementById('chartSemanal'),{
+    type:'bar',
+    data:{
+      labels:semLabels,
+      datasets:[
+        {label:'Junho/26',data:junhoSemanas.valores,backgroundColor:'rgba(232,99,10,0.8)',borderColor:ORANGE,borderWidth:1.5,borderRadius:4,order:2},
+        {label:'Julho/26 (Real)',data:julRealData,backgroundColor:'rgba(31,56,100,0.85)',borderColor:NAVY,borderWidth:1.5,borderRadius:4,order:1},
+        {label:'Julho/26 (Tendência)',data:julTendData,backgroundColor:'rgba(31,56,100,0.28)',borderColor:NAVY,borderWidth:1.5,borderRadius:4,borderDash:[5,3],order:1}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:14}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': R$ '+fmt(ctx.raw)}}},
+      scales:{y:{ticks:{callback:v=>'R$'+Math.round(v/1000)+'k',font:{size:10}},grid:{color:'#eee'},stacked:false},x:{grid:{display:false}}}
+    }
+  });
+}
+
+function showTab(name,btn) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if(btn) btn.classList.add('active');
+  setTimeout(()=>Object.values(charts).forEach(c=>{try{c.resize();}catch(e){}}),50);
+}
+
+// ── DADOS POR UNIDADE – JUNHO 2026 ──
+// Ordenados por Fat. Comanda (maior → menor)
+const unidades = {
+  nomes: ['Campina Grande','Barreiro','Dona Clara','Itaim Paulista','Ipatinga','São Miguel Paulista','Contagem','Paulista Pernambuco','Sorocaba'],
+  abrev: ['Camp.GR','Barreiro','D.Clara','Itaim','Ipatinga','S.Miguel','Contagem','Paulista PE','Sorocaba'],
+  fatServico:  [227935.20, 201803.76, 130796.25, 129274.45, 126297.74, 124549.44, 108606.20, 84966.02, 43964.38],
+  fatComanda:  [227326.91, 198900.13, 122229.02, 129274.45, 123985.86, 116911.46, 108606.20, 84582.36,  43729.09]
+};
+// Venda Planos por unidade (Jun/26) – ordenado por volume
+const vendasUnidade = {
+  nomes:   ['Campina Grande','Itaim Paulista','Contagem','Sorocaba','Barreiro','Ipatinga','Paulista Pernambuco','Dona Clara','São Miguel Paulista','Cosmópolis'],
+  abrev:   ['Camp.GR','Itaim','Contagem','Sorocaba','Barreiro','Ipatinga','Paulista PE','D.Clara','S.Miguel','Cosmópolis'],
+  qtd:     [252, 246, 235, 214, 196, 188, 162, 156, 136, 71]
+};
+
+function fillUnidades() {
+  const tbody = document.getElementById('unidade-tbody');
+  const totalComanda = unidades.fatComanda.reduce((a,b)=>a+b,0);
+  const totalServico = unidades.fatServico.reduce((a,b)=>a+b,0);
+  const totalVendas  = vendasUnidade.qtd.reduce((a,b)=>a+b,0);
+
+  // Map vendas by unit name
+  const vendasMap = {};
+  vendasUnidade.nomes.forEach((n,i) => vendasMap[n] = vendasUnidade.qtd[i]);
+  vendasMap['Cosmópolis'] = 71; // not in fat table
+
+  unidades.nomes.forEach((nome, i) => {
+    const serv = unidades.fatServico[i];
+    const com  = unidades.fatComanda[i];
+    const diff = serv - com;
+    const pctCom = (com / totalComanda * 100).toFixed(1);
+    const vp = vendasMap[nome] || '—';
+    const pctVP = vp !== '—' ? (vp/totalVendas*100).toFixed(1)+'%' : '—';
+    const isBest = com === Math.max(...unidades.fatComanda);
+    tbody.innerHTML += `<tr class="${isBest?'best-month':''}">
+      <td>${nome}${isBest?' ⭐':''}</td>
+      <td>R$ ${fmt(serv)}</td>
+      <td>R$ ${fmt(com)}</td>
+      <td style="color:#777">R$ ${fmt(diff)}</td>
+      <td style="text-align:center"><strong>${pctCom}%</strong></td>
+      <td style="text-align:center">${typeof vp==='number'?vp.toLocaleString('pt-BR'):vp}</td>
+      <td style="text-align:center">${pctVP}</td>
+    </tr>`;
+  });
+  // Cosmópolis row (no fat data)
+  tbody.innerHTML += `<tr class="parcial-row"><td>Cosmópolis</td><td>—</td><td>—</td><td>—</td><td>—</td><td>71</td><td>${(71/totalVendas*100).toFixed(1)}%</td></tr>`;
+  document.getElementById('unidade-tfoot').innerHTML =
+    `<tr><td>TOTAL</td><td>R$ ${fmt(totalServico)}</td><td>R$ ${fmt(totalComanda)}</td><td></td><td>100%</td><td>${totalVendas.toLocaleString('pt-BR')}</td><td>100%</td></tr>`;
+}
+
+function createChartsUnidade() {
+  const COLORS_SERV  = 'rgba(31,56,100,0.85)';
+  const COLORS_COM   = 'rgba(232,99,10,0.85)';
+  const COLORS_VENDA = unidades.nomes.map((_,i) => {
+    const palette = ['#E8630A','#1F3864','#1E7B45','#8B2FC9','#0A7EC8','#C85A1A','#2C8C5C','#5B3A8C','#B85C00'];
+    return palette[i % palette.length];
+  });
+
+  charts.fatUnidade = new Chart(document.getElementById('chartFatUnidade'), {
+    type: 'bar',
+    data: {
+      labels: unidades.abrev,
+      datasets: [
+        { label: 'Fat. Serviço', data: unidades.fatServico, backgroundColor: COLORS_SERV, borderRadius: 4, order: 2 },
+        { label: 'Fat. Comanda', data: unidades.fatComanda, backgroundColor: COLORS_COM,  borderRadius: 4, order: 1 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 14 } },
+        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': R$ ' + fmt(ctx.raw) } }
+      },
+      scales: {
+        y: { ticks: { callback: v => 'R$' + Math.round(v/1000) + 'k', font: { size: 10 } }, grid: { color: '#eee' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // Venda Planos – horizontal bar sorted by value
+  charts.vendasUnidade = new Chart(document.getElementById('chartVendasUnidade'), {
+    type: 'bar',
+    data: {
+      labels: vendasUnidade.abrev,
+      datasets: [{
+        label: 'Planos Vendidos',
+        data: vendasUnidade.qtd,
+        backgroundColor: vendasUnidade.qtd.map((v,i) => {
+          const max = Math.max(...vendasUnidade.qtd);
+          return v === max ? '#E8630A' : 'rgba(31,56,100,0.7)';
+        }),
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ctx.raw + ' planos' } }
+      },
+      scales: {
+        x: { grid: { color: '#eee' } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillSemanal(); fillUnidades(); createCharts(); createChartsUnidade();
+</script>
+</body>
+</html>
