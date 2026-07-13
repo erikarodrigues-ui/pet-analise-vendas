@@ -271,7 +271,7 @@
     </div>
 
     <div class="chart-wrap" style="margin-bottom:16px">
-      <div class="chart-title">📊 Faturamento por Unidade – Fat. Serviço vs Fat. Comanda · Jun/26 (R$)</div>
+      <div class="chart-title">📊 Fatur. Comanda por Unidade · Jun/26 (R$)</div>
       <div class="chart-body" style="height:360px"><canvas id="chartFatUnidade"></canvas></div>
     </div>
 
@@ -571,36 +571,38 @@ function fillUnidades() {
 }
 
 function createChartsUnidade() {
-  const COLORS_SERV  = 'rgba(31,56,100,0.85)';
-  const COLORS_COM   = 'rgba(232,99,10,0.85)';
-  const COLORS_VENDA = unidades.nomes.map((_,i) => {
-    const palette = ['#E8630A','#1F3864','#1E7B45','#8B2FC9','#0A7EC8','#C85A1A','#2C8C5C','#5B3A8C','#B85C00'];
-    return palette[i % palette.length];
-  });
+  // Sorted by Fat. Comanda descending (already sorted in data)
+  const labels = [...unidades.nomes].reverse();
+  const values = [...unidades.fatComanda].reverse();
+  const maxVal = Math.max(...values);
 
   charts.fatUnidade = new Chart(document.getElementById('chartFatUnidade'), {
     type: 'bar',
     data: {
-      labels: unidades.abrev,
-      datasets: [
-        { label: 'Fat. Serviço', data: unidades.fatServico, backgroundColor: COLORS_SERV, borderRadius: 4, order: 2 },
-        { label: 'Fat. Comanda', data: unidades.fatComanda, backgroundColor: COLORS_COM,  borderRadius: 4, order: 1 }
-      ]
+      labels: labels,
+      datasets: [{
+        label: 'Fat. Comanda',
+        data: values,
+        backgroundColor: values.map(v => v === maxVal ? '#E8630A' : 'rgba(232,99,10,0.75)'),
+        borderRadius: 4
+      }]
     },
     options: {
+      indexAxis: 'y',
       responsive: true, maintainAspectRatio: false,
       plugins: {
-        legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 14 } },
-        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': R$ ' + fmt(ctx.raw) } }
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => 'R$ ' + fmt(ctx.raw) } },
+        datalabels: false
       },
       scales: {
-        y: { ticks: { callback: v => 'R$' + Math.round(v/1000) + 'k', font: { size: 10 } }, grid: { color: '#eee' } },
-        x: { grid: { display: false } }
+        x: { ticks: { callback: v => 'R$'+Math.round(v/1000)+'k', font:{size:10} }, grid:{color:'#eee'} },
+        y: { grid:{display:false}, ticks:{font:{size:11}} }
       }
     }
   });
 
-  // Venda Planos – horizontal bar sorted by value
+  // Venda Planos
   charts.vendasUnidade = new Chart(document.getElementById('chartVendasUnidade'), {
     type: 'bar',
     data: {
@@ -629,7 +631,6 @@ function createChartsUnidade() {
     }
   });
 }
-
 fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillSemanal(); fillUnidades(); createCharts(); createChartsUnidade();
 </script>
 </body>
