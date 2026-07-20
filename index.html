@@ -68,11 +68,11 @@
   <div class="header-logo">Pet<span>de</span><br>Todos</div>
   <div class="header-title">
     <h1>Análise de Vendas – 2026</h1>
-    <p>Janeiro a Julho 2026 · Fonte: Power BI PetDeTodosTático · 13/07/2026</p>
+    <p>Janeiro a Julho 2026 · Fonte: Power BI PetDeTodosTático · 20/07/2026</p>
   </div>
   <div class="header-badges">
     <div class="badge">🔒 6 meses fechados</div>
-    <div class="badge parcial">⏳ Jul/26 parcial (10/27 du)</div>
+    <div class="badge parcial">⏳ Jul/26 parcial (16/27 du)</div>
   </div>
 </div>
 
@@ -82,13 +82,13 @@
   <button class="nav-btn" onclick="showTab('plano',this)">Fat. Plano</button>
   <button class="nav-btn" onclick="showTab('vendas',this)">Venda de Planos</button>
   <button class="nav-btn" onclick="showTab('semanal',this)">Comparativo Semanal Jul×Jun</button>
-  <button class="nav-btn" onclick="showTab('unidades',this)">Por Unidade – Jun/26</button>
+  <button class="nav-btn" onclick="showTab('unidades',this)">Por Unidade – Jul/26</button>
 </div>
 
 <!-- ══ RESUMO ══ -->
 <div id="tab-resumo" class="tab-panel active">
   <div class="content">
-    <div class="parcial-note">⚠️ <strong>Julho/26 = parcial</strong> — dados de 10 de 27 dias úteis (atualizado 13/07/2026). Valores de Julho NÃO entram no total de meses fechados.</div>
+    <div class="parcial-note">⚠️ <strong>Julho/26 = parcial</strong> — dados de 16 de 27 dias úteis (atualizado 20/07/2026). Valores de Julho NÃO entram no total de meses fechados.</div>
     <div class="kpi-row">
       <div class="kpi-card">
         <div class="kpi-label">Fat. Clínica – Jun/26</div>
@@ -112,19 +112,19 @@
     <div class="kpi-row" style="opacity:0.82">
       <div class="kpi-card parcial">
         <div class="kpi-label">⏳ Fat. Clínica – Jul/26 (parcial)</div>
-        <div class="kpi-value">R$ 414.022</div>
-        <div class="kpi-sub">10/27 du · Média: R$ 41.402/dia</div>
-        <span class="kpi-var up">▲ Média +10,8% vs Jun (37.359)</span>
+        <div class="kpi-value">R$ 653.755</div>
+        <div class="kpi-sub">16/27 du · Média: R$ 40.860/dia</div>
+        <span class="kpi-var up">▲ Média +9,4% vs Jun (37.359)</span>
       </div>
       <div class="kpi-card parcial">
         <div class="kpi-label">⏳ Fat. Plano – Jul/26 (parcial)</div>
-        <div class="kpi-value">R$ 198.381</div>
-        <div class="kpi-sub">10/27 du · Projeção: R$ 512.484</div>
+        <div class="kpi-value">R$ 319.064</div>
+        <div class="kpi-sub">16/27 du · Projeção: R$ 520.579</div>
       </div>
       <div class="kpi-card parcial">
         <div class="kpi-label">⏳ Venda Planos – Jul/26 (parcial)</div>
-        <div class="kpi-value">735 planos</div>
-        <div class="kpi-sub">10/27 du · Projeção: 1.899</div>
+        <div class="kpi-value">1.244 planos</div>
+        <div class="kpi-sub">16/27 du · Projeção: 2.030</div>
       </div>
     </div>
     <div class="chart-grid">
@@ -266,22 +266,22 @@
 <div id="tab-unidades" class="tab-panel">
   <div class="content">
     <div class="tend-note">
-      🏪 <strong>Análise por Unidade – Junho/26 (mês fechado · 26 dias úteis)</strong><br>
+      🏪 <strong>Análise por Unidade – Julho/26 (parcial · 16 de 27 dias úteis)</strong><br>
       Fat. Serviço = total faturado antes de deduções · Fat. Comanda = valor líquido faturado por comanda · Venda Planos = planos novos comercializados
     </div>
 
     <div class="chart-wrap" style="margin-bottom:16px">
-      <div class="chart-title">📊 Fatur. Comanda por Unidade · Jun/26 (R$)</div>
+      <div class="chart-title">📊 Fatur. Comanda por Unidade · Jul/26 (R$)</div>
       <div class="chart-body" style="height:360px"><canvas id="chartFatUnidade"></canvas></div>
     </div>
 
     <div class="chart-wrap" style="margin-bottom:16px">
-      <div class="chart-title">🏅 Venda de Planos Novos por Unidade · Jun/26 (Qtd)</div>
+      <div class="chart-title">🏅 Venda de Planos Novos por Unidade · Jul/26 (Qtd)</div>
       <div class="chart-body" style="height:320px"><canvas id="chartVendasUnidade"></canvas></div>
     </div>
 
     <div class="section">
-      <div class="section-header">Tabela – Faturamento por Unidade · Jun/26</div>
+      <div class="section-header">Tabela – Faturamento por Unidade · Jul/26 (parcial)</div>
       <div class="section-body">
         <table>
           <thead>
@@ -303,15 +303,15 @@
   </div>
 </div>
 
-<div class="footer">Pet de Todos · Análise de Vendas 2026 · Atualizado em 13/07/2026 · Fonte: Power BI PetDeTodosTático</div>
+<div class="footer">Pet de Todos · Análise de Vendas 2026 · Atualizado em 20/07/2026 · Fonte: Power BI PetDeTodosTático</div>
 
 <script>
 // ── DADOS MENSAIS ──
 const meses = ['Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26*'];
-const diasUteis = [27,24,26,26,26,26,10];
-const fatClinica = [859670.31,817957.92,992700.66,980566.62,1006049.73,971344.52,414022.21];
-const fatPlano   = [437073.57,423338.56,480962.19,478022.32,518607.38,516333.11,198381.11];
-const vendaPlanos = [1162,1116,1304,1711,1251,1856,735];
+const diasUteis = [27,24,26,26,26,26,16];
+const fatClinica = [859670.31,817957.92,992700.66,980566.62,1006049.73,971344.52,653755.00];
+const fatPlano   = [437073.57,423338.56,480962.19,478022.32,518607.38,516333.11,319064.26];
+const vendaPlanos = [1162,1116,1304,1711,1251,1856,1244];
 const isParcial = [false,false,false,false,false,false,true];
 
 // ── DADOS SEMANAIS (normalizados para bater com KPI) ──
@@ -322,11 +322,11 @@ const junhoSemanas = {
   valores: [214540, 229063, 223694, 235288, 68693],
   duDias: [6,6,6,6,2]
 };
-// Julho: S1 e S2 reais normalizados (fator 0.8868), S3-S5 tendência
+// Julho: S1, S2 e S3 reais; S4-S5 tendência (média 40.860/du)
 const julhoSemanas = {
   periodos: ['01/07–05/07','06/07–12/07','13/07–19/07','20/07–26/07','27/07–31/07'],
-  valores:  [172227, 241741, 248412, 248412, 207010],
-  tipos:    ['Real','Real','Tendência','Tendência','Tendência'],
+  valores:  [172227, 241741, 239787, 245158, 204298],
+  tipos:    ['Real','Real','Real','Tendência','Tendência'],
   duDias:   [4,6,6,6,5]
 };
 
@@ -520,19 +520,19 @@ function showTab(name,btn) {
   setTimeout(()=>Object.values(charts).forEach(c=>{try{c.resize();}catch(e){}}),50);
 }
 
-// ── DADOS POR UNIDADE – JUNHO 2026 ──
+// ── DADOS POR UNIDADE – JULHO 2026 (parcial · 16 du) ──
 // Ordenados por Fat. Comanda (maior → menor)
 const unidades = {
-  nomes: ['Campina Grande','Barreiro','Dona Clara','Itaim Paulista','Ipatinga','São Miguel Paulista','Contagem','Paulista Pernambuco','Sorocaba'],
-  abrev: ['Camp.GR','Barreiro','D.Clara','Itaim','Ipatinga','S.Miguel','Contagem','Paulista PE','Sorocaba'],
-  fatServico:  [227935.20, 201803.76, 130796.25, 129274.45, 126297.74, 124549.44, 108606.20, 84966.02, 43964.38],
-  fatComanda:  [227326.91, 198900.13, 122229.02, 129274.45, 123985.86, 116911.46, 108606.20, 84582.36,  43729.09]
+  nomes: ['Campina Grande','Barreiro','Ipatinga','Paulista Pernambuco','São Miguel Paulista','Itaim Paulista','Dona Clara','Contagem','Sorocaba'],
+  abrev: ['Camp.GR','Barreiro','Ipatinga','Paulista PE','S.Miguel','Itaim','D.Clara','Contagem','Sorocaba'],
+  fatServico:  [166771.27, 123666.51, 78318.33, 76138.71, 80862.95, 74173.30, 79543.53, 55116.13, 34211.26],
+  fatComanda:  [166294.49, 121735.41, 77174.77, 76054.77, 74803.09, 74173.30, 72273.96, 55116.13, 33920.71]
 };
-// Venda Planos por unidade (Jun/26) – ordenado por volume
+// Venda Planos por unidade (Jul/26 parcial · 16 du) – ordenado por volume
 const vendasUnidade = {
-  nomes:   ['Campina Grande','Itaim Paulista','Contagem','Sorocaba','Barreiro','Ipatinga','Paulista Pernambuco','Dona Clara','São Miguel Paulista','Cosmópolis'],
-  abrev:   ['Camp.GR','Itaim','Contagem','Sorocaba','Barreiro','Ipatinga','Paulista PE','D.Clara','S.Miguel','Cosmópolis'],
-  qtd:     [252, 246, 235, 214, 196, 188, 162, 156, 136, 71]
+  nomes:   ['Sorocaba','Contagem','Itaim Paulista','Campina Grande','Ipatinga','Barreiro','Paulista Pernambuco','Dona Clara','São Miguel Paulista','Cosmópolis'],
+  abrev:   ['Sorocaba','Contagem','Itaim','Camp.GR','Ipatinga','Barreiro','Paulista PE','D.Clara','S.Miguel','Cosmópolis'],
+  qtd:     [174, 171, 170, 162, 122, 118, 112, 96, 74, 45]
 };
 
 function fillUnidades() {
