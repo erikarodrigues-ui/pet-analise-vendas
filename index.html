@@ -128,6 +128,30 @@
         <div class="kpi-sub">16/27 du · Projeção: 2.030</div>
       </div>
     </div>
+    <!-- ── Comparativo Até Dia 20 ── -->
+    <div class="section">
+      <div class="section-header">📅 Comparativo Acumulado: Até 20/Jul vs Até 20/Jun</div>
+      <div class="section-body">
+        <div class="tend-note" style="margin-bottom:12px">
+          ℹ️ Julho teve <strong>16 du</strong> até dia 20 (mês iniciou na Quarta) · Junho teve <strong>18 du</strong> até dia 20 (mês iniciou na Segunda). A <strong>variação por dia útil</strong> é a comparação mais justa.
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Indicador</th>
+              <th>Jul/26 · até 20/07 (16 du)</th>
+              <th>Jun/26 · até 20/06 (18 du)</th>
+              <th>Var. Bruta</th>
+              <th>Méd/du · Jul</th>
+              <th>Méd/du · Jun</th>
+              <th>⭐ Var. p/ du</th>
+            </tr>
+          </thead>
+          <tbody id="comp-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
     <div class="chart-grid">
       <div class="chart-wrap">
         <div class="chart-title">📊 Fat. Clínica por Mês (R$)</div>
@@ -507,6 +531,37 @@ function fillSemanal() {
     </ul>`;
 }
 
+// ── COMPARATIVO ATÉ DIA 20 ──
+function fillComparativo() {
+  const tbody = document.getElementById('comp-tbody');
+  // Fat. Clínica: Jun parcial = real (S1+S2+S3 das semanas)
+  // Fat. Plano e Venda Planos Jun: estimativa proporcional 18/26 du
+  const rows = [
+    { label:'Fat. Clínica',   julV:653755,  junV:667297,  julDu:16, junDu:18, isCurr:true,  isNum:false },
+    { label:'Fat. Plano',     julV:319064,  junV:Math.round(516333*18/26), julDu:16, junDu:18, isCurr:true, isNum:false },
+    { label:'Venda Planos',   julV:1244,    junV:Math.round(1856*18/26),   julDu:16, junDu:18, isCurr:false, isNum:true  }
+  ];
+  const estLabels = [false, true, true]; // Fat. Clínica é real; demais são estimativa
+  rows.forEach((r, idx) => {
+    const varBruta = (r.julV - r.junV) / r.junV;
+    const medJul   = r.julV / r.julDu;
+    const medJun   = r.junV / r.junDu;
+    const varDu    = (medJul - medJun) / medJun;
+    const fmtV     = v => r.isNum ? Math.round(v).toLocaleString('pt-BR') : 'R$ ' + fmt(v);
+    const fmtM     = v => r.isNum ? v.toFixed(1) : 'R$ ' + fmt(v);
+    const est      = estLabels[idx] ? ' <em style="font-size:10px;color:#999">(est.)</em>' : '';
+    tbody.innerHTML += `<tr>
+      <td>${r.label}</td>
+      <td><strong>${fmtV(r.julV)}</strong></td>
+      <td>${fmtV(r.junV)}${est}</td>
+      <td class="${varClass(varBruta)}">${varArrow(varBruta)} ${fmtPct(varBruta)}</td>
+      <td>${fmtM(medJul)}</td>
+      <td>${fmtM(medJun)}</td>
+      <td class="${varClass(varDu)}"><strong>${varArrow(varDu)} ${fmtPct(varDu)}</strong></td>
+    </tr>`;
+  });
+}
+
 // ── GRÁFICOS ──
 const ORANGE='#E8630A', NAVY='#1F3864', ORANGE_LIGHT='rgba(232,99,10,0.15)', GRAY='rgba(150,150,150,0.35)';
 let charts={};
@@ -777,11 +832,11 @@ function createChartsIndicadores() {
   });
 }
 
-fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillSemanal(); fillUnidades(); fillIndicadores(); createCharts(); createChartsUnidade(); createChartsIndicadores();
+fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillSemanal(); fillUnidades(); fillIndicadores(); fillComparativo(); createCharts(); createChartsUnidade(); createChartsIndicadores();
 </script>
 </body>
 </html>
-ientes Únicos (R$)',
+',
         data: recSorted.map(d => d.val),
         backgroundColor: recSorted.map(d => d.val === maxRec ? GREEN : GREEN_LIGHT),
         borderRadius: 4
