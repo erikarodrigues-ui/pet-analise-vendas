@@ -83,6 +83,7 @@
   <button class="nav-btn" onclick="showTab('vendas',this)">Venda de Planos</button>
   <button class="nav-btn" onclick="showTab('semanal',this)">Comparativo Semanal Jul×Jun</button>
   <button class="nav-btn" onclick="showTab('unidades',this)">Por Unidade – Jul/26</button>
+  <button class="nav-btn" onclick="showTab('indicadores',this)">QCA · QIA · Rec. Únicos</button>
 </div>
 
 <!-- ══ RESUMO ══ -->
@@ -272,7 +273,7 @@
 
     <div class="chart-wrap" style="margin-bottom:16px">
       <div class="chart-title">📊 Fatur. Comanda por Unidade · Jul/26 (R$)</div>
-      <div class="chart-body" style="height:360px"><canvas id="chartFatUnidade"></canvas></div>
+      <div class="chart-body" style="height:340px"><canvas id="chartFatUnidade"></canvas></div>
     </div>
 
     <div class="chart-wrap" style="margin-bottom:16px">
@@ -297,6 +298,52 @@
           </thead>
           <tbody id="unidade-tbody"></tbody>
           <tfoot id="unidade-tfoot"></tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ QCA / QIA / REC. ÚNICOS ══ -->
+<div id="tab-indicadores" class="tab-panel">
+  <div class="content">
+    <div class="tend-note">
+      📊 <strong>QCA · QIA · Recebimento de Clientes Únicos – Jul/26 (parcial · 16 de 27 du)</strong><br>
+      QCA = Quantidade de Clientes Ativos (plano) · QIA = Quantidade de Itens Arrecadados · Rec. Únicos = Faturamento de clientes sem plano
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-wrap">
+        <div class="chart-title">👥 QCA – Clientes Ativos por Unidade · Jul/26</div>
+        <div class="chart-body" style="height:320px"><canvas id="chartQCA"></canvas></div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">📋 QIA – Itens Arrecadados por Unidade · Jul/26</div>
+        <div class="chart-body" style="height:320px"><canvas id="chartQIA"></canvas></div>
+      </div>
+    </div>
+
+    <div class="chart-wrap" style="margin-bottom:16px">
+      <div class="chart-title">💰 Recebimento Clientes Únicos por Unidade · Jul/26 (R$)</div>
+      <div class="chart-body" style="height:320px"><canvas id="chartRecUnicos"></canvas></div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">Tabela – QCA · QIA · Rec. Únicos por Unidade · Jul/26 (parcial)</div>
+      <div class="section-body">
+        <table>
+          <thead>
+            <tr>
+              <th>Unidade</th>
+              <th>QCA</th>
+              <th>QIA</th>
+              <th>QIA/QCA</th>
+              <th>Rec. Únicos (R$)</th>
+              <th>Rec./Cliente Único</th>
+            </tr>
+          </thead>
+          <tbody id="indicadores-tbody"></tbody>
+          <tfoot id="indicadores-tfoot"></tfoot>
         </table>
       </div>
     </div>
@@ -579,7 +626,7 @@ function createChartsUnidade() {
   charts.fatUnidade = new Chart(document.getElementById('chartFatUnidade'), {
     type: 'bar',
     data: {
-      labels: labels,
+          labels: labels,
       datasets: [{
         label: 'Fat. Comanda',
         data: values,
@@ -631,7 +678,132 @@ function createChartsUnidade() {
     }
   });
 }
-fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillSemanal(); fillUnidades(); createCharts(); createChartsUnidade();
+
+// ── DADOS QCA / QIA / FAT. ÚNICO – JULHO 2026 (parcial · 16 du) ──
+const indicadores = {
+  nomes:     ['Barreiro','São Miguel Paulista','Itaim Paulista','Campina Grande','Dona Clara','Ipatinga','Contagem','Sorocaba','Paulista Pernambuco','Cosmópolis'],
+  abrev:     ['Barreiro','S.Miguel','Itaim','Camp.GR','D.Clara','Ipatinga','Contagem','Sorocaba','Paulista PE','Cosmópolis'],
+  qca:       [6692, 5423, 4741, 3062, 2953, 2089, 1012, 865, 633, 283],
+  qia:       [2105, 1768, 1649, 1793, 1269, 1274, 818,  676, 539, 137],
+  recUnicos: [1812, 1462, 1325, 1436, 1078, 1044, 544,  425, 362, 137]
+};
+
+function fillIndicadores() {
+  const tbody = document.getElementById('indicadores-tbody');
+  const tfoot = document.getElementById('indicadores-tfoot');
+  let totQCA=0, totQIA=0, totRec=0;
+  const maxQCA = Math.max(...indicadores.qca);
+  indicadores.nomes.forEach((nome, i) => {
+    const qca = indicadores.qca[i];
+    const qia = indicadores.qia[i];
+    const rec = indicadores.recUnicos[i];
+    const ratio = (qia / qca).toFixed(2);
+    totQCA += qca; totQIA += qia; totRec += rec;
+    const isBest = qca === maxQCA;
+    tbody.innerHTML += `<tr class="${isBest?'best-month':''}">
+      <td>${nome}${isBest?' ⭐':''}</td>
+      <td style="text-align:right"><strong>${qca.toLocaleString('pt-BR')}</strong></td>
+      <td style="text-align:right">${qia.toLocaleString('pt-BR')}</td>
+      <td style="text-align:center;color:#555">${ratio}</td>
+      <td>R$ ${rec.toLocaleString('pt-BR')}</td>
+      <td style="text-align:right;color:#777">${(rec/qca*1000).toFixed(0)}</td>
+    </tr>`;
+  });
+  tfoot.innerHTML = `<tr>
+    <td>TOTAL / MÉDIA</td>
+    <td style="text-align:right">${totQCA.toLocaleString('pt-BR')}</td>
+    <td style="text-align:right">${totQIA.toLocaleString('pt-BR')}</td>
+    <td style="text-align:center">${(totQIA/totQCA).toFixed(2)}</td>
+    <td>R$ ${totRec.toLocaleString('pt-BR')}</td>
+    <td style="text-align:right">—</td>
+  </tr>`;
+}
+
+function createChartsIndicadores() {
+  const GREEN = '#1E7B45';
+  const GREEN_LIGHT = 'rgba(30,123,69,0.65)';
+
+  const maxQCA = Math.max(...indicadores.qca);
+  charts.qca = new Chart(document.getElementById('chartQCA'), {
+    type: 'bar',
+    data: {
+      labels: indicadores.abrev,
+      datasets: [{ label: 'QCA', data: indicadores.qca,
+        backgroundColor: indicadores.qca.map(v => v === maxQCA ? ORANGE : 'rgba(232,99,10,0.7)'),
+        borderRadius: 4 }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend:{display:false}, tooltip:{callbacks:{label:ctx=>ctx.raw.toLocaleString('pt-BR')+' clientes'}} },
+      scales: { x:{grid:{color:'#eee'},ticks:{font:{size:10}}}, y:{grid:{display:false},ticks:{font:{size:11}}} }
+    }
+  });
+
+  const maxQIA = Math.max(...indicadores.qia);
+  charts.qia = new Chart(document.getElementById('chartQIA'), {
+    type: 'bar',
+    data: {
+      labels: indicadores.abrev,
+      datasets: [{ label: 'QIA', data: indicadores.qia,
+        backgroundColor: indicadores.qia.map(v => v === maxQIA ? NAVY : 'rgba(31,56,100,0.65)'),
+        borderRadius: 4 }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend:{display:false}, tooltip:{callbacks:{label:ctx=>ctx.raw.toLocaleString('pt-BR')+' itens'}} },
+      scales: { x:{grid:{color:'#eee'},ticks:{font:{size:10}}}, y:{grid:{display:false},ticks:{font:{size:11}}} }
+    }
+  });
+
+  const recSorted = indicadores.nomes.map((n,i) => ({ nome: indicadores.abrev[i], val: indicadores.recUnicos[i] }))
+    .sort((a,b) => b.val - a.val);
+  const maxRec = recSorted[0].val;
+  charts.recUnicos = new Chart(document.getElementById('chartRecUnicos'), {
+    type: 'bar',
+    data: {
+      labels: recSorted.map(d => d.nome),
+      datasets: [{ label: 'Rec. Clientes Únicos (R$)', data: recSorted.map(d => d.val),
+        backgroundColor: recSorted.map(d => d.val === maxRec ? GREEN : GREEN_LIGHT),
+        borderRadius: 4 }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend:{display:false}, tooltip:{callbacks:{label:ctx=>'R$ '+ctx.raw.toLocaleString('pt-BR')}} },
+      scales: {
+        x: { grid:{color:'#eee'}, ticks:{font:{size:10}, callback: v => 'R$'+Math.round(v/1000)+'k'} },
+        y: { grid:{display:false}, ticks:{font:{size:11}} }
+      }
+    }
+  });
+}
+
+fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillSemanal(); fillUnidades(); fillIndicadores(); createCharts(); createChartsUnidade(); createChartsIndicadores();
 </script>
 </body>
 </html>
+ientes Únicos (R$)',
+        data: recSorted.map(d => d.val),
+        backgroundColor: recSorted.map(d => d.val === maxRec ? GREEN : GREEN_LIGHT),
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => 'R$ ' + ctx.raw.toLocaleString('pt-BR') } }
+      },
+      scales: {
+        x: { grid: { color: '#eee' }, ticks: { font: { size: 10 }, callback: v => 'R$'+Math.round(v/1000)+'k' } },
+        y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillSemanal(); fillUnidades(); fillIndicadores(); createCharts(); createChartsUnidade(); createChartsIndicadores();
+</script>
+</body>
+</html>
+                                                                                                                                                                                                                               
