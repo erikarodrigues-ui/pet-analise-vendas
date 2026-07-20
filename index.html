@@ -287,6 +287,44 @@
       <div class="section-header">📌 Destaques da Semana</div>
       <div class="section-body" id="semanal-insights"></div>
     </div>
+
+    <!-- ── Planos Semanais ── -->
+    <div style="height:1px;background:#eee;margin:20px 0"></div>
+    <div class="tend-note" style="margin-top:0">
+      🏆 <strong>Comparativo Semanal – Julho 2026 vs Junho 2026 · Venda de Planos Novos (Qtd)</strong><br>
+      Semanas 1, 2 e 3 de Julho = dados reais do Power BI · Semana 4 em andamento (iniciou 21/07)<br>
+      <em>Junho fechado: 1.856 planos · Julho acumulado S1–S3: 1.243 planos</em>
+    </div>
+
+    <div class="chart-wrap" style="margin-bottom:16px">
+      <div class="chart-title">📊 Venda de Planos Novos Semanal – Julho vs Junho 2026 (Qtd)</div>
+      <div class="chart-body" style="height:300px"><canvas id="chartPlanosSemanais"></canvas></div>
+    </div>
+
+    <div class="legend-row" style="padding:0 4px 10px">
+      <div class="legend-item"><div class="legend-box" style="background:#E8630A"></div> Junho/26 (fechado)</div>
+      <div class="legend-item"><div class="legend-box" style="background:rgba(31,56,100,0.85)"></div> Julho/26 (real)</div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">Tabela – Comparativo Semanal Venda de Planos (Qtd)</div>
+      <div class="section-body">
+        <table>
+          <thead>
+            <tr>
+              <th>Semana</th>
+              <th>Junho/26</th>
+              <th>Julho/26</th>
+              <th>Tipo</th>
+              <th>Var. Qtd</th>
+              <th>Var. %</th>
+            </tr>
+          </thead>
+          <tbody id="planos-semanal-tbody"></tbody>
+          <tfoot id="planos-semanal-tfoot"></tfoot>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -543,6 +581,41 @@ function fillVendas() {
       <td class="${varP!==null?varClass(varP):''}">${varP!==null?varArrow(varP)+' '+fmtPct(varP):'—'}</td>
     </tr>`;
   });
+}
+
+const planosJun = [243, 364, 368, 699, 182];
+const planosJul = [287, 456, 500, null, null]; // S4 em andamento, S5 não iniciou
+
+function fillPlanosSemanais() {
+  const tbody = document.getElementById('planos-semanal-tbody');
+  const tfoot = document.getElementById('planos-semanal-tfoot');
+  let totJun=0, totJulReal=0;
+  const tipos = ['Real','Real','Real','Em curso','—'];
+  planosJun.forEach((jun, i) => {
+    const jul = planosJul[i];
+    const tipo = tipos[i];
+    const isReal = tipo === 'Real';
+    const hasJul = jul !== null;
+    totJun += jun;
+    if (isReal && hasJul) totJulReal += jul;
+    const varR = hasJul ? jul - jun : null;
+    const varP = hasJul ? varR / jun : null;
+    tbody.innerHTML += `<tr class="${isReal ? '' : 'parcial-row'}">
+      <td>Semana ${i+1}</td>
+      <td style="text-align:center">${jun.toLocaleString('pt-BR')}</td>
+      <td style="text-align:center">${hasJul ? jul.toLocaleString('pt-BR') : '<span style="color:#aaa">—</span>'}</td>
+      <td style="text-align:center"><span style="font-size:10px;padding:2px 7px;border-radius:10px;background:${isReal?'#E6F5EC':'#EEF2F9'};color:${isReal?'#1E7B45':'#1F3864'};font-weight:600">${tipo}</span></td>
+      <td class="${varR !== null ? varClass(varR) : ''}">${varR !== null ? varArrow(varR) + ' ' + Math.abs(varR).toLocaleString('pt-BR') : '<span style="color:#aaa">—</span>'}</td>
+      <td class="${varP !== null ? varClass(varP) : ''}">${varP !== null ? varArrow(varP) + ' ' + fmtPct(varP) : '<span style="color:#aaa">—</span>'}</td>
+    </tr>`;
+  });
+  tfoot.innerHTML = `
+    <tr>
+      <td>TOTAL</td>
+      <td style="text-align:center"><strong>${totJun.toLocaleString('pt-BR')}</strong></td>
+      <td style="text-align:center"><strong>${totJulReal.toLocaleString('pt-BR')}</strong> (S1–S3)</td>
+      <td colspan="3" style="font-size:10px;color:#555">Ritmo Jul S1–S3: ${Math.round(totJulReal/3).toLocaleString('pt-BR')}/sem · Jun média: ${Math.round(totJun/5).toLocaleString('pt-BR')}/sem</td>
+    </tr>`;
 }
 
 function fillSemanal() {
@@ -842,6 +915,50 @@ function fillIndicadores() {
   </tr>`;
 }
 
+function createChartPlanosSemanais() {
+  const labels = ['S1','S2','S3'];
+  const junData = planosJun.slice(0,3);
+  const julData = planosJul.slice(0,3);
+  charts.planosSemanais = new Chart(document.getElementById('chartPlanosSemanais'), {
+    type: 'bar',
+    data: {
+      labels: ['S1','S2','S3','S4','S5'],
+      datasets: [
+        {
+          label: 'Junho/26',
+          data: planosJun,
+          backgroundColor: 'rgba(232,99,10,0.8)',
+          borderColor: '#E8630A',
+          borderWidth: 1.5,
+          borderRadius: 4,
+          order: 2
+        },
+        {
+          label: 'Julho/26 (Real)',
+          data: planosJul,
+          backgroundColor: 'rgba(31,56,100,0.85)',
+          borderColor: '#1F3864',
+          borderWidth: 1.5,
+          borderRadius: 4,
+          order: 1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 14 } },
+        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.raw !== null ? ctx.raw.toLocaleString('pt-BR') + ' planos' : '—') } }
+      },
+      scales: {
+        y: { ticks: { font: { size: 10 } }, grid: { color: '#eee' }, title: { display: true, text: 'Planos vendidos', font: { size: 10 } } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+}
+
 function createChartEquilibrio() {
   // Order by QCA descending (already sorted in data)
   const labels = indicadores.abrev;
@@ -938,116 +1055,6 @@ function createChartEquilibrio() {
   });
 }
 
-function createChartEquilibrio() {
-  const labels = indicadores.abrev;
-  const qca    = indicadores.qca;
-  const qia    = indicadores.qia;
-
-  charts.equilibrio = new Chart(document.getElementById('chartEquilibrio'), {
-    type: 'line',
-    data: {
-      labels: labels,
-      datasets: [
-        {
-          label: 'QCA – Clientes Ativos',
-          data: qca,
-          borderColor: '#E8630A',
-          backgroundColor: 'rgba(232,99,10,0.10)',
-          borderWidth: 3,
-          pointBackgroundColor: '#E8630A',
-          pointRadius: 5,
-          fill: false,
-          tension: 0.3
-        },
-        {
-          label: 'QIA – Itens Arrecadados',
-          data: qia,
-          borderColor: '#1F3864',
-          backgroundColor: 'rgba(192,0,0,0.10)',
-          borderWidth: 3,
-          pointBackgroundColor: '#1F3864',
-          pointRadius: 5,
-          fill: 0,
-          tension: 0.3
-        }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
-      plugins: {
-        legend: { position: 'bottom', labels: { font:{size:11}, boxWidth:14 } },
-        tooltip: {
-          callbacks: {
-            afterBody: (items) => {
-              const qcaVal = items[0]?.raw || 0;
-              const qiaVal = items[1]?.raw || 0;
-              const gap    = qcaVal - qiaVal;
-              const taxa   = (qiaVal/qcaVal*100).toFixed(1);
-              return ['', '— Gap: ' + gap.toLocaleString('pt-BR') + ' clientes inativos', '— Taxa ativação: ' + taxa + '%'];
-            }
-          }
-        }
-      },
-      scales: {
-        y: { grid:{color:'#eee'}, ticks:{font:{size:10}}, beginAtZero:true },
-        x: { grid:{display:false}, ticks:{font:{size:10}} }
-      }
-    }
-  });
-
-  // Taxa de ativação QIA/QCA
-  const taxas = indicadores.qia.map((q,i) => parseFloat((q/indicadores.qca[i]*100).toFixed(1)));
-  const META  = 60;
-  charts.taxaAtivacao = new Chart(document.getElementById('chartTaxaAtivacao'), {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: 'Taxa QIA/QCA (%)',
-        data: taxas,
-        backgroundColor: taxas.map(t => t >= META ? 'rgba(30,123,69,0.75)' : 'rgba(192,0,0,0.65)'),
-        borderRadius: 4
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ctx.raw + '% de ativação' } }
-      },
-      scales: {
-        y: {
-          max: 100, grid:{color:'#eee'},
-          ticks:{callback:v=>v+'%', font:{size:10}},
-          beginAtZero: true
-        },
-        x: { grid:{display:false}, ticks:{font:{size:10}} }
-      }
-    },
-    plugins: [{
-      id: 'metaLine',
-      afterDraw(chart) {
-        const {ctx, chartArea:{left,right,top}, scales:{y}} = chart;
-        const yPos = y.getPixelForValue(META);
-        ctx.save();
-        ctx.beginPath();
-        ctx.setLineDash([8,4]);
-        ctx.strokeStyle = '#E8630A';
-        ctx.lineWidth = 2;
-        ctx.moveTo(left, yPos);
-        ctx.lineTo(right, yPos);
-        ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.fillStyle = '#E8630A';
-        ctx.font = 'bold 10px Segoe UI';
-        ctx.fillText('Meta 60%', right - 65, yPos - 4);
-        ctx.restore();
-      }
-    }]
-  });
-}
-
 function createChartsIndicadores() {
   const GREEN = '#1E7B45';
   const GREEN_LIGHT = 'rgba(30,123,69,0.65)';
@@ -1106,7 +1113,7 @@ function createChartsIndicadores() {
   });
 }
 
-fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillSemanal(); fillUnidades(); fillIndicadores(); fillComparativo(); createCharts(); createChartsUnidade(); createChartsIndicadores(); createChartEquilibrio(); createChartEquilibrio();
+fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillSemanal(); fillPlanosSemanais(); fillUnidades(); fillIndicadores(); fillComparativo(); createCharts(); createChartsUnidade(); createChartsIndicadores(); createChartEquilibrio(); createChartPlanosSemanais();
 </script>
 </body>
 </html>
