@@ -350,6 +350,23 @@
       </div>
     </div>
 
+    <!-- Gráfico de equilíbrio QCA vs QIA -->
+    <div class="chart-wrap" style="margin-bottom:16px">
+      <div class="chart-title">📉 Equilíbrio QCA vs QIA por Unidade · Jul/26</div>
+      <div style="background:#FFF3CD;border:1px solid #FBBF24;border-left:4px solid #E8630A;padding:8px 14px;font-size:11px;color:#7A4F00;line-height:1.6">
+        ⚠️ <strong>Gap QCA–QIA:</strong> Diferença entre clientes ativos na base (QCA) e itens arrecadados no período (QIA). Quanto maior o gap, maior o volume de clientes que <strong>não geraram receita</strong> no período — sinal de inadimplência, cancelamentos silenciosos ou baixa utilização.
+      </div>
+      <div class="chart-body" style="height:340px"><canvas id="chartEquilibrio"></canvas></div>
+    </div>
+
+    <div class="chart-wrap" style="margin-bottom:16px">
+      <div class="chart-title">📊 Taxa QIA/QCA por Unidade (% de ativação) · Jul/26</div>
+      <div style="background:#EEF2F9;border:1px solid #B0C2E8;padding:8px 14px;font-size:11px;color:#1F3864;line-height:1.6">
+        💡 <strong>Taxa de ativação = QIA ÷ QCA.</strong> Indica qual proporção dos clientes ativos gerou ao menos um item arrecadado no período. Taxa ideal: acima de <strong>60%</strong>. Abaixo disso há oportunidade de reativação.
+      </div>
+      <div class="chart-body" style="height:260px"><canvas id="chartTaxaAtivacao"></canvas></div>
+    </div>
+
     <div class="chart-wrap" style="margin-bottom:16px">
       <div class="chart-title">👤 Recebimento Clientes Únicos por Unidade · Jul/26 (Qtd)</div>
       <div class="chart-body" style="height:320px"><canvas id="chartRecUnicos"></canvas></div>
@@ -782,6 +799,212 @@ function fillIndicadores() {
   </tr>`;
 }
 
+function createChartEquilibrio() {
+  // Order by QCA descending (already sorted in data)
+  const labels = indicadores.abrev;
+  const qca    = indicadores.qca;
+  const qia    = indicadores.qia;
+
+  // Line chart: QCA and QIA lines, fill between them
+  charts.equilibrio = new Chart(document.getElementById('chartEquilibrio'), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'QCA – Clientes Ativos',
+          data: qca,
+          borderColor: '#E8630A',
+          backgroundColor: 'rgba(232,99,10,0.12)',
+          borderWidth: 3,
+          pointBackgroundColor: '#E8630A',
+          pointRadius: 5,
+          fill: false,
+          tension: 0.3,
+          yAxisID: 'y'
+        },
+        {
+          label: 'QIA – Itens Arrecadados',
+          data: qia,
+          borderColor: '#1F3864',
+          backgroundColor: 'rgba(192,0,0,0.08)',
+          borderWidth: 3,
+          pointBackgroundColor: '#1F3864',
+          pointRadius: 5,
+          fill: 0,        // fill para a linha do QCA, criando área de gap
+          tension: 0.3,
+          yAxisID: 'y'
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { position: 'bottom', labels: { font:{size:11}, boxWidth:14 } },
+        tooltip: {
+          callbacks: {
+            afterBody: (items) => {
+              const qcaVal = items.find(i => i.datasetIndex===0)?.raw || 0;
+              const qiaVal = items.find(i => i.datasetIndex===1)?.raw || 0;
+              const gap    = qcaVal - qiaVal;
+              const taxa   = (qiaVal/qcaVal*100).toFixed(1);
+              return ['', `Gap: ${gap.toLocaleString('pt-BR')} clientes inativos`, `Taxa ativação: ${taxa}%`];
+            }
+          }
+        }
+      },
+      scales: {
+        y: { grid:{color:'#eee'}, ticks:{font:{size:10}}, beginAtZero:true },
+        x: { grid:{display:false}, ticks:{font:{size:10}} }
+      }
+    }
+  });
+
+  // Bar chart: taxa de ativação QIA/QCA por unidade
+  const taxas  = indicadores.qia.map((q,i) => parseFloat((q/indicadores.qca[i]*100).toFixed(1)));
+  const META   = 60; // linha de referência
+  charts.taxaAtivacao = new Chart(document.getElementById('chartTaxaAtivacao'), {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Taxa QIA/QCA (%)',
+          data: taxas,
+          backgroundColor: taxas.map(t => t >= META ? 'rgba(30,123,69,0.75)' : 'rgba(192,0,0,0.65)'),
+          borderRadius: 4
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => `${ctx.raw}% de ativação` } },
+        annotation: { annotations: {
+          meta: { type:'line', yMin:META, yMax:META, borderColor:'#E8630A', borderWidth:2, borderDash:[6,3],
+            label:{ content:'Meta 60%', enabled:true, position:'end', font:{size:10}, color:'#E8630A' } }
+        }}
+      },
+      scales: {
+        y: { max:100, grid:{color:'#eee'}, ticks:{callback:v=>v+'%', font:{size:10}} },
+        x: { grid:{display:false}, ticks:{font:{size:10}} }
+      }
+    }
+  });
+}
+
+function createChartEquilibrio() {
+  const labels = indicadores.abrev;
+  const qca    = indicadores.qca;
+  const qia    = indicadores.qia;
+
+  charts.equilibrio = new Chart(document.getElementById('chartEquilibrio'), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'QCA – Clientes Ativos',
+          data: qca,
+          borderColor: '#E8630A',
+          backgroundColor: 'rgba(232,99,10,0.10)',
+          borderWidth: 3,
+          pointBackgroundColor: '#E8630A',
+          pointRadius: 5,
+          fill: false,
+          tension: 0.3
+        },
+        {
+          label: 'QIA – Itens Arrecadados',
+          data: qia,
+          borderColor: '#1F3864',
+          backgroundColor: 'rgba(192,0,0,0.10)',
+          borderWidth: 3,
+          pointBackgroundColor: '#1F3864',
+          pointRadius: 5,
+          fill: 0,
+          tension: 0.3
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { position: 'bottom', labels: { font:{size:11}, boxWidth:14 } },
+        tooltip: {
+          callbacks: {
+            afterBody: (items) => {
+              const qcaVal = items[0]?.raw || 0;
+              const qiaVal = items[1]?.raw || 0;
+              const gap    = qcaVal - qiaVal;
+              const taxa   = (qiaVal/qcaVal*100).toFixed(1);
+              return ['', '— Gap: ' + gap.toLocaleString('pt-BR') + ' clientes inativos', '— Taxa ativação: ' + taxa + '%'];
+            }
+          }
+        }
+      },
+      scales: {
+        y: { grid:{color:'#eee'}, ticks:{font:{size:10}}, beginAtZero:true },
+        x: { grid:{display:false}, ticks:{font:{size:10}} }
+      }
+    }
+  });
+
+  // Taxa de ativação QIA/QCA
+  const taxas = indicadores.qia.map((q,i) => parseFloat((q/indicadores.qca[i]*100).toFixed(1)));
+  const META  = 60;
+  charts.taxaAtivacao = new Chart(document.getElementById('chartTaxaAtivacao'), {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Taxa QIA/QCA (%)',
+        data: taxas,
+        backgroundColor: taxas.map(t => t >= META ? 'rgba(30,123,69,0.75)' : 'rgba(192,0,0,0.65)'),
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ctx.raw + '% de ativação' } }
+      },
+      scales: {
+        y: {
+          max: 100, grid:{color:'#eee'},
+          ticks:{callback:v=>v+'%', font:{size:10}},
+          beginAtZero: true
+        },
+        x: { grid:{display:false}, ticks:{font:{size:10}} }
+      }
+    },
+    plugins: [{
+      id: 'metaLine',
+      afterDraw(chart) {
+        const {ctx, chartArea:{left,right,top}, scales:{y}} = chart;
+        const yPos = y.getPixelForValue(META);
+        ctx.save();
+        ctx.beginPath();
+        ctx.setLineDash([8,4]);
+        ctx.strokeStyle = '#E8630A';
+        ctx.lineWidth = 2;
+        ctx.moveTo(left, yPos);
+        ctx.lineTo(right, yPos);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#E8630A';
+        ctx.font = 'bold 10px Segoe UI';
+        ctx.fillText('Meta 60%', right - 65, yPos - 4);
+        ctx.restore();
+      }
+    }]
+  });
+}
+
 function createChartsIndicadores() {
   const GREEN = '#1E7B45';
   const GREEN_LIGHT = 'rgba(30,123,69,0.65)';
@@ -840,7 +1063,7 @@ function createChartsIndicadores() {
   });
 }
 
-fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillSemanal(); fillUnidades(); fillIndicadores(); fillComparativo(); createCharts(); createChartsUnidade(); createChartsIndicadores();
+fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillSemanal(); fillUnidades(); fillIndicadores(); fillComparativo(); createCharts(); createChartsUnidade(); createChartsIndicadores(); createChartEquilibrio(); createChartEquilibrio();
 </script>
 </body>
 </html>
