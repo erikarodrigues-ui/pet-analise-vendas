@@ -169,7 +169,7 @@
       <div class="section-header">📋 Consolidado Jan–Jul 2026</div>
       <div class="section-body">
         <table>
-          <thead><tr><th>Mês</th><th>Du</th><th>Fat. Clínica (R$)</th><th>Var. Clínica</th><th>Fat. Plano (R$)</th><th>Var. Plano</th><th>Venda Planos</th><th>Var. Vendas</th></tr></thead>
+          <thead><tr><th>Mês</th><th>Du</th><th>Fat. Clínica (R$)</th><th>Var. Clínica</th><th>Fat. Plano (R$)</th><th>Var. Plano</th><th>Venda Planos</th><th>Var. Vendas</th><th>Campanha do Mês</th></tr></thead>
           <tbody id="resumo-tbody"></tbody>
           <tfoot id="resumo-tfoot"></tfoot>
         </table>
@@ -426,6 +426,48 @@ function fmtPct(v) { return (v>=0?'+':'')+(v*100).toFixed(1)+'%'; }
 function varClass(v) { return v>=0?'var-up':'var-down'; }
 function varArrow(v) { return v>=0?'▲':'▼'; }
 
+
+// ── CAMPANHAS POR MÊS ──
+const campanhas = {
+  'Jan/26':  [
+    { tipo:'Clínica', cor:'#C00000', nome:'Festival Verão', desc:'50% hemograma · 40% anti pulga · 15% vacina' }
+  ],
+  'Fev/26':  [
+    { tipo:'Plano',   cor:'#1F3864', nome:'Prev. Neuro Degenerativa', desc:'70% desc. na 1ª mensalidade' },
+    { tipo:'Clínica', cor:'#C00000', nome:'Prev. Neuro Degenerativa', desc:'15% vacina+vermífugo · Banho&Tosa grátis' }
+  ],
+  'Mar/26':  [
+    { tipo:'Clínica', cor:'#C00000', nome:'Prev. Verminose', desc:'20% Probiótico · Giárdia · Vacina' }
+  ],
+  'Abr/26':  [
+    { tipo:'Plano',   cor:'#1F3864', nome:'CASHPET', desc:'Prev. Crueldade Animal' },
+    { tipo:'Clínica', cor:'#C00000', nome:'CASHPET', desc:'Prev. Crueldade Animal' }
+  ],
+  'Mai/26':  [
+    { tipo:'Clínica', cor:'#C00000', nome:'Prev. Renal & Oral', desc:'20% exame laboratorial função renal' },
+    { tipo:'Plano',   cor:'#1F3864', nome:'Prev. Renal & Oral', desc:'50% desc. no plano' }
+  ],
+  'Jun/26':  [
+    { tipo:'Clínica', cor:'#C00000', nome:'Prev. Ocular & Dermato', desc:'20% OFF Teste Schirmer + exames' },
+    { tipo:'Clínica', cor:'#C00000', nome:'Prev. Ocular & Dermato', desc:'50% desc. especialista dermato e oftalmo' },
+    { tipo:'Plano',   cor:'#1F3864', nome:'Copa do Mundo 🏆', desc:'Novo plano + 1 banho/mês · R$ 39,90' }
+  ],
+  'Jul/26*': [
+    { tipo:'Plano',   cor:'#1F3864', nome:'Vacina', desc:'1 mensalidade grátis · adesão R$ 9,90' }
+  ]
+};
+
+function renderCampanha(mes) {
+  const lista = campanhas[mes];
+  if (!lista) return '<span style="color:#aaa;font-size:10px">—</span>';
+  return lista.map(c => `
+    <div style="margin-bottom:4px">
+      <span style="display:inline-block;background:${c.cor};color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px;margin-right:4px;vertical-align:middle">${c.tipo}</span>
+      <span style="font-size:11px;font-weight:700;color:#1F3864">${c.nome}</span>
+      <div style="font-size:10px;color:#666;padding-left:2px;margin-top:1px">${c.desc}</div>
+    </div>`).join('');
+}
+
 // ── TABELA RESUMO ──
 function fillResumo() {
   const tbody = document.getElementById('resumo-tbody');
@@ -446,9 +488,10 @@ function fillResumo() {
       <td class="${varFP!==null?varClass(varFP):''}">${varFP!==null?varArrow(varFP)+' '+fmtPct(varFP):'—'}</td>
       <td>${vendaPlanos[i].toLocaleString('pt-BR')}</td>
       <td class="${varVP!==null?varClass(varVP):''}">${varVP!==null?varArrow(varVP)+' '+fmtPct(varVP):'—'}</td>
+      <td style="min-width:200px;padding:8px 10px">${renderCampanha(m)}</td>
     </tr>`;
   });
-  document.getElementById('resumo-tfoot').innerHTML=`<tr><td colspan="2">TOTAL (Jan–Jun)</td><td>R$ ${fmt(totFC)}</td><td></td><td>R$ ${fmt(totFP)}</td><td></td><td>${totVP.toLocaleString('pt-BR')}</td><td></td></tr>`;
+  document.getElementById('resumo-tfoot').innerHTML=`<tr><td colspan="2">TOTAL (Jan–Jun)</td><td>R$ ${fmt(totFC)}</td><td></td><td>R$ ${fmt(totFP)}</td><td></td><td>${totVP.toLocaleString('pt-BR')}</td><td></td><td></td></tr>`;
 }
 
 function fillClinica() {
