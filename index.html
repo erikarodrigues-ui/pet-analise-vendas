@@ -336,7 +336,7 @@
   <div class="content">
     <div class="tend-note">
       📊 <strong>QCA · QIA · Recebimento de Clientes Únicos – Jul/26 (parcial · 16 de 27 du)</strong><br>
-      QCA = Quantidade de Clientes Ativos (plano) · QIA = Quantidade de Itens Arrecadados · Rec. Únicos = Faturamento de clientes sem plano
+      QCA = Quantidade de Clientes Ativos (plano) · QIA = Quantidade de Itens Arrecadados · Rec. Únicos = Quantidade de clientes únicos (sem plano)
     </div>
 
     <div class="chart-grid">
@@ -351,7 +351,7 @@
     </div>
 
     <div class="chart-wrap" style="margin-bottom:16px">
-      <div class="chart-title">💰 Recebimento Clientes Únicos por Unidade · Jul/26 (R$)</div>
+      <div class="chart-title">👤 Recebimento Clientes Únicos por Unidade · Jul/26 (Qtd)</div>
       <div class="chart-body" style="height:320px"><canvas id="chartRecUnicos"></canvas></div>
     </div>
 
@@ -365,7 +365,7 @@
               <th>QCA</th>
               <th>QIA</th>
               <th>QIA/QCA</th>
-              <th>Rec. Únicos (R$)</th>
+              <th>Rec. Únicos (Qtd)</th>
               <th>Rec./Cliente Único</th>
             </tr>
           </thead>
@@ -768,7 +768,7 @@ function fillIndicadores() {
       <td style="text-align:right"><strong>${qca.toLocaleString('pt-BR')}</strong></td>
       <td style="text-align:right">${qia.toLocaleString('pt-BR')}</td>
       <td style="text-align:center;color:#555">${ratio}</td>
-      <td>R$ ${rec.toLocaleString('pt-BR')}</td>
+      <td style="text-align:right">${rec.toLocaleString('pt-BR')}</td>
       <td style="text-align:right;color:#777">${(rec/qca*1000).toFixed(0)}</td>
     </tr>`;
   });
@@ -777,7 +777,7 @@ function fillIndicadores() {
     <td style="text-align:right">${totQCA.toLocaleString('pt-BR')}</td>
     <td style="text-align:right">${totQIA.toLocaleString('pt-BR')}</td>
     <td style="text-align:center">${(totQIA/totQCA).toFixed(2)}</td>
-    <td>R$ ${totRec.toLocaleString('pt-BR')}</td>
+    <td style="text-align:right">${totRec.toLocaleString('pt-BR')}</td>
     <td style="text-align:right">—</td>
   </tr>`;
 }
@@ -825,13 +825,13 @@ function createChartsIndicadores() {
     type: 'bar',
     data: {
       labels: recSorted.map(d => d.nome),
-      datasets: [{ label: 'Rec. Clientes Únicos (R$)', data: recSorted.map(d => d.val),
+      datasets: [{ label: 'Rec. Clientes Únicos (Qtd)', data: recSorted.map(d => d.val),
         backgroundColor: recSorted.map(d => d.val === maxRec ? GREEN : GREEN_LIGHT),
         borderRadius: 4 }]
     },
     options: {
       indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      plugins: { legend:{display:false}, tooltip:{callbacks:{label:ctx=>'R$ '+ctx.raw.toLocaleString('pt-BR')}} },
+      plugins: { legend:{display:false}, tooltip:{callbacks:{label:ctx=>ctx.raw.toLocaleString('pt-BR')+' clientes'}} },
       scales: {
         x: { grid:{color:'#eee'}, ticks:{font:{size:10}, callback: v => 'R$'+Math.round(v/1000)+'k'} },
         y: { grid:{display:false}, ticks:{font:{size:11}} }
@@ -844,29 +844,3 @@ fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillSemanal(); fillUnida
 </script>
 </body>
 </html>
-',
-        data: recSorted.map(d => d.val),
-        backgroundColor: recSorted.map(d => d.val === maxRec ? GREEN : GREEN_LIGHT),
-        borderRadius: 4
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => 'R$ ' + ctx.raw.toLocaleString('pt-BR') } }
-      },
-      scales: {
-        x: { grid: { color: '#eee' }, ticks: { font: { size: 10 }, callback: v => 'R$'+Math.round(v/1000)+'k' } },
-        y: { grid: { display: false }, ticks: { font: { size: 11 } } }
-      }
-    }
-  });
-}
-
-fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillSemanal(); fillUnidades(); fillIndicadores(); createCharts(); createChartsUnidade(); createChartsIndicadores();
-</script>
-</body>
-</html>
-                                                                                                                                                                                                                               
