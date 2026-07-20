@@ -132,8 +132,9 @@
     <div class="section">
       <div class="section-header">📅 Comparativo Acumulado: Até 20/Jul vs Até 20/Jun</div>
       <div class="section-body">
-        <div class="tend-note" style="margin-bottom:12px">
-          ℹ️ Julho teve <strong>16 du</strong> até dia 20 (mês iniciou na Quarta) · Junho teve <strong>18 du</strong> até dia 20 (mês iniciou na Segunda). A <strong>variação por dia útil</strong> é a comparação mais justa.
+        <div style="background:#FFF3CD;border:1px solid #FBBF24;border-radius:8px;padding:10px 14px;font-size:11px;color:#7A4F00;margin-bottom:12px;line-height:1.6">
+          ⚠️ <strong>Não compare os valores absolutos diretamente.</strong> Julho iniciou na Quarta-feira → apenas <strong>16 du</strong> até dia 20. Junho iniciou na Segunda-feira → <strong>18 du</strong> até dia 20.<br>
+          O correto é comparar o <strong style="color:#1E7B45">ritmo diário (Var. p/du)</strong> — e nesse critério <strong style="color:#1E7B45">julho está à frente em todos os indicadores.</strong> A linha de projeção mostra o que julho acumularia se também tivesse 18 du.
         </div>
         <table>
           <thead>
@@ -144,10 +145,12 @@
               <th>Var. Bruta</th>
               <th>Méd/du · Jul</th>
               <th>Méd/du · Jun</th>
-              <th>⭐ Var. p/ du</th>
+              <th style="background:#1E7B45">▶ Var. p/du (ritmo)</th>
+              <th style="background:#1E7B45">Proj. Jul · 18 du</th>
             </tr>
           </thead>
           <tbody id="comp-tbody"></tbody>
+          <tfoot id="comp-tfoot"></tfoot>
         </table>
       </div>
     </div>
@@ -534,22 +537,23 @@ function fillSemanal() {
 // ── COMPARATIVO ATÉ DIA 20 ──
 function fillComparativo() {
   const tbody = document.getElementById('comp-tbody');
-  // Fat. Clínica: Jun parcial = real (S1+S2+S3 das semanas)
-  // Fat. Plano e Venda Planos Jun: estimativa proporcional 18/26 du
+  const tfoot = document.getElementById('comp-tfoot');
   const rows = [
-    { label:'Fat. Clínica',   julV:653755,  junV:667297,  julDu:16, junDu:18, isCurr:true,  isNum:false },
-    { label:'Fat. Plano',     julV:319064,  junV:Math.round(516333*18/26), julDu:16, junDu:18, isCurr:true, isNum:false },
-    { label:'Venda Planos',   julV:1244,    junV:Math.round(1856*18/26),   julDu:16, junDu:18, isCurr:false, isNum:true  }
+    { label:'Fat. Clínica',  julV:653755,  junV:667297,              julDu:16, junDu:18, isNum:false, est:false },
+    { label:'Fat. Plano',    julV:319064,  junV:Math.round(516333*18/26), julDu:16, junDu:18, isNum:false, est:true  },
+    { label:'Venda Planos',  julV:1244,    junV:Math.round(1856*18/26),   julDu:16, junDu:18, isNum:true,  est:true  }
   ];
-  const estLabels = [false, true, true]; // Fat. Clínica é real; demais são estimativa
-  rows.forEach((r, idx) => {
+  const GREEN_CELL = 'background:#E6F5EC;color:#1E7B45;font-weight:700';
+  rows.forEach(r => {
     const varBruta = (r.julV - r.junV) / r.junV;
     const medJul   = r.julV / r.julDu;
     const medJun   = r.junV / r.junDu;
     const varDu    = (medJul - medJun) / medJun;
-    const fmtV     = v => r.isNum ? Math.round(v).toLocaleString('pt-BR') : 'R$ ' + fmt(v);
-    const fmtM     = v => r.isNum ? v.toFixed(1) : 'R$ ' + fmt(v);
-    const est      = estLabels[idx] ? ' <em style="font-size:10px;color:#999">(est.)</em>' : '';
+    const proj18   = medJul * 18;
+    const varProj  = (proj18 - r.junV) / r.junV;
+    const fmtV = v => r.isNum ? Math.round(v).toLocaleString('pt-BR') : 'R$ ' + fmt(v);
+    const fmtM = v => r.isNum ? v.toFixed(1) : 'R$ ' + fmt(v);
+    const est  = r.est ? ' <em style="font-size:10px;color:#999">(est.)</em>' : '';
     tbody.innerHTML += `<tr>
       <td>${r.label}</td>
       <td><strong>${fmtV(r.julV)}</strong></td>
@@ -557,9 +561,13 @@ function fillComparativo() {
       <td class="${varClass(varBruta)}">${varArrow(varBruta)} ${fmtPct(varBruta)}</td>
       <td>${fmtM(medJul)}</td>
       <td>${fmtM(medJun)}</td>
-      <td class="${varClass(varDu)}"><strong>${varArrow(varDu)} ${fmtPct(varDu)}</strong></td>
+      <td style="${GREEN_CELL}"><strong>${varArrow(varDu)} ${fmtPct(varDu)}</strong></td>
+      <td style="${GREEN_CELL}">${fmtV(proj18)} <span style="font-size:10px;font-weight:400">(${varArrow(varProj)} ${fmtPct(varProj)} vs Jun)</span></td>
     </tr>`;
   });
+  tfoot.innerHTML = `<tr style="font-size:10px;color:#555;font-style:italic;background:#F9F9F9">
+    <td colspan="8">* Fat. Clínica Jun: dado real (S1+S2+S3 das semanas). Fat. Plano e Venda Planos Jun: estimativa proporcional (18/26 du). Proj. Jul = média diária Jul × 18 du.</td>
+  </tr>`;
 }
 
 // ── GRÁFICOS ──
