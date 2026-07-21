@@ -1,4 +1,26 @@
-<!DOCTYPE html>
+<div class="tend-note" style="margin-top:16px;background:#EEF2F9;border-color:#B0C2E8">
+      📊 <strong>Dados reais por dia da semana · Jun 1–20 vs Jul 1–20 (fonte: BI Serviço/Produto)</strong><br>
+      Período comparado: <strong>1 a 20</strong> de cada mês. Jun 1–20 = 18 dias Mon-Sáb · Jul 1–20 = 17 dias Mon-Sáb (apenas 2 Terças).<br>
+      Seg–Qui: Jun = 12 dias · Jul = 11 dias. Sábados: 3 em cada período (comparação direta).
+      </div>
+      <!-- Seg-Qui chart -->
+      <div class="chart-wrap" style="margin-bottom:16px">
+        <div class="chart-title">🗓️ Banhos Seg–Qui por Unidade · Jul vs Jun (taxa por dia Seg-Qui)</div>
+        <div style="background:#EEF2F9;border:1px solid #B0C2E8;padding:8px 14px;font-size:11px;color:#1F3864;margin-bottom:8px">
+          💡 Taxa = total de banhos Seg–Qui ÷ nº de dias Seg–Qui no período (Jun=12 dias, Jul=11 dias).
+        </div>
+        <div class="chart-body" style="height:320px"><canvas id="chartBanhosSegQui"></canvas></div>
+      </div>
+      <!-- Sábado chart -->
+      <div class="chart-wrap" style="margin-bottom:16px">
+        <div class="chart-title">📅 Banhos nos Sábados por Unidade · Jul vs Jun (média por sábado)</div>
+        <div style="background:#EEF2F9;border:1px solid #B0C2E8;padding:8px 14px;font-size:11px;color:#1F3864;margin-bottom:8px">
+          💡 Ambos os períodos têm <strong>3 sábados</strong> — comparação direta. Sorocaba foi a única unidade com queda (-35%).
+        </div>
+        <div class="chart-body" style="height:320px"><canvas id="chartBanhosSab"></canvas></div>
+      </div>
+      </div>
+</div><!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -1248,7 +1270,7 @@ function showTab(name,btn) {
         const canvas=document.getElementById(id);
         if(canvas){const ex=Chart.getChart(canvas);if(ex)ex.destroy();}
       });
-      createChartBanhosRanking();createChartBanhosTaxa();createChartBanhosCrescimento();populateBanhosTable();
+      createChartBanhosRanking();createChartBanhosTaxa();createChartBanhosCrescimento();createChartBanhosSegQui();createChartBanhosSab();populateBanhosTable();
     }
   },50);
 }
@@ -1303,12 +1325,18 @@ function fillUnidades() {
     `<tr><td>TOTAL</td><td>R$ ${fmt(totalServico)}</td><td>R$ ${fmt(totalComanda)}</td><td></td><td>100%</td><td>${totalVendas.toLocaleString('pt-BR')}</td><td>100%</td></tr>`;
 }
 
-// ── DADOS BANHOS POR UNIDADE ──
-const banhosUnidades = ['Barreiro','Campina Grande','Contagem','Ipatinga','Itaim Paulista','Paulista Pernambuco','São Miguel Paulista','Sorocaba'];
-const banhosJulArr = [660, 692, 309, 551, 672, 208, 714, 175];
-const banhosJunArr = [814, 934, 278, 706, 822, 199, 1039, 231];
-const banhosJulDu = 17;
-const banhosJunDu = 26;
+// ── DADOS BANHOS POR UNIDADE (fonte: BI Serviço/Produto, Grupo=Banho, período 01–20 de cada mês) ──
+const banhosUnidades = ['Barreiro','Campina Grande','Contagem','Dona Clara','Ipatinga','Itaim Paulista','Paulista Pernambuco','São Miguel Paulista','Sorocaba'];
+const banhosJulArr = [660, 692, 309, 551, 443, 672, 209, 714, 175];  // Jul 1-20 (Mon-Sat, 17 dias)
+const banhosJunArr = [573, 662, 211, 537, 506, 609, 130, 706, 166];  // Jun 1-20 (Mon-Sat, 18 dias)
+const banhosJulDu = 17;  // dias Mon-Sat em Jul 1-20
+const banhosJunDu = 18;  // dias Mon-Sat em Jun 1-20
+// Seg-Qui: Jul=11 dias (2 Ter), Jun=12 dias (3 de cada)
+const segQuiJul = [389, 415, 186, 308, 277, 413, 108, 452, 105];
+const segQuiJun = [346, 379, 131, 302, 300, 384,  64, 404,  88];
+// Sábados: 3 Sáb em cada período
+const sabJul = [127, 140, 65, 115,  94, 107, 60, 158, 34];
+const sabJun = [ 95, 132, 32,  85,  92, 103, 37, 137, 52];
 const banhosTaxaJul = banhosJulArr.map(v => +(v/banhosJulDu).toFixed(1));
 const banhosTaxaJun = banhosJunArr.map(v => +(v/banhosJunDu).toFixed(1));
 const banhosCrescPct = banhosTaxaJul.map((tj, i) => +((tj/banhosTaxaJun[i]-1)*100).toFixed(1));
@@ -1385,6 +1413,50 @@ function populateBanhosTable() {
       <td style="color:${banhosCrescPct[i]>=0?'#27ae60':'#e74c3c'};font-weight:600">${banhosCrescPct[i]>0?'+':''}${banhosCrescPct[i]}%</td>
       <td style="text-align:center">${rank+1}°</td>
     </tr>`).join('');
+}
+
+function createChartBanhosSegQui() {
+  if (!document.getElementById('chartBanhosSegQui')) return;
+  const txJul = segQuiJul.map(v=>+(v/11).toFixed(1));
+  const txJun = segQuiJun.map(v=>+(v/12).toFixed(1));
+  charts.banhosSegQui = new Chart(document.getElementById('chartBanhosSegQui'), {
+    type:'bar',
+    data:{
+      labels:banhosUnidades,
+      datasets:[
+        {label:'Jul/26 · banhos/dia Seg-Qui',data:txJul,backgroundColor:'#E8630A',borderRadius:3},
+        {label:'Jun/26 · banhos/dia Seg-Qui',data:txJun,backgroundColor:'rgba(232,99,10,0.35)',borderRadius:3}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{font:{size:10}}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}/dia`}}},
+      scales:{y:{grid:{color:'#eee'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}}
+    }
+  });
+}
+
+function createChartBanhosSab() {
+  if (!document.getElementById('chartBanhosSab')) return;
+  const txJul = sabJul.map(v=>+(v/3).toFixed(1));
+  const txJun = sabJun.map(v=>+(v/3).toFixed(1));
+  charts.banhosSab = new Chart(document.getElementById('chartBanhosSab'), {
+    type:'bar',
+    data:{
+      labels:banhosUnidades,
+      datasets:[
+        {label:'Jul/26 · média/sábado',data:txJul,backgroundColor:'#1F3864',borderRadius:3},
+        {label:'Jun/26 · média/sábado',data:txJun,backgroundColor:'rgba(31,56,100,0.35)',borderRadius:3}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{font:{size:10}}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}/sáb`}}},
+      scales:{y:{grid:{color:'#eee'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}}
+    }
+  });
 }
 
 function createChartsUnidade() {
@@ -1687,7 +1759,7 @@ function createChartsIndicadores() {
   });
 }
 
-fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillSemanal(); fillPlanosSemanais(); fillUnidades(); fillIndicadores(); fillComparativo(); createCharts(); createChartsUnidade(); createChartsIndicadores(); createChartEquilibrio(); createChartPlanosSemanais(); createChartChurn(); calcMetrics(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); populateBanhosTable();
+fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillSemanal(); fillPlanosSemanais(); fillUnidades(); fillIndicadores(); fillComparativo(); createCharts(); createChartsUnidade(); createChartsIndicadores(); createChartEquilibrio(); createChartPlanosSemanais(); createChartChurn(); calcMetrics(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); createChartBanhosSegQui(); createChartBanhosSab(); populateBanhosTable();
 
 // ── DADOS CHURN (BI – Dez/24 a Jul/26) ──
 const churnMeses = ['Dez/24','Jan/25','Fev/25','Mar/25','Abr/25','Mai/25','Jun/25','Jul/25','Ago/25','Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26*'];
