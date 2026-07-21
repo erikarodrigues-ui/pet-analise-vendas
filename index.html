@@ -418,7 +418,7 @@
 
     <!-- Taxa diária Jul vs Jun -->
     <div class="chart-wrap" style="margin-bottom:16px">
-      <div class="chart-title">📊 Banhos por Dia Útil – Jul/26 vs Jun/26 · Taxa diária normalizada</div>
+      <div class="chart-title">📊 Total de Banhos por Unidade – Jul/26 vs Jun/26 (dias 1–20)</div>
       <div style="background:#EEF2F9;border:1px solid #B0C2E8;padding:8px 14px;font-size:11px;color:#1F3864;line-height:1.6;margin-bottom:8px">
         💡 <strong>Taxa diária</strong> = banhos totais ÷ dias Mon-Sáb do período (Jun=18, Jul=17).
       </div>
@@ -1224,15 +1224,15 @@ function createChartBanhosTaxa() {
     data:{
       labels:banhosUnidades,
       datasets:[
-        {label:'Jul/26 · banhos/du',data:banhosTaxaJul,backgroundColor:'#E8630A',borderRadius:3},
-        {label:'Jun/26 · banhos/du',data:banhosTaxaJun,backgroundColor:'rgba(232,99,10,0.35)',borderRadius:3}
+        {label:'Jul/26 · total banhos',data:banhosJulArr,backgroundColor:'#E8630A',borderRadius:3},
+        {label:'Jun/26 · total banhos',data:banhosJunArr,backgroundColor:'rgba(232,99,10,0.35)',borderRadius:3}
       ]
     },
     options:{
       responsive:true, maintainAspectRatio:false,
       plugins:{
         legend:{position:'top',labels:{font:{size:10}}},
-        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}/dia`}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw} banhos`}},
         datalabels:{anchor:'end',align:'top',formatter:v=>v,color:'#333',font:{size:9,weight:'bold'}}
       },
       scales:{y:{grid:{color:'#eee'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}},
