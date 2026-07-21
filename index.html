@@ -51,22 +51,22 @@ function fmtDec(v,d) { return v.toLocaleString('pt-BR',{minimumFractionDigits:d,
 
 function calcMetrics() {
   const arpu  = parseFloat(document.getElementById('c-arpu').value)  || 0;
-  const churn = parseFloat(document.getElementById('c-churn').value) || 0.01;
+  const vida  = parseFloat(document.getElementById('c-vida').value)  || 4;
   const clinic= parseFloat(document.getElementById('c-clinic').value)|| 0;
   const marg  = parseFloat(document.getElementById('c-margem').value)|| 1;
 
-  document.getElementById('c-churn-out').textContent = fmtDec(churn,2).replace('.',',')+'%';
+  document.getElementById('c-vida-out').textContent = Math.round(vida)+' meses';
   document.getElementById('c-margem-out').textContent = Math.round(marg)+'%';
 
   const arpuTotal = arpu + clinic;
-  const vida = 1/(churn/100);
+  const churnImpl = 100/vida;
   const ltvBruto = arpuTotal * vida;
   const ltvMargem = ltvBruto * (marg/100);
 
   document.getElementById('r-ltv-bruto').textContent = fmtBR(ltvBruto);
-  document.getElementById('r-ltv-bruto-sub').textContent = 'R$ '+fmtDec(arpuTotal,2)+' ÷ '+fmtDec(churn,2).replace('.',',')+' % = '+fmtDec(vida,1)+' meses de vida média';
+  document.getElementById('r-ltv-bruto-sub').textContent = 'R$ '+fmtDec(arpuTotal,2)+' × '+Math.round(vida)+' meses (churn implícito: '+fmtDec(churnImpl,1)+'%/mês)';
   document.getElementById('r-ltv-margem').textContent = fmtBR(ltvMargem);
-  document.getElementById('r-vida').textContent = fmtDec(vida,1)+' meses';
+  document.getElementById('r-vida').textContent = Math.round(vida)+' meses';
   document.getElementById('r-arpu-total').textContent = 'R$ '+fmtDec(arpuTotal,2);
 
   // CAC
@@ -654,11 +654,14 @@ function calcMetrics() {
             <div class="field-hint">Preço praticado na campanha vigente. Ex.: R$ 39,90</div>
           </div>
           <div class="slide-row">
-            <label>Churn mensal (%) <span class="bi-badge">BI</span></label>
-            <input type="range" min="0.5" max="10" value="1.58" step="0.01" id="c-churn" oninput="calcMetrics()">
-            <span class="slide-val" id="c-churn-out">1,58%</span>
+            <label>Vida média do cliente (meses) <span class="manual-badge">operacional</span></label>
+            <input type="range" min="1" max="24" value="4" step="1" id="c-vida" oninput="calcMetrics()">
+            <span class="slide-val" id="c-vida-out">4 meses</span>
           </div>
-          <div class="field-hint" style="margin:-6px 0 10px">Jun/26 real: 1,58% · Jul/26: 1,16% · Média 2026: 1,52%</div>
+          <div class="field-hint" style="margin:-6px 0 10px">Experiência operacional: 3–5 meses · Churn implícito: 1/vida_média (ex: 4 meses → 25%/mês)</div>
+          <div class="parcial-note" style="margin:-2px 0 10px;font-size:10px;background:#fff8e1;border-left:3px solid #f59e0b;padding:6px 10px;border-radius:4px">
+            ⚠️ <strong>Atenção:</strong> O churn do BI (1,58%) reflete a base <em>sobrevivente</em> de longo prazo e subestima o churn real de novos contratos. Use a vida média operacional (3–5 meses) para decisões de CAC.
+          </div>
           <div class="field-mb">
             <label class="field-lbl">Receita clínica adicional/cliente/mês (R$) <span class="manual-badge">manual</span></label>
             <input class="calc-input" type="number" id="c-clinic" value="0" step="1" oninput="calcMetrics()">
@@ -673,18 +676,18 @@ function calcMetrics() {
         <div style="display:flex;flex-direction:column;gap:10px">
           <div class="ckpi accent">
             <div class="ckpi-lbl">LTV bruto</div>
-            <div class="ckpi-val" id="r-ltv-bruto">R$ 2.525</div>
-            <div class="ckpi-sub" id="r-ltv-bruto-sub">R$ 39,90 ÷ 1,58% = 63 meses de vida média</div>
+            <div class="ckpi-val" id="r-ltv-bruto">R$ 160</div>
+            <div class="ckpi-sub" id="r-ltv-bruto-sub">R$ 39,90 × 4 meses (churn implícito: 25,0%/mês)</div>
           </div>
           <div class="ckpi navy">
             <div class="ckpi-lbl">LTV com margem</div>
-            <div class="ckpi-val" id="r-ltv-margem">R$ 1.010</div>
+            <div class="ckpi-val" id="r-ltv-margem">R$ 64</div>
             <div class="ckpi-sub">LTV bruto × margem de contribuição</div>
           </div>
           <div class="ckpi">
             <div class="ckpi-lbl">Vida média do cliente</div>
-            <div class="ckpi-val" id="r-vida">63,3 meses</div>
-            <div class="ckpi-sub">1 ÷ taxa de churn mensal</div>
+            <div class="ckpi-val" id="r-vida">4 meses</div>
+            <div class="ckpi-sub">Tempo médio de permanência por contrato</div>
           </div>
           <div class="ckpi">
             <div class="ckpi-lbl">ARPU total (plano + clínica)</div>
@@ -1573,22 +1576,22 @@ function fmtDec(v,d) { return v.toLocaleString('pt-BR',{minimumFractionDigits:d,
 
 function calcMetrics() {
   const arpu  = parseFloat(document.getElementById('c-arpu').value)  || 0;
-  const churn = parseFloat(document.getElementById('c-churn').value) || 0.01;
+  const vida  = parseFloat(document.getElementById('c-vida').value)  || 4;
   const clinic= parseFloat(document.getElementById('c-clinic').value)|| 0;
   const marg  = parseFloat(document.getElementById('c-margem').value)|| 1;
 
-  document.getElementById('c-churn-out').textContent = fmtDec(churn,2).replace('.',',')+'%';
+  document.getElementById('c-vida-out').textContent = Math.round(vida)+' meses';
   document.getElementById('c-margem-out').textContent = Math.round(marg)+'%';
 
   const arpuTotal = arpu + clinic;
-  const vida = 1/(churn/100);
+  const churnImpl = 100/vida;
   const ltvBruto = arpuTotal * vida;
   const ltvMargem = ltvBruto * (marg/100);
 
   document.getElementById('r-ltv-bruto').textContent = fmtBR(ltvBruto);
-  document.getElementById('r-ltv-bruto-sub').textContent = 'R$ '+fmtDec(arpuTotal,2)+' ÷ '+fmtDec(churn,2).replace('.',',')+' % = '+fmtDec(vida,1)+' meses de vida média';
+  document.getElementById('r-ltv-bruto-sub').textContent = 'R$ '+fmtDec(arpuTotal,2)+' × '+Math.round(vida)+' meses (churn implícito: '+fmtDec(churnImpl,1)+'%/mês)';
   document.getElementById('r-ltv-margem').textContent = fmtBR(ltvMargem);
-  document.getElementById('r-vida').textContent = fmtDec(vida,1)+' meses';
+  document.getElementById('r-vida').textContent = Math.round(vida)+' meses';
   document.getElementById('r-arpu-total').textContent = 'R$ '+fmtDec(arpuTotal,2);
 
   // CAC
