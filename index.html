@@ -6,145 +6,6 @@
 <title>Pet de Todos – Análise Mensal de Vendas 2026</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js" crossorigin="anonymous"></script>
-<script>
-// ── DADOS CHURN (BI – Dez/24 a Jul/26) ──
-const churnMeses = ['Dez/24','Jan/25','Fev/25','Mar/25','Abr/25','Mai/25','Jun/25','Jul/25','Ago/25','Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26*'];
-const churnPct   = [1.17,1.48,2.41,4.35,2.59,1.87,6.55,0.97,1.26,1.38,1.36,1.21,1.21,1.71,1.28,1.67,1.65,1.62,1.58,1.16];
-const churnInterr= [190,241,399,728,422,310,1097,157,210,238,250,232,244,358,279,377,386,402,402,312];
-
-function createChartChurn() {
-  if (!document.getElementById('chartChurn')) return;
-  const is2026 = churnMeses.map(m => m.includes('/26') || m.includes('Dez/25'));
-  charts.churn = new Chart(document.getElementById('chartChurn'), {
-    type: 'bar',
-    data: {
-      labels: churnMeses,
-      datasets: [{
-        label: 'Churn (%)',
-        data: churnPct,
-        backgroundColor: churnMeses.map((m,i) => i >= 13 ? '#E8630A' : 'rgba(232,99,10,0.3)'),
-        borderRadius: 3
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ctx.raw.toFixed(2) + '% · ' + churnInterr[ctx.dataIndex].toLocaleString('pt-BR') + ' cancel.' } }
-      },
-      scales: {
-        y: { ticks: { callback: v => v.toFixed(1)+'%', font: {size:10} }, grid: {color:'#eee'} },
-        x: { grid: {display:false}, ticks: {font:{size:9}, maxRotation:45} }
-      }
-    }
-  });
-}
-
-function showCalcTab(name) {
-  document.querySelectorAll('.calc-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.calc-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('calctab-'+name).classList.add('active');
-  const tabs = ['ltv','cac','roi','roas'];
-  document.querySelectorAll('.calc-tab')[tabs.indexOf(name)].classList.add('active');
-}
-
-function fmtBR(v) { return 'R$ ' + Math.round(v).toLocaleString('pt-BR'); }
-function fmtDec(v,d) { return v.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d}); }
-
-function calcMetrics() {
-  const arpu  = parseFloat(document.getElementById('c-arpu').value)  || 0;
-  const vida  = parseFloat(document.getElementById('c-vida').value)  || 4;
-  const clinic= parseFloat(document.getElementById('c-clinic').value)|| 0;
-  const marg  = parseFloat(document.getElementById('c-margem').value)|| 1;
-
-  document.getElementById('c-vida-out').textContent = Math.round(vida)+' meses';
-  document.getElementById('c-margem-out').textContent = Math.round(marg)+'%';
-
-  const arpuTotal = arpu + clinic;
-  const churnImpl = 100/vida;
-  const ltvBruto = arpuTotal * vida;
-  const ltvMargem = ltvBruto * (marg/100);
-
-  document.getElementById('r-ltv-bruto').textContent = fmtBR(ltvBruto);
-  document.getElementById('r-ltv-bruto-sub').textContent = 'R$ '+fmtDec(arpuTotal,2)+' × '+Math.round(vida)+' meses (churn implícito: '+fmtDec(churnImpl,1)+'%/mês)';
-  document.getElementById('r-ltv-margem').textContent = fmtBR(ltvMargem);
-  document.getElementById('r-vida').textContent = Math.round(vida)+' meses';
-  document.getElementById('r-arpu-total').textContent = 'R$ '+fmtDec(arpuTotal,2);
-
-  // CAC
-  const midia  = parseFloat(document.getElementById('c-midia').value)  || 0;
-  const equipe = parseFloat(document.getElementById('c-equipe').value) || 0;
-  const outros = parseFloat(document.getElementById('c-outros').value) || 0;
-  const novos  = parseFloat(document.getElementById('c-novos').value)  || 1;
-  const totalInv = midia + equipe + outros;
-  const cac = totalInv > 0 ? totalInv / novos : 0;
-
-  document.getElementById('r-invest').textContent = fmtBR(totalInv);
-  document.getElementById('r-proj-novos').textContent = Math.round(novos).toLocaleString('pt-BR');
-
-  if (cac > 0) {
-    document.getElementById('r-cac').textContent = fmtBR(cac);
-    document.getElementById('r-cac-sub').textContent = fmtBR(totalInv)+' ÷ '+Math.round(novos).toLocaleString('pt-BR')+' novos clientes';
-    const ratio = ltvMargem / cac;
-    document.getElementById('r-ratio').textContent = fmtDec(ratio,1)+'× LTV';
-    const pctLtv = (cac/ltvBruto*100);
-    const bench = pctLtv < 10 ? 'Excelente' : pctLtv < 20 ? 'Bom' : pctLtv < 33 ? 'Atenção' : 'Crítico';
-    document.getElementById('r-bench').textContent = bench;
-    document.getElementById('r-bench-sub').textContent = 'CAC representa '+fmtDec(pctLtv,1)+'% do LTV bruto';
-
-    const lucro = ltvMargem - cac;
-    const payback = arpuTotal*(marg/100) > 0 ? cac/(arpuTotal*(marg/100)) : 0;
-    const roi = (lucro/cac)*100;
-
-    document.getElementById('r-roi').textContent = (roi>=0?'+':'')+Math.round(roi)+'%';
-    document.getElementById('r-payback').textContent = fmtDec(payback,1)+' meses';
-    document.getElementById('r-lucro').textContent = (lucro>=0?'+':'')+fmtBR(lucro);
-    document.getElementById('r-proj-receita').textContent = fmtBR(ltvBruto*novos);
-    document.getElementById('r-proj-lucro').textContent = (lucro>=0?'+':'')+fmtBR(lucro*novos);
-
-    const roiC = document.getElementById('r-roi-card');
-    const payC = document.getElementById('r-payback-card');
-    const lucC = document.getElementById('r-lucro-card');
-    roiC.className = 'ckpi'+(roi<0?' red':roi>100?' green':' navy');
-    payC.className = 'ckpi'+(payback>vida?' red':payback<vida/3?' green':' navy');
-    lucC.className = 'ckpi'+(lucro<0?' red':' green');
-  } else {
-    ['r-cac','r-ratio','r-bench','r-roi','r-payback','r-lucro','r-proj-receita','r-proj-lucro'].forEach(id => {
-      const el = document.getElementById(id); if(el) el.textContent = '—';
-    });
-    document.getElementById('r-cac-sub').textContent = 'Informe os custos para calcular';
-    document.getElementById('r-bench-sub').textContent = 'CAC representa —% do LTV bruto';
-  }
-
-  // ROAS
-  const rMidia = parseFloat(document.getElementById('r-roas-midia').value) || 0;
-  const rConv  = parseFloat(document.getElementById('r-roas-conv').value)  || 0;
-  const rTick  = parseFloat(document.getElementById('r-roas-ticket').value)|| 0;
-  const rMeses = parseInt(document.getElementById('r-roas-meses').value)   || 1;
-  document.getElementById('r-roas-meses-out').textContent = rMeses+' '+(rMeses===1?'mês':'meses');
-
-  if (rMidia > 0 && rConv > 0) {
-    const recAtrib = rConv * rTick * rMeses;
-    const roas = recAtrib / rMidia;
-    const cpa  = rMidia / rConv;
-    document.getElementById('r-roas-val').textContent  = fmtDec(roas,2)+'×';
-    document.getElementById('r-roas-sub').textContent  = fmtBR(recAtrib)+' receita ÷ '+fmtBR(rMidia)+' verba';
-    document.getElementById('r-roas-rec').textContent  = fmtBR(recAtrib);
-    document.getElementById('r-roas-rec-sub').textContent = Math.round(rConv)+' conv. × R$ '+fmtDec(rTick,2)+' × '+rMeses+(rMeses===1?' mês':' meses');
-    document.getElementById('r-cpa').textContent       = fmtBR(cpa);
-    const roasBench = roas >= 6 ? 'Excelente' : roas >= 4 ? 'Bom' : roas >= 2 ? 'Atenção' : 'Crítico';
-    document.getElementById('r-roas-bench').textContent = roasBench;
-    document.getElementById('r-roas-bench-card').className = 'ckpi'+(roas>=4?' green':roas>=2?'':' red');
-  } else {
-    ['r-roas-val','r-roas-rec','r-cpa','r-roas-bench'].forEach(id => {
-      const el = document.getElementById(id); if(el) el.textContent = '—';
-    });
-    document.getElementById('r-roas-sub').textContent = 'Informe verba e conversões';
-    document.getElementById('r-roas-rec-sub').textContent = 'Conversões × ticket × meses';
-  }
-}
-
-</script>
 <style>
   :root { color-scheme: light; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1782,12 +1643,13 @@ function createChartsIndicadores() {
   });
 }
 
-fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillSemanal(); fillPlanosSemanais(); fillUnidades(); fillIndicadores(); fillComparativo(); createCharts(); createChartsUnidade(); createChartsIndicadores(); createChartEquilibrio(); createChartPlanosSemanais(); createChartChurn(); calcMetrics(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); createChartBanhosSegQui(); createChartBanhosSab(); populateBanhosTable();
 
 // ── DADOS CHURN (BI – Dez/24 a Jul/26) ──
 const churnMeses = ['Dez/24','Jan/25','Fev/25','Mar/25','Abr/25','Mai/25','Jun/25','Jul/25','Ago/25','Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26*'];
 const churnPct   = [1.17,1.48,2.41,4.35,2.59,1.87,6.55,0.97,1.26,1.38,1.36,1.21,1.21,1.71,1.28,1.67,1.65,1.62,1.58,1.16];
 const churnInterr= [190,241,399,728,422,310,1097,157,210,238,250,232,244,358,279,377,386,402,402,312];
+
+fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillSemanal(); fillPlanosSemanais(); fillUnidades(); fillIndicadores(); fillComparativo(); createCharts(); createChartsUnidade(); createChartsIndicadores(); createChartEquilibrio(); createChartPlanosSemanais(); createChartChurn(); calcMetrics(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); createChartBanhosSegQui(); createChartBanhosSab(); populateBanhosTable();
 
 function createChartChurn() {
   if (!document.getElementById('chartChurn')) return;
