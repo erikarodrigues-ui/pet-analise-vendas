@@ -1241,7 +1241,16 @@ function showTab(name,btn) {
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   if(btn) btn.classList.add('active');
-  setTimeout(()=>Object.values(charts).forEach(c=>{try{c.resize();}catch(e){}}),50);
+  setTimeout(()=>{
+    Object.values(charts).forEach(c=>{try{c.resize();}catch(e){}});
+    if(name==='banhos'){
+      ['chartBanhosRanking','chartBanhosTaxa','chartBanhosCrescimento'].forEach(id=>{
+        const canvas=document.getElementById(id);
+        if(canvas){const ex=Chart.getChart(canvas);if(ex)ex.destroy();}
+      });
+      createChartBanhosRanking();createChartBanhosTaxa();createChartBanhosCrescimento();populateBanhosTable();
+    }
+  },50);
 }
 
 // ── DADOS POR UNIDADE – JULHO 2026 (parcial · 16 du) ──
