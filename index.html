@@ -1277,7 +1277,7 @@ function populateBanhosTable() {
     const delta = +((txJul/txJun-1)*100).toFixed(1);
     const sq = segQuiJul[i]; const sqTx = (sq/11).toFixed(1);
     const sb = sabJul[i]; const sbTx = (sb/3).toFixed(1);
-    return \`<tr>
+    return `<tr>
       <td>${rank===0?'🥇 ':rank===1?'🥈 ':rank===2?'🥉 ':''}${u}</td>
       <td><strong>${banhosJulArr[i]}</strong></td>
       <td>${banhosJunArr[i]}</td>
@@ -1287,7 +1287,7 @@ function populateBanhosTable() {
       <td>${sq} (${sqTx}/d)</td>
       <td>${sb} (${sbTx}/sáb)</td>
       <td style="text-align:center">${rank+1}°</td>
-    </tr>\`;
+    </tr>`;
   }).join('');
 }
 
