@@ -435,14 +435,14 @@
     <div class="chart-wrap" style="margin-bottom:16px">
       <div class="chart-title">🗓️ Banhos Seg–Qui por Unidade · Jul vs Jun (taxa por dia Seg–Qui)</div>
       <div style="background:#EEF2F9;border:1px solid #B0C2E8;padding:8px 14px;font-size:11px;color:#1F3864;margin-bottom:8px">
-        💡 Taxa = total de banhos Seg–Qui ÷ nº de dias Seg–Qui no período (Jun=12 dias, Jul=11 dias).
+        💡 Total de banhos realizados em dias Seg–Qui no período 1–20. Jun = 12 dias Seg-Qui · Jul = 11 dias Seg-Qui.
       </div>
       <div class="chart-body" style="height:320px"><canvas id="chartBanhosSegQui"></canvas></div>
     </div>
 
     <!-- Sábados -->
     <div class="chart-wrap" style="margin-bottom:16px">
-      <div class="chart-title">📅 Banhos nos Sábados por Unidade · Jul vs Jun (média por sábado)</div>
+      <div class="chart-title">📅 Banhos nos Sábados por Unidade · Jul vs Jun (total 3 sábados)</div>
       <div style="background:#EEF2F9;border:1px solid #B0C2E8;padding:8px 14px;font-size:11px;color:#1F3864;margin-bottom:8px">
         💡 Ambos os períodos têm <strong>3 sábados</strong> — comparação direta. Sorocaba foi a única unidade com queda (−35%).
       </div>
@@ -1293,22 +1293,20 @@ function populateBanhosTable() {
 
 function createChartBanhosSegQui() {
   if (!document.getElementById('chartBanhosSegQui')) return;
-  const txJul = segQuiJul.map(v=>+(v/11).toFixed(1));
-  const txJun = segQuiJun.map(v=>+(v/12).toFixed(1));
   charts.banhosSegQui = new Chart(document.getElementById('chartBanhosSegQui'), {
     type:'bar',
     data:{
       labels:banhosUnidades,
       datasets:[
-        {label:'Jul/26 · banhos/dia Seg-Qui',data:txJul,backgroundColor:'#E8630A',borderRadius:3},
-        {label:'Jun/26 · banhos/dia Seg-Qui',data:txJun,backgroundColor:'rgba(232,99,10,0.35)',borderRadius:3}
+        {label:'Jul/26 · banhos Seg-Qui',data:segQuiJul,backgroundColor:'#E8630A',borderRadius:3},
+        {label:'Jun/26 · banhos Seg-Qui',data:segQuiJun,backgroundColor:'rgba(232,99,10,0.35)',borderRadius:3}
       ]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
       plugins:{
         legend:{position:'top',labels:{font:{size:10}}},
-        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}/dia`}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw} banhos`}},
         datalabels:{anchor:'end',align:'top',formatter:v=>v,color:'#333',font:{size:9,weight:'bold'}}
       },
       scales:{y:{grid:{color:'#eee'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}},
@@ -1319,22 +1317,20 @@ function createChartBanhosSegQui() {
 
 function createChartBanhosSab() {
   if (!document.getElementById('chartBanhosSab')) return;
-  const txJul = sabJul.map(v=>+(v/3).toFixed(1));
-  const txJun = sabJun.map(v=>+(v/3).toFixed(1));
   charts.banhosSab = new Chart(document.getElementById('chartBanhosSab'), {
     type:'bar',
     data:{
       labels:banhosUnidades,
       datasets:[
-        {label:'Jul/26 · média/sábado',data:txJul,backgroundColor:'#1F3864',borderRadius:3},
-        {label:'Jun/26 · média/sábado',data:txJun,backgroundColor:'rgba(31,56,100,0.35)',borderRadius:3}
+        {label:'Jul/26 · banhos nos Sábados',data:sabJul,backgroundColor:'#1F3864',borderRadius:3},
+        {label:'Jun/26 · banhos nos Sábados',data:sabJun,backgroundColor:'rgba(31,56,100,0.35)',borderRadius:3}
       ]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
       plugins:{
         legend:{position:'top',labels:{font:{size:10}}},
-        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}/sáb`}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw} banhos`}},
         datalabels:{anchor:'end',align:'top',formatter:v=>v,color:'#333',font:{size:9,weight:'bold'}}
       },
       scales:{y:{grid:{color:'#eee'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}},
