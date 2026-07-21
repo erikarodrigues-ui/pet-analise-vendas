@@ -1,32 +1,12 @@
-<div class="tend-note" style="margin-top:16px;background:#EEF2F9;border-color:#B0C2E8">
-      📊 <strong>Dados reais por dia da semana · Jun 1–20 vs Jul 1–20 (fonte: BI Serviço/Produto)</strong><br>
-      Período comparado: <strong>1 a 20</strong> de cada mês. Jun 1–20 = 18 dias Mon-Sáb · Jul 1–20 = 17 dias Mon-Sáb (apenas 2 Terças).<br>
-      Seg–Qui: Jun = 12 dias · Jul = 11 dias. Sábados: 3 em cada período (comparação direta).
-      </div>
-      <!-- Seg-Qui chart -->
-      <div class="chart-wrap" style="margin-bottom:16px">
-        <div class="chart-title">🗓️ Banhos Seg–Qui por Unidade · Jul vs Jun (taxa por dia Seg-Qui)</div>
-        <div style="background:#EEF2F9;border:1px solid #B0C2E8;padding:8px 14px;font-size:11px;color:#1F3864;margin-bottom:8px">
-          💡 Taxa = total de banhos Seg–Qui ÷ nº de dias Seg–Qui no período (Jun=12 dias, Jul=11 dias).
-        </div>
-        <div class="chart-body" style="height:320px"><canvas id="chartBanhosSegQui"></canvas></div>
-      </div>
-      <!-- Sábado chart -->
-      <div class="chart-wrap" style="margin-bottom:16px">
-        <div class="chart-title">📅 Banhos nos Sábados por Unidade · Jul vs Jun (média por sábado)</div>
-        <div style="background:#EEF2F9;border:1px solid #B0C2E8;padding:8px 14px;font-size:11px;color:#1F3864;margin-bottom:8px">
-          💡 Ambos os períodos têm <strong>3 sábados</strong> — comparação direta. Sorocaba foi a única unidade com queda (-35%).
-        </div>
-        <div class="chart-body" style="height:320px"><canvas id="chartBanhosSab"></canvas></div>
-      </div>
-      </div>
-</div><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pet de Todos – Análise Mensal de Vendas 2026</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js" crossorigin="anonymous"></script>
+<script>
 // ── DADOS CHURN (BI – Dez/24 a Jul/26) ──
 const churnMeses = ['Dez/24','Jan/25','Fev/25','Mar/25','Abr/25','Mai/25','Jun/25','Jul/25','Ago/25','Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26*'];
 const churnPct   = [1.17,1.48,2.41,4.35,2.59,1.87,6.55,0.97,1.26,1.38,1.36,1.21,1.21,1.71,1.28,1.67,1.65,1.62,1.58,1.16];
@@ -564,47 +544,66 @@ function calcMetrics() {
 <div id="tab-banhos" class="tab-panel">
   <div class="content">
     <div class="tend-note">
-      🛁 <strong>Banhos por Unidade – Comparativo Jul/26 (1-20) vs Jun/26 (mês completo)</strong><br>
+      🛁 <strong>Banhos por Unidade – Comparativo Jul/26 (1–20) vs Jun/26 (1–20)</strong><br>
       Fonte: BI · Serviço/Produto · Grupo = Banho · Quantidade Serviços/Produtos<br>
-      <strong>Nota metodológica:</strong> Julho = 17 dias úteis (1–20) · Junho = 26 dias úteis (mês completo).
-      Variação % calculada por <em>taxa diária</em> (banhos ÷ du) para comparação justa entre períodos.
+      <strong>Nota metodológica:</strong> Período idêntico: dias 1–20 de cada mês · Jun = 18 dias Mon-Sáb · Jul = 17 dias Mon-Sáb (apenas 2 Terças).
     </div>
 
-    <!-- Gráfico ranking total Jul -->
+    <!-- Ranking Jul -->
     <div class="chart-wrap" style="margin-bottom:16px">
-      <div class="chart-title">🏆 Ranking de Banhos por Unidade · Jul/26 (1-20) – Qtd Serviços</div>
-      <div class="chart-body" style="height:320px"><canvas id="chartBanhosRanking"></canvas></div>
+      <div class="chart-title">🏆 Ranking de Banhos por Unidade · Jul/26 (1–20) – Qtd Serviços</div>
+      <div class="chart-body" style="height:340px"><canvas id="chartBanhosRanking"></canvas></div>
     </div>
 
-    <!-- Gráfico comparativo Jul vs Jun (taxa diária) -->
+    <!-- Taxa diária Jul vs Jun -->
     <div class="chart-wrap" style="margin-bottom:16px">
-      <div class="chart-title">📊 Banhos por Dia Útil – Jul/26 vs Jun/26 · Comparativo normalizado</div>
+      <div class="chart-title">📊 Banhos por Dia Útil – Jul/26 vs Jun/26 · Taxa diária normalizada</div>
       <div style="background:#EEF2F9;border:1px solid #B0C2E8;padding:8px 14px;font-size:11px;color:#1F3864;line-height:1.6;margin-bottom:8px">
-        💡 <strong>Taxa diária</strong> = banhos totais ÷ dias úteis do período. Elimina o efeito do número diferente de dias entre Jul (17 du) e Jun (26 du), tornando a comparação justa.
+        💡 <strong>Taxa diária</strong> = banhos totais ÷ dias Mon-Sáb do período (Jun=18, Jul=17).
       </div>
       <div class="chart-body" style="height:340px"><canvas id="chartBanhosTaxa"></canvas></div>
     </div>
 
-    <!-- Gráfico crescimento % -->
+    <!-- Crescimento % -->
     <div class="chart-wrap" style="margin-bottom:16px">
       <div class="chart-title">📈 Crescimento % em Banhos por Unidade (taxa diária Jul vs Jun)</div>
       <div class="chart-body" style="height:280px"><canvas id="chartBanhosCrescimento"></canvas></div>
     </div>
 
-    <!-- Tabela completa -->
+    <!-- Seg-Qui -->
+    <div class="chart-wrap" style="margin-bottom:16px">
+      <div class="chart-title">🗓️ Banhos Seg–Qui por Unidade · Jul vs Jun (taxa por dia Seg–Qui)</div>
+      <div style="background:#EEF2F9;border:1px solid #B0C2E8;padding:8px 14px;font-size:11px;color:#1F3864;margin-bottom:8px">
+        💡 Taxa = total de banhos Seg–Qui ÷ nº de dias Seg–Qui no período (Jun=12 dias, Jul=11 dias).
+      </div>
+      <div class="chart-body" style="height:320px"><canvas id="chartBanhosSegQui"></canvas></div>
+    </div>
+
+    <!-- Sábados -->
+    <div class="chart-wrap" style="margin-bottom:16px">
+      <div class="chart-title">📅 Banhos nos Sábados por Unidade · Jul vs Jun (média por sábado)</div>
+      <div style="background:#EEF2F9;border:1px solid #B0C2E8;padding:8px 14px;font-size:11px;color:#1F3864;margin-bottom:8px">
+        💡 Ambos os períodos têm <strong>3 sábados</strong> — comparação direta. Sorocaba foi a única unidade com queda (−35%).
+      </div>
+      <div class="chart-body" style="height:320px"><canvas id="chartBanhosSab"></canvas></div>
+    </div>
+
+    <!-- Tabela -->
     <div class="section">
-      <div class="section-header">Tabela – Banhos por Unidade · Comparativo Jul/26 × Jun/26</div>
+      <div class="section-header">Tabela – Banhos por Unidade · Jul/26 × Jun/26 (período 1–20)</div>
       <div class="section-body">
         <table>
           <thead>
             <tr>
               <th>Unidade</th>
-              <th>Banhos Jul (17 du)</th>
-              <th>Banhos Jun (26 du)</th>
-              <th>Taxa Jul/du</th>
-              <th>Taxa Jun/du</th>
-              <th>Δ% Taxa Diária</th>
-              <th>Ranking Jul</th>
+              <th>Total Jul (17d)</th>
+              <th>Total Jun (18d)</th>
+              <th>Taxa Jul/dia</th>
+              <th>Taxa Jun/dia</th>
+              <th>Δ% Taxa</th>
+              <th>Seg–Qui Jul</th>
+              <th>Sáb Jul</th>
+              <th>Rank Jul</th>
             </tr>
           </thead>
           <tbody id="banhos-tbody"></tbody>
@@ -612,19 +611,12 @@ function calcMetrics() {
       </div>
     </div>
 
-    <!-- Nota sobre seg-qui e sábados -->
-    <div class="tend-note" style="margin-top:16px;background:#FFF3CD;border-color:#FBBF24">
-      📅 <strong>Banhos Seg–Qui vs Sábado:</strong> Para esta análise segmentada por dia da semana, selecione no BI 
-      (Serviço/Produto → filtro Dia) os dias de segunda a quinta ou apenas sábados.
-      Julho 1–20: Seg–Qui = dias 1,2,6,7,8,9,13,14,15,16,20 (11 dias) · Sábados = dias 4,11,18 (3 dias).
-      Junho 1–20: Seg–Qui = dias 1,2,3,4,8,9,10,11,15,16,17,18 (12 dias) · Sábados = dias 6,13,20 (3 dias).
-      <br><br>
-      🔢 <strong>Estimativa proporcional Jul/26 (todos os dias):</strong> 
-      4.424 banhos totais · taxa de 260/du · Seg–Qui estimado: ~2.861 banhos (65%) · Sábado estimado: ~783 banhos (18%) · Sexta: ~780 banhos (18%).
+    <div class="tend-note" style="margin-top:16px;background:#EEF2F9;border-color:#B0C2E8">
+      📊 <strong>Dados reais por dia da semana · Jun 1–20 vs Jul 1–20 (fonte: BI Serviço/Produto)</strong><br>
+      Destaques: Contagem +55% Seg–Qui · Paulista PE +84% Seg–Qui · Sorocaba −35% nos Sábados · São Miguel lidera Seg–Qui (41/dia) e Sábados (52,7/sáb).
     </div>
   </div>
 </div>
-
 <!-- ══ QCA / QIA / REC. ÚNICOS ══ -->
 <div id="tab-indicadores" class="tab-panel">
   <div class="content">
@@ -1209,31 +1201,32 @@ function fillComparativo() {
 // ── GRÁFICOS ──
 const ORANGE='#E8630A', NAVY='#1F3864', ORANGE_LIGHT='rgba(232,99,10,0.15)', GRAY='rgba(150,150,150,0.35)';
 let charts={};
+Chart.register(ChartDataLabels);
 
 function createCharts() {
   const bgC=meses.map((_,i)=>isParcial[i]?GRAY:(fatClinica[i]===Math.max(...fatClinica.filter((_,j)=>!isParcial[j]))?ORANGE:ORANGE_LIGHT));
   charts.clinica=new Chart(document.getElementById('chartClinica'),{
     type:'bar',data:{labels:meses,datasets:[{label:'Fat. Clínica',data:fatClinica,backgroundColor:bgC,borderColor:meses.map((_,i)=>isParcial[i]?'#aaa':ORANGE),borderWidth:1.5,borderRadius:4}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'R$ '+fmt(ctx.raw)}}},scales:{y:{ticks:{callback:v=>'R$'+Math.round(v/1000)+'k',font:{size:10}},grid:{color:'#eee'}},x:{grid:{display:false}}}}
+    options:{responsive:true,maintainAspectRatio:false,plugins:{datalabels:{display:false},legend:{display:false},tooltip:{callbacks:{label:ctx=>'R$ '+fmt(ctx.raw)}}},scales:{y:{ticks:{callback:v=>'R$'+Math.round(v/1000)+'k',font:{size:10}},grid:{color:'#eee'}},x:{grid:{display:false}}}}
   });
   charts.plano=new Chart(document.getElementById('chartPlano'),{
     type:'bar',data:{labels:meses,datasets:[
       {label:'Fat. Plano (R$)',data:fatPlano,backgroundColor:meses.map((_,i)=>isParcial[i]?'rgba(150,150,150,0.35)':'rgba(31,56,100,0.8)'),borderRadius:4,yAxisID:'y'},
       {label:'Venda Planos',data:vendaPlanos,type:'line',borderColor:ORANGE,backgroundColor:'transparent',borderWidth:2.5,pointRadius:4,pointBackgroundColor:meses.map((_,i)=>isParcial[i]?'#aaa':ORANGE),yAxisID:'y1'}
     ]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}}},scales:{y:{position:'left',ticks:{callback:v=>'R$'+Math.round(v/1000)+'k',font:{size:10}},grid:{color:'#eee'}},y1:{position:'right',grid:{display:false}},x:{grid:{display:false}}}}
+    options:{responsive:true,maintainAspectRatio:false,plugins:{datalabels:{display:false},legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}}},scales:{y:{position:'left',ticks:{callback:v=>'R$'+Math.round(v/1000)+'k',font:{size:10}},grid:{color:'#eee'}},y1:{position:'right',grid:{display:false}},x:{grid:{display:false}}}}
   });
   charts.clinicaBig=new Chart(document.getElementById('chartClinicaBig'),{
     type:'line',data:{labels:meses,datasets:[{label:'Fat. Clínica',data:fatClinica,borderColor:ORANGE,backgroundColor:ORANGE_LIGHT,borderWidth:3,fill:true,tension:0.3,pointBackgroundColor:meses.map((_,i)=>isParcial[i]?'#aaa':ORANGE),pointRadius:6}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'R$ '+fmt(ctx.raw)}}},scales:{y:{ticks:{callback:v=>'R$'+Math.round(v/1000)+'k'},grid:{color:'#eee'}},x:{grid:{display:false}}}}
+    options:{responsive:true,maintainAspectRatio:false,plugins:{datalabels:{display:false},legend:{display:false},tooltip:{callbacks:{label:ctx=>'R$ '+fmt(ctx.raw)}}},scales:{y:{ticks:{callback:v=>'R$'+Math.round(v/1000)+'k'},grid:{color:'#eee'}},x:{grid:{display:false}}}}
   });
   charts.planoBig=new Chart(document.getElementById('chartPlanoBig'),{
     type:'line',data:{labels:meses,datasets:[{label:'Fat. Plano',data:fatPlano,borderColor:NAVY,backgroundColor:'rgba(31,56,100,0.12)',borderWidth:3,fill:true,tension:0.3,pointBackgroundColor:meses.map((_,i)=>isParcial[i]?'#aaa':NAVY),pointRadius:6}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'R$ '+fmt(ctx.raw)}}},scales:{y:{ticks:{callback:v=>'R$'+Math.round(v/1000)+'k'},grid:{color:'#eee'}},x:{grid:{display:false}}}}
+    options:{responsive:true,maintainAspectRatio:false,plugins:{datalabels:{display:false},legend:{display:false},tooltip:{callbacks:{label:ctx=>'R$ '+fmt(ctx.raw)}}},scales:{y:{ticks:{callback:v=>'R$'+Math.round(v/1000)+'k'},grid:{color:'#eee'}},x:{grid:{display:false}}}}
   });
   charts.vendasBig=new Chart(document.getElementById('chartVendasBig'),{
     type:'bar',data:{labels:meses,datasets:[{label:'Planos Vendidos',data:vendaPlanos,backgroundColor:meses.map((_,i)=>isParcial[i]?'rgba(150,150,150,0.35)':(vendaPlanos[i]===Math.max(...vendaPlanos.filter((_,j)=>!isParcial[j]))?'rgba(31,56,100,0.9)':'rgba(31,56,100,0.4)')),borderColor:meses.map((_,i)=>isParcial[i]?'#aaa':NAVY),borderWidth:1.5,borderRadius:4}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:{color:'#eee'}},x:{grid:{display:false}}}}
+    options:{responsive:true,maintainAspectRatio:false,plugins:{datalabels:{display:false},legend:{display:false}},scales:{y:{grid:{color:'#eee'}},x:{grid:{display:false}}}}
   });
 
   // Semanal chart
@@ -1252,7 +1245,7 @@ function createCharts() {
     },
     options:{
       responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:14}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': R$ '+fmt(ctx.raw)}}},
+      plugins:{datalabels:{display:false},legend:{position:'bottom',labels:{font:{size:11},boxWidth:14}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': R$ '+fmt(ctx.raw)}}},
       scales:{y:{ticks:{callback:v=>'R$'+Math.round(v/1000)+'k',font:{size:10}},grid:{color:'#eee'},stacked:false},x:{grid:{display:false}}}
     }
   });
@@ -1352,8 +1345,13 @@ function createChartBanhosRanking() {
     data:{ labels:banhosRankLabel, datasets:[{label:'Banhos Jul/26',data:banhosRankJul,backgroundColor:colors,borderRadius:4}] },
     options:{
       indexAxis:'y', responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw} banhos (${(ctx.raw/banhosJulDu).toFixed(1)}/du)`}}},
-      scales:{x:{grid:{color:'#eee'},ticks:{font:{size:10}}},y:{grid:{display:false},ticks:{font:{size:11}}}}
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>`${ctx.raw} banhos (${(ctx.raw/banhosJulDu).toFixed(1)}/du)`}},
+        datalabels:{anchor:'end',align:'end',formatter:v=>v,color:'#333',font:{size:11,weight:'bold'}}
+      },
+      scales:{x:{grid:{color:'#eee'},ticks:{font:{size:10}}},y:{grid:{display:false},ticks:{font:{size:11}}}},
+      layout:{padding:{right:40}}
     }
   });
 }
@@ -1371,9 +1369,13 @@ function createChartBanhosTaxa() {
     },
     options:{
       responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{position:'top',labels:{font:{size:10}}},
-        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}/du`}}},
-      scales:{y:{grid:{color:'#eee'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}}
+      plugins:{
+        legend:{position:'top',labels:{font:{size:10}}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}/dia`}},
+        datalabels:{anchor:'end',align:'top',formatter:v=>v,color:'#333',font:{size:9,weight:'bold'}}
+      },
+      scales:{y:{grid:{color:'#eee'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}},
+      layout:{padding:{top:16}}
     }
   });
 }
@@ -1393,8 +1395,13 @@ function createChartBanhosCrescimento() {
     },
     options:{
       responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw>0?'+':''}${ctx.raw}%`}}},
-      scales:{y:{grid:{color:'#eee'},ticks:{callback:v=>v+'%',font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}}
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>`${ctx.raw>0?'+':''}${ctx.raw}%`}},
+        datalabels:{anchor:'end',align:'top',formatter:v=>`${v>0?'+':''}${v}%`,color:'#333',font:{size:10,weight:'bold'}}
+      },
+      scales:{y:{grid:{color:'#eee'},ticks:{callback:v=>v+'%',font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}},
+      layout:{padding:{top:20}}
     }
   });
 }
@@ -1403,16 +1410,24 @@ function populateBanhosTable() {
   const tbody = document.getElementById('banhos-tbody');
   if (!tbody) return;
   const sorted = banhosUnidades.map((u,i)=>({u,i})).sort((a,b)=>banhosJulArr[b.i]-banhosJulArr[a.i]);
-  tbody.innerHTML = sorted.map(({u,i},rank)=>`
-    <tr>
+  tbody.innerHTML = sorted.map(({u,i},rank)=>{
+    const txJul = (banhosJulArr[i]/banhosJulDu).toFixed(1);
+    const txJun = (banhosJunArr[i]/banhosJunDu).toFixed(1);
+    const delta = +((txJul/txJun-1)*100).toFixed(1);
+    const sq = segQuiJul[i]; const sqTx = (sq/11).toFixed(1);
+    const sb = sabJul[i]; const sbTx = (sb/3).toFixed(1);
+    return \`<tr>
       <td>${rank===0?'🥇 ':rank===1?'🥈 ':rank===2?'🥉 ':''}${u}</td>
-      <td><strong>${banhosJulArr[i].toLocaleString('pt-BR')}</strong></td>
-      <td>${banhosJunArr[i].toLocaleString('pt-BR')}</td>
-      <td>${banhosTaxaJul[i].toFixed(1)}</td>
-      <td>${banhosTaxaJun[i].toFixed(1)}</td>
-      <td style="color:${banhosCrescPct[i]>=0?'#27ae60':'#e74c3c'};font-weight:600">${banhosCrescPct[i]>0?'+':''}${banhosCrescPct[i]}%</td>
+      <td><strong>${banhosJulArr[i]}</strong></td>
+      <td>${banhosJunArr[i]}</td>
+      <td><strong>${txJul}</strong></td>
+      <td>${txJun}</td>
+      <td style="color:${delta>=0?'#27ae60':'#e74c3c'};font-weight:600">${delta>0?'+':''}${delta}%</td>
+      <td>${sq} (${sqTx}/d)</td>
+      <td>${sb} (${sbTx}/sáb)</td>
       <td style="text-align:center">${rank+1}°</td>
-    </tr>`).join('');
+    </tr>\`;
+  }).join('');
 }
 
 function createChartBanhosSegQui() {
@@ -1430,9 +1445,13 @@ function createChartBanhosSegQui() {
     },
     options:{
       responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'top',labels:{font:{size:10}}},
-        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}/dia`}}},
-      scales:{y:{grid:{color:'#eee'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}}
+      plugins:{
+        legend:{position:'top',labels:{font:{size:10}}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}/dia`}},
+        datalabels:{anchor:'end',align:'top',formatter:v=>v,color:'#333',font:{size:9,weight:'bold'}}
+      },
+      scales:{y:{grid:{color:'#eee'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}},
+      layout:{padding:{top:16}}
     }
   });
 }
@@ -1452,9 +1471,13 @@ function createChartBanhosSab() {
     },
     options:{
       responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'top',labels:{font:{size:10}}},
-        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}/sáb`}}},
-      scales:{y:{grid:{color:'#eee'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}}
+      plugins:{
+        legend:{position:'top',labels:{font:{size:10}}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}/sáb`}},
+        datalabels:{anchor:'end',align:'top',formatter:v=>v,color:'#333',font:{size:9,weight:'bold'}}
+      },
+      scales:{y:{grid:{color:'#eee'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}},
+      layout:{padding:{top:16}}
     }
   });
 }
