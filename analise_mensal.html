@@ -501,7 +501,11 @@
           </div>
           <div style="font-size:12px;color:#333;font-weight:600;margin-bottom:4px">🐾 Sem Pegadinha</div>
           <div style="font-size:11px;color:#555;line-height:1.6"><strong>Plano:</strong> 1 mensalidade grátis + taxa de adesão por R$ 9,90</div>
-          <div style="margin-top:8px;font-size:10px;color:#555;font-style:italic">Mês em aberto — dados até 27/07/2026</div>
+          <div style="margin-top:10px;background:#E6F5EC;border-radius:8px;padding:7px 10px;display:flex;align-items:center;gap:8px">
+            <span style="background:#1E7B45;color:white;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap">🏥 Inauguração</span>
+            <span style="font-size:11px;color:#1E7B45;font-weight:600">Paulista – PE · 9ª unidade</span>
+          </div>
+          <div style="margin-top:6px;font-size:10px;color:#555;font-style:italic">Mês em aberto — dados até 27/07/2026</div>
         </div>
       </div>
 
@@ -541,10 +545,10 @@
             <tr><td>6ª</td><td><strong>Ipatinga</strong></td><td>MG</td><td>Nova</td><td>Franqueado</td><td>Out/2025</td><td style="text-align:center">9+</td></tr>
             <tr style="background:#FDE9D9"><td>7ª</td><td><strong>Sorocaba</strong></td><td>SP</td><td>Nova</td><td>Franqueado</td><td><strong>Fev/2026</strong></td><td style="text-align:center">5+</td></tr>
             <tr style="background:#FDE9D9"><td>8ª</td><td><strong>Contagem</strong></td><td>MG</td><td>Nova</td><td>Franqueadora</td><td><strong>Mai/2026</strong></td><td style="text-align:center">2+</td></tr>
-            <tr><td>9ª</td><td><strong>Paulista – PE</strong></td><td>PE</td><td>Virada</td><td>Franqueado</td><td>Jul/2025</td><td style="text-align:center">12+</td></tr>
+            <tr style="background:#FDE9D9"><td>9ª</td><td><strong>Paulista – PE</strong></td><td>PE</td><td>Virada</td><td>Franqueado</td><td><strong>Jul/2026</strong></td><td style="text-align:center">1+</td></tr>
           </tbody>
           <tfoot>
-            <tr><td colspan="7" style="text-align:left;font-size:10px;color:#777;background:#f9f9f9;font-style:italic;border-top:1px solid #eee">* Meses calculados até Jul/2026 · Linhas em laranja: inauguradas em 2026 — impacto direto no crescimento do período · Próxima: Cosmópolis/SP em Ago/2026</td></tr>
+            <tr><td colspan="7" style="text-align:left;font-size:10px;color:#777;background:#f9f9f9;font-style:italic;border-top:1px solid #eee">* Meses calculados até Jul/2026 · Linhas em laranja: inauguradas em 2026 — impacto direto no crescimento do período · Próxima: Cosmópolis/SP em Ago/2026 · Paulista-PE: inauguração Jul/2026 (mês atual)</td></tr>
           </tfoot>
         </table>
       </div>
@@ -887,8 +891,8 @@ function createChartsUnidade() {
 
 function createChartCampanhas() {
   const campanhas = ['Festival Verão','Carnaval Animal','Verminose & Giárdia','CASHPET','Vantagens Pet','Copa do Mundo 2026','Sem Pegadinha'];
-  const inauguracao = [false, true, false, false, true, false, false];
-  const inaugNomes = ['','Sorocaba – SP','','','Contagem – MG','',''];
+  const inauguracao = [false, true, false, false, true, false, true];
+  const inaugNomes = ['','Sorocaba – SP','','','Contagem – MG','','Paulista – PE'];
   const tipos = ['Clínica','Plano + Clínica','Plano + Clínica','Plano + Clínica','Plano + Clínica','Plano + Clínica','Plano'];
   const mesesC = ['Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26*'];
 
@@ -905,7 +909,6 @@ function createChartCampanhas() {
   const barColors = vendaPlanos.map((v,i) => {
     if (i === 5) return '#E8630A';
     if (inauguracao[i]) return 'rgba(30,123,69,0.85)';
-    if (i === 6) return 'rgba(192,148,48,0.65)';
     return 'rgba(31,56,100,0.8)';
   });
 
