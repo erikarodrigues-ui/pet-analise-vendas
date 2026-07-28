@@ -309,10 +309,25 @@
   <div class="content">
     <div class="parcial-note">📋 Calendário consolidado de campanhas Jan–Jul/26 com inaugurações de unidades. Correlacione as ações de marketing com os resultados de vendas de cada mês.</div>
 
+    <!-- ── GRÁFICO VISUAL ── -->
+    <div class="section" style="margin-bottom:22px">
+      <div class="section-header">📊 Venda de Planos × Fat. Clínica · Jan–Jul/26</div>
+      <div class="section-body" style="padding:16px 14px">
+        <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:center;margin-bottom:12px;font-size:11px;color:#555">
+          <span style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:rgba(31,56,100,0.8)"></span>Mês normal</span>
+          <span style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#1E7B45"></span>Mês c/ inauguração</span>
+          <span style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#E8630A"></span>Recorde de vendas</span>
+          <span style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:12px;height:3px;background:rgba(232,99,10,0.6);border-radius:2px"></span>Fat. Clínica (eixo direito)</span>
+        </div>
+        <div style="height:290px;position:relative"><canvas id="chartCampanhas"></canvas></div>
+        <div id="campLabels" style="display:grid;grid-template-columns:repeat(7,1fr);margin-top:10px;text-align:center;gap:4px;font-size:9px;padding:0 2px"></div>
+      </div>
+    </div>
+
     <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:18px;font-size:11px;color:#555">
       <span style="display:flex;align-items:center;gap:6px"><span style="background:#1F3864;color:white;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700">Plano</span> Campanha de plano</span>
       <span style="display:flex;align-items:center;gap:6px"><span style="background:#C00000;color:white;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700">Clínica</span> Campanha clínica</span>
-      <span style="display:flex;align-items:center;gap:6px"><span style="background:#1E7B45;color:white;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700">🏥 Inauguração</span> Nova unidade no mês</span>
+      <span style="display:flex;align-items:center;gap:6px"><span style="background:#1E7B45;color:white;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700">🏥</span> Inauguração no mês</span>
     </div>
 
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;margin-bottom:20px">
@@ -870,7 +885,102 @@ function createChartsUnidade() {
   });
 }
 
-fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillSemanal(); fillUnidades(); createCharts(); createChartsUnidade();
+function createChartCampanhas() {
+  const campanhas = ['Festival Verão','Carnaval Animal','Verminose & Giárdia','CASHPET','Vantagens Pet','Copa do Mundo 2026','Sem Pegadinha'];
+  const inauguracao = [false, true, false, false, true, false, false];
+  const inaugNomes = ['','Sorocaba – SP','','','Contagem – MG','',''];
+  const tipos = ['Clínica','Plano + Clínica','Plano + Clínica','Plano + Clínica','Plano + Clínica','Plano + Clínica','Plano'];
+  const mesesC = ['Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26*'];
+
+  // Chips de campanha abaixo do gráfico
+  const labelsDiv = document.getElementById('campLabels');
+  mesesC.forEach((mes, i) => {
+    labelsDiv.innerHTML += `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 2px">
+      ${inauguracao[i] ? `<span style="background:#1E7B45;color:white;padding:2px 5px;border-radius:8px;font-size:8px;font-weight:700;line-height:1.4">🏥 ${inaugNomes[i]}</span>` : ''}
+      <span style="background:${i===5?'#E8630A':inauguracao[i]?'#1E7B45':'#1F3864'};color:white;padding:2px 5px;border-radius:8px;font-size:8px;font-weight:600;line-height:1.4">${campanhas[i]}</span>
+      <span style="font-size:8px;color:#888;line-height:1.4">${tipos[i]}</span>
+    </div>`;
+  });
+
+  const barColors = vendaPlanos.map((v,i) => {
+    if (i === 5) return '#E8630A';
+    if (inauguracao[i]) return 'rgba(30,123,69,0.85)';
+    if (i === 6) return 'rgba(192,148,48,0.65)';
+    return 'rgba(31,56,100,0.8)';
+  });
+
+  charts.campanhas = new Chart(document.getElementById('chartCampanhas'), {
+    type: 'bar',
+    data: {
+      labels: mesesC,
+      datasets: [
+        {
+          label: 'Planos Vendidos',
+          data: vendaPlanos,
+          backgroundColor: barColors,
+          borderColor: barColors.map(c => c.replace('0.8','1').replace('0.85','1').replace('0.65','1')),
+          borderWidth: 1.5,
+          borderRadius: 5,
+          yAxisID: 'y',
+          order: 2
+        },
+        {
+          label: 'Fat. Clínica (R$k)',
+          data: fatClinica.map(v => +(v/1000).toFixed(0)),
+          type: 'line',
+          borderColor: 'rgba(232,99,10,0.7)',
+          backgroundColor: 'rgba(232,99,10,0.06)',
+          borderWidth: 2.5,
+          pointBackgroundColor: 'rgba(232,99,10,0.9)',
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          tension: 0.3,
+          fill: false,
+          yAxisID: 'y2',
+          order: 1
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: true, position: 'top', labels: { font: { size: 11 }, padding: 14, usePointStyle: true } },
+        tooltip: {
+          callbacks: {
+            label(ctx) {
+              if (ctx.datasetIndex === 0) return `  Planos vendidos: ${ctx.raw.toLocaleString('pt-BR')}`;
+              return `  Fat. Clínica: R$ ${ctx.raw}k`;
+            },
+            afterBody(items) {
+              const i = items[0].dataIndex;
+              const lines = [`  Campanha: ${campanhas[i]}`];
+              if (inauguracao[i]) lines.push(`  🏥 Inauguração: ${inaugNomes[i]}`);
+              return lines;
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          position: 'left',
+          title: { display: true, text: 'Planos Vendidos', font: { size: 11 }, color: '#1F3864' },
+          ticks: { font: { size: 10 }, color: '#555' },
+          grid: { color: '#eee' }
+        },
+        y2: {
+          position: 'right',
+          title: { display: true, text: 'Fat. Clínica (R$k)', font: { size: 11 }, color: '#E8630A' },
+          ticks: { callback: v => 'R$'+v+'k', font: { size: 10 }, color: '#E8630A' },
+          grid: { display: false }
+        },
+        x: { ticks: { font: { size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillSemanal(); fillUnidades(); createCharts(); createChartsUnidade(); createChartCampanhas();
 </script>
 </body>
 </html>
