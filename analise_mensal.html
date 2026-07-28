@@ -83,6 +83,7 @@
   <button class="nav-btn" onclick="showTab('vendas',this)">Venda de Planos</button>
   <button class="nav-btn" onclick="showTab('semanal',this)">Comparativo Semanal Jul×Jun</button>
   <button class="nav-btn" onclick="showTab('unidades',this)">Por Unidade – Jul/26</button>
+  <button class="nav-btn" onclick="showTab('campanhas',this)">Campanhas Mensais</button>
 </div>
 
 <!-- ══ RESUMO ══ -->
@@ -300,6 +301,240 @@
         </table>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ══ CAMPANHAS MENSAIS ══ -->
+<div id="tab-campanhas" class="tab-panel">
+  <div class="content">
+    <div class="parcial-note">📋 Calendário consolidado de campanhas Jan–Jul/26 com inaugurações de unidades. Correlacione as ações de marketing com os resultados de vendas de cada mês.</div>
+
+    <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:18px;font-size:11px;color:#555">
+      <span style="display:flex;align-items:center;gap:6px"><span style="background:#1F3864;color:white;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700">Plano</span> Campanha de plano</span>
+      <span style="display:flex;align-items:center;gap:6px"><span style="background:#C00000;color:white;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700">Clínica</span> Campanha clínica</span>
+      <span style="display:flex;align-items:center;gap:6px"><span style="background:#1E7B45;color:white;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700">🏥 Inauguração</span> Nova unidade no mês</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;margin-bottom:20px">
+
+      <!-- JANEIRO -->
+      <div style="background:white;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.08);overflow:hidden;border-top:4px solid #AAAAAA">
+        <div style="background:#f5f5f5;padding:10px 16px;display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-size:13px;font-weight:800;color:#333">Janeiro 2026</div>
+            <div style="font-size:10px;color:#777;margin-top:2px">27 dias úteis</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:10px;color:#777">Fat. Clínica</div>
+            <div style="font-size:13px;font-weight:700;color:#1F3864">R$ 859.670</div>
+            <div style="font-size:10px;color:#777;margin-top:2px">1.162 planos vendidos</div>
+          </div>
+        </div>
+        <div style="padding:12px 16px">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+            <span style="background:#888;color:white;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700">Clínica</span>
+          </div>
+          <div style="font-size:12px;color:#333;font-weight:600;margin-bottom:4px">🐾 Festival Verão</div>
+          <div style="font-size:11px;color:#555;line-height:1.6">50% hemograma · 40% anti pulga · 15% vacina</div>
+        </div>
+      </div>
+
+      <!-- FEVEREIRO -->
+      <div style="background:white;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.08);overflow:hidden;border-top:4px solid #C06080">
+        <div style="background:#fdf0f3;padding:10px 16px;display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-size:13px;font-weight:800;color:#333">Fevereiro 2026</div>
+            <div style="font-size:10px;color:#777;margin-top:2px">24 dias úteis</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:10px;color:#777">Fat. Clínica</div>
+            <div style="font-size:13px;font-weight:700;color:#1F3864">R$ 817.958</div>
+            <div style="font-size:10px;color:#777;margin-top:2px">1.116 planos vendidos</div>
+          </div>
+        </div>
+        <div style="padding:12px 16px">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+            <span style="background:#1F3864;color:white;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700">Plano</span>
+            <span style="background:#C00000;color:white;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700">Clínica</span>
+          </div>
+          <div style="font-size:12px;color:#333;font-weight:600;margin-bottom:4px">🎉 Carnaval Animal</div>
+          <div style="font-size:11px;color:#555;line-height:1.6;margin-bottom:5px"><strong>Plano:</strong> 70% de desconto na 1ª mensalidade · 01/02 a 28/02</div>
+          <div style="font-size:11px;color:#555;line-height:1.6"><strong>Clínica:</strong> 15% vacina + vermífugo (1ª quinzena) · Banho & tosa ganha hidratação (2ª quinzena)</div>
+          <div style="margin-top:10px;background:#E6F5EC;border-radius:8px;padding:7px 10px;display:flex;align-items:center;gap:8px">
+            <span style="background:#1E7B45;color:white;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap">🏥 Inauguração</span>
+            <span style="font-size:11px;color:#1E7B45;font-weight:600">Sorocaba – SP · 7ª unidade</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MARÇO -->
+      <div style="background:white;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.08);overflow:hidden;border-top:4px solid #2060A0">
+        <div style="background:#f0f6fc;padding:10px 16px;display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-size:13px;font-weight:800;color:#333">Março 2026</div>
+            <div style="font-size:10px;color:#777;margin-top:2px">26 dias úteis</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:10px;color:#777">Fat. Clínica</div>
+            <div style="font-size:13px;font-weight:700;color:#1F3864">R$ 992.701</div>
+            <div style="font-size:10px;color:#1E7B45;font-weight:600;margin-top:2px">↑ +21,3% vs Fev · 1.304 planos</div>
+          </div>
+        </div>
+        <div style="padding:12px 16px">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+            <span style="background:#1F3864;color:white;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700">Plano</span>
+            <span style="background:#C00000;color:white;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700">Clínica</span>
+          </div>
+          <div style="font-size:11px;color:#555;line-height:1.6;margin-bottom:5px"><strong>Clínica:</strong> 20% de desconto em Probiótico, teste de Giárdia e Vacina de Giárgia · 01/03 a 31/03</div>
+          <div style="font-size:11px;color:#555;line-height:1.6"><strong>Plano:</strong> 50% de desconto no plano · 01/03 a 31/03</div>
+        </div>
+      </div>
+
+      <!-- ABRIL -->
+      <div style="background:white;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.08);overflow:hidden;border-top:4px solid #E8630A">
+        <div style="background:#fff7f0;padding:10px 16px;display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-size:13px;font-weight:800;color:#333">Abril 2026</div>
+            <div style="font-size:10px;color:#777;margin-top:2px">26 dias úteis</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:10px;color:#777">Fat. Clínica</div>
+            <div style="font-size:13px;font-weight:700;color:#1F3864">R$ 980.567</div>
+            <div style="font-size:10px;color:#1F3864;font-weight:600;margin-top:2px">1.711 planos ↑ +31,2% vs Mar</div>
+          </div>
+        </div>
+        <div style="padding:12px 16px">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+            <span style="background:#1F3864;color:white;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700">Plano</span>
+            <span style="background:#C00000;color:white;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700">Clínica</span>
+          </div>
+          <div style="font-size:12px;color:#333;font-weight:600;margin-bottom:4px">💰 CASHPET</div>
+          <div style="font-size:11px;color:#555;line-height:1.6">Valor do plano de volta em gasto na loja · 01/04 a 30/04</div>
+          <div style="margin-top:8px;font-size:10px;color:#E8630A;font-weight:700">🚀 Maior venda de planos até então — campanha de cashback impulsionou conversão</div>
+        </div>
+      </div>
+
+      <!-- MAIO -->
+      <div style="background:white;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.08);overflow:hidden;border-top:4px solid #C09000">
+        <div style="background:#fffdf0;padding:10px 16px;display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-size:13px;font-weight:800;color:#333">Maio 2026</div>
+            <div style="font-size:10px;color:#777;margin-top:2px">26 dias úteis</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:10px;color:#777">Fat. Clínica</div>
+            <div style="font-size:13px;font-weight:700;color:#1F3864">R$ 1.006.050</div>
+            <div style="font-size:10px;color:#777;margin-top:2px">1.251 planos vendidos</div>
+          </div>
+        </div>
+        <div style="padding:12px 16px">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+            <span style="background:#1F3864;color:white;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700">Plano</span>
+            <span style="background:#C00000;color:white;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700">Clínica</span>
+          </div>
+          <div style="font-size:12px;color:#333;font-weight:600;margin-bottom:4px">🐾 Vantagens Pet</div>
+          <div style="font-size:11px;color:#555;line-height:1.6;margin-bottom:5px"><strong>Clínica:</strong> 20% de desconto em exame laboratorial para função renal</div>
+          <div style="font-size:11px;color:#555;line-height:1.6"><strong>Plano:</strong> 50% de desconto no plano</div>
+          <div style="margin-top:10px;background:#E6F5EC;border-radius:8px;padding:7px 10px;display:flex;align-items:center;gap:8px">
+            <span style="background:#1E7B45;color:white;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap">🏥 Inauguração</span>
+            <span style="font-size:11px;color:#1E7B45;font-weight:600">Contagem – MG · 8ª unidade</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- JUNHO -->
+      <div style="background:white;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.08);overflow:hidden;border-top:4px solid #7050C0">
+        <div style="background:#f7f0ff;padding:10px 16px;display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-size:13px;font-weight:800;color:#333">Junho 2026</div>
+            <div style="font-size:10px;color:#777;margin-top:2px">26 dias úteis</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:10px;color:#777">Fat. Clínica</div>
+            <div style="font-size:13px;font-weight:700;color:#1F3864">R$ 971.345</div>
+            <div style="font-size:10px;color:#E8630A;font-weight:700;margin-top:2px">⭐ 1.856 planos — recorde</div>
+          </div>
+        </div>
+        <div style="padding:12px 16px">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+            <span style="background:#1F3864;color:white;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700">Plano</span>
+            <span style="background:#C00000;color:white;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700">Clínica</span>
+          </div>
+          <div style="font-size:12px;color:#333;font-weight:600;margin-bottom:4px">⚽ Copa do Mundo 2026</div>
+          <div style="font-size:11px;color:#555;line-height:1.6;margin-bottom:5px"><strong>Clínica:</strong> 20% OFF consulta oftalmo + exames preventivos · 50% dermato e oftalmo</div>
+          <div style="font-size:11px;color:#555;line-height:1.6"><strong>Plano – Torcida CãoPeã:</strong> Novo plano com 1 banho incluso/mês por R$ 39,90</div>
+          <div style="margin-top:8px;font-size:10px;color:#7050C0;font-weight:700">📈 Venda de planos +48,4% vs Maio — melhor resultado do período</div>
+        </div>
+      </div>
+
+      <!-- JULHO -->
+      <div style="background:white;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.08);overflow:hidden;border-top:4px solid #C09430;opacity:0.93">
+        <div style="background:#fffbf0;padding:10px 16px;display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-size:13px;font-weight:800;color:#333">Julho 2026 <span style="font-size:10px;font-weight:500;color:#E8630A">⏳ parcial</span></div>
+            <div style="font-size:10px;color:#777;margin-top:2px">23 de 27 dias úteis</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:10px;color:#777">Fat. Clínica (23du)</div>
+            <div style="font-size:13px;font-weight:700;color:#1F3864">R$ 936.666</div>
+            <div style="font-size:10px;color:#777;margin-top:2px">1.852 planos · proj. R$ 1.099.565</div>
+          </div>
+        </div>
+        <div style="padding:12px 16px">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+            <span style="background:#1F3864;color:white;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700">Plano</span>
+          </div>
+          <div style="font-size:12px;color:#333;font-weight:600;margin-bottom:4px">🐾 Sem Pegadinha</div>
+          <div style="font-size:11px;color:#555;line-height:1.6"><strong>Plano:</strong> 1 mensalidade grátis + taxa de adesão por R$ 9,90</div>
+          <div style="margin-top:8px;font-size:10px;color:#555;font-style:italic">Mês em aberto — dados até 27/07/2026</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Próxima inauguração -->
+    <div style="background:white;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.08);padding:14px 20px;margin-bottom:16px">
+      <div style="font-size:11px;font-weight:700;color:#1F3864;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px">📅 Próxima Inauguração Prevista</div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <span style="background:#1E7B45;color:white;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700">🏥 Cosmópolis – SP</span>
+        <span style="font-size:12px;color:#555">Previsão: <strong>28/08/2026</strong> · Franqueado: João Mori · 10ª unidade ativa</span>
+      </div>
+    </div>
+
+    <!-- Histórico de inaugurações -->
+    <div class="section">
+      <div class="section-header">🏥 Histórico de Inaugurações – Unidades Ativas (ordem de abertura)</div>
+      <div class="section-body">
+        <table>
+          <thead>
+            <tr>
+              <th style="text-align:left">#</th>
+              <th style="text-align:left">Unidade</th>
+              <th style="text-align:left">UF</th>
+              <th style="text-align:left">Tipo</th>
+              <th style="text-align:left">Modelo</th>
+              <th style="text-align:left">Inaugurada em</th>
+              <th>Meses em operação*</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1ª</td><td><strong>São Miguel Paulista</strong></td><td>SP</td><td>Nova</td><td>Franqueadora</td><td>Mai/2022</td><td style="text-align:center">50+</td></tr>
+            <tr><td>2ª</td><td><strong>Barreiro</strong></td><td>MG</td><td>Nova</td><td>Franqueadora</td><td>Nov/2022</td><td style="text-align:center">44+</td></tr>
+            <tr><td>3ª</td><td><strong>Dona Clara</strong></td><td>MG</td><td>Nova</td><td>Franqueadora</td><td>Mai/2023</td><td style="text-align:center">26+</td></tr>
+            <tr><td>4ª</td><td><strong>Itaim Paulista</strong></td><td>SP</td><td>Nova</td><td>Franqueadora</td><td>Set/2023</td><td style="text-align:center">22+</td></tr>
+            <tr><td>5ª</td><td><strong>Campina Grande</strong></td><td>PB</td><td>Virada</td><td>Franqueado</td><td>Set/2025</td><td style="text-align:center">10+</td></tr>
+            <tr><td>6ª</td><td><strong>Ipatinga</strong></td><td>MG</td><td>Nova</td><td>Franqueado</td><td>Out/2025</td><td style="text-align:center">9+</td></tr>
+            <tr style="background:#FDE9D9"><td>7ª</td><td><strong>Sorocaba</strong></td><td>SP</td><td>Nova</td><td>Franqueado</td><td><strong>Fev/2026</strong></td><td style="text-align:center">5+</td></tr>
+            <tr style="background:#FDE9D9"><td>8ª</td><td><strong>Contagem</strong></td><td>MG</td><td>Nova</td><td>Franqueadora</td><td><strong>Mai/2026</strong></td><td style="text-align:center">2+</td></tr>
+            <tr><td>9ª</td><td><strong>Paulista – PE</strong></td><td>PE</td><td>Virada</td><td>Franqueado</td><td>Jul/2025</td><td style="text-align:center">12+</td></tr>
+          </tbody>
+          <tfoot>
+            <tr><td colspan="7" style="text-align:left;font-size:10px;color:#777;background:#f9f9f9;font-style:italic;border-top:1px solid #eee">* Meses calculados até Jul/2026 · Linhas em laranja: inauguradas em 2026 — impacto direto no crescimento do período · Próxima: Cosmópolis/SP em Ago/2026</td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
   </div>
 </div>
 
