@@ -120,13 +120,13 @@
 <!-- ══ RESUMO ══ -->
 <div id="tab-resumo" class="tab-panel active">
   <div class="content">
-    <div class="tend-note">✅ <strong>Julho/26 fechado</strong> — mês completo (27 dias úteis). 2.254 planos vendidos — novo recorde do período (+21,1% vs Jun). Todos os 7 meses de 2026 disponíveis.</div>
+    <div class="tend-note">✅ <strong>Julho/26 fechado</strong> — mês completo (27 dias úteis). 2.254 planos — novo recorde (+21,1% vs Jun) · Fat. Clínica R$ 1.327.208 (+12,3% vs Jun). Todos os 7 meses de 2026 disponíveis.</div>
     <div class="kpi-row">
       <div class="kpi-card">
         <div class="kpi-label">Fat. Clínica – Jul/26</div>
-        <div class="kpi-value">R$ 936.666</div>
+        <div class="kpi-value">R$ 1.327.208</div>
         <div class="kpi-sub">27 du · Mês fechado</div>
-        <span class="kpi-var down">▼ -3,6% vs Jun</span>
+        <span class="kpi-var up">▲ +12,3% vs Jun</span>
       </div>
       <div class="kpi-card blue">
         <div class="kpi-label">Fat. Plano – Jul/26</div>
@@ -144,9 +144,9 @@
     <div class="kpi-row">
       <div class="kpi-card">
         <div class="kpi-label">Fat. Clínica – Jun/26</div>
-        <div class="kpi-value">R$ 971.344</div>
+        <div class="kpi-value">R$ 1.181.917</div>
         <div class="kpi-sub">26 du · Mês anterior</div>
-        <span class="kpi-var down">▼ -3,5% vs Mai</span>
+        <span class="kpi-var up">▲ +15,1% vs Mai</span>
       </div>
       <div class="kpi-card blue">
         <div class="kpi-label">Fat. Plano – Jun/26</div>
@@ -565,7 +565,7 @@
 // ── DADOS MENSAIS ──
 const meses = ['Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26'];
 const diasUteis = [27,24,26,26,26,26,27];
-const fatClinica = [859670.31,817957.92,992700.66,980566.62,1006049.73,971344.52,936666.18];
+const fatClinica = [879312.72,848652.47,1013310.18,1004936.04,1026980.34,1181917.44,1327208.53];
 const fatPlano   = [437073.57,423338.56,480962.19,477913.16,518574.29,516238.31,534722.13];
 const vendaPlanos = [1162,1116,1305,1711,1252,1862,2254];
 const isParcial = [false,false,false,false,false,false,false];
@@ -901,12 +901,12 @@ function showTab(name,btn) {
 }
 
 // ── DADOS POR UNIDADE – JULHO 2026 (fechado · 27 du) ──
-// Ordenados por Fat. Comanda (maior → menor)
+// Ordenados por Fat. Clínica (maior → menor) — Fonte: Planilha consolidada
 const unidades = {
-  nomes: ['Campina Grande','Barreiro','Ipatinga','Paulista Pernambuco','Itaim Paulista','Dona Clara','São Miguel Paulista','Contagem','Sorocaba'],
-  abrev: ['Camp.GR','Barreiro','Ipatinga','Paulista PE','Itaim','D.Clara','S.Miguel','Contagem','Sorocaba'],
-  fatServico:  [234380, 171682, 116489, 113593, 108433, 106493, 106401, 87839, 51830],
-  fatComanda:  [234380, 171682, 116489, 113593, 108433, 106493, 106401, 87839, 51830]
+  nomes: ['Campina Grande','Barreiro','Dona Clara','Ipatinga','São Miguel Paulista','Paulista Pernambuco','Itaim Paulista','Contagem','Sorocaba'],
+  abrev: ['Camp.GR','Barreiro','D.Clara','Ipatinga','S.Miguel','Paulista PE','Itaim','Contagem','Sorocaba'],
+  fatServico:  [287717.96, 196594.66, 145870.11, 136446.43, 134357.43, 131242.97, 128419.09, 103606.01, 62953.87],
+  fatComanda:  [287717.96, 196594.66, 145870.11, 136446.43, 134357.43, 131242.97, 128419.09, 103606.01, 62953.87]
 };
 // Venda Planos por unidade (Jul/26 parcial · 16 du) – ordenado por volume
 const vendasUnidade = {
