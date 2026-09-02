@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pet de Todos – Análise Mensal de Vendas 2026</title>
+<title>Pet de Todos – Análise de Vendas 2026</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js" crossorigin="anonymous"></script>
 <style>
@@ -90,19 +90,28 @@
   .manual-badge { display: inline-block; background: #FFF3CD; color: #7A4F00; font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 10px; margin-left: 4px; vertical-align: middle; }
   .field-mb { margin-bottom: 12px; }
 
+  /* ── LEITURA DO MÊS ── */
+  .lead-box { background: linear-gradient(135deg,#1F3864 0%,#2d4d80 100%); color:#fff; border-radius:12px; padding:20px 24px; margin-bottom:18px; box-shadow:0 2px 10px rgba(31,56,100,0.25); }
+  .lead-tag { display:inline-block; background:#E8630A; color:#fff; font-size:10px; font-weight:800; letter-spacing:.6px; text-transform:uppercase; padding:3px 10px; border-radius:12px; margin-bottom:10px; }
+  .lead-title { font-size:17px; font-weight:800; line-height:1.35; margin-bottom:10px; }
+  .lead-text { font-size:12.5px; line-height:1.75; color:rgba(255,255,255,0.92); }
+  .lead-text strong { color:#FFD580; }
+  .lead-flag { display:inline-block; background:rgba(255,255,255,0.16); border-radius:6px; padding:2px 8px; font-weight:700; font-size:11px; margin-right:6px; }
+
 </style>
 </head>
 <body>
+
 
 <div class="header">
   <div class="header-logo">Pet<span>de</span><br>Todos</div>
   <div class="header-title">
     <h1>Análise de Vendas – 2026</h1>
-    <p>Janeiro a Julho 2026 · Fonte: Power BI + Google Sheets · 05/08/2026</p>
+    <p>Janeiro a Agosto 2026 · Fonte: Power BI + Google Sheets · Atualizado em 02/09/2026</p>
   </div>
   <div class="header-badges">
-    <div class="badge">🔒 7 meses fechados</div>
-    <div class="badge">✅ Jul/26 fechado</div>
+    <div class="badge">🔒 8 meses fechados</div>
+    <div class="badge">✅ Ago/26 fechado</div>
   </div>
 </div>
 
@@ -111,80 +120,84 @@
   <button class="nav-btn" onclick="showTab('clinica',this)">Fat. Clínica</button>
   <button class="nav-btn" onclick="showTab('plano',this)">Fat. Plano</button>
   <button class="nav-btn" onclick="showTab('vendas',this)">Venda de Planos</button>
-  <button class="nav-btn" onclick="showTab('unidades',this)">Por Unidade – Jul/26</button>
+  <button class="nav-btn" onclick="showTab('unidades',this)">Por Unidade – Ago/26</button>
+  <button class="nav-btn" onclick="showTab('semanal',this)">Semanal Ago × Jul</button>
   <button class="nav-btn" onclick="showTab('banhos',this)">Banhos por Unidade</button>
-  <button class="nav-btn" onclick="showTab('indicadores',this)">QCA · QIA · Rec. Únicos</button>
+  <button class="nav-btn" onclick="showTab('yoy',this)">2025 × 2026</button>
+  <button class="nav-btn" onclick="showTab('indicadores',this)">QCA · QIA</button>
   <button class="nav-btn" onclick="showTab('servicos',this)">Serviços/Produtos</button>
-  <button class="nav-btn" onclick="showTab('ativacao',this)">Taxa de Ativação</button>
 </div>
 
 <!-- ══ RESUMO ══ -->
 <div id="tab-resumo" class="tab-panel active">
   <div class="content">
-    <div class="tend-note">✅ <strong>Julho/26 fechado</strong> — mês completo (27 dias úteis). 2.254 planos — novo recorde (+21,1% vs Jun) · Fat. Clínica R$ 1.327.208 (+12,3% vs Jun). Todos os 7 meses de 2026 disponíveis.</div>
-    <div class="kpi-row">
-      <div class="kpi-card">
-        <div class="kpi-label">Fat. Clínica – Jul/26</div>
-        <div class="kpi-value">R$ 1.327.208</div>
-        <div class="kpi-sub">27 du · Mês fechado</div>
-        <span class="kpi-var up">▲ +12,3% vs Jun</span>
-      </div>
-      <div class="kpi-card blue">
-        <div class="kpi-label">Fat. Plano – Jul/26</div>
-        <div class="kpi-value">R$ 534.722</div>
-        <div class="kpi-sub">Mês fechado</div>
-        <span class="kpi-var up">▲ +3,6% vs Jun</span>
-      </div>
-      <div class="kpi-card green">
-        <div class="kpi-label">Venda Planos – Jul/26 ⭐</div>
-        <div class="kpi-value">2.254 planos</div>
-        <div class="kpi-sub">Novo recorde do período!</div>
-        <span class="kpi-var up">▲ +21,1% vs Jun</span>
+
+    <div class="lead-box">
+      <div class="lead-tag">Leitura do mês · Agosto/26</div>
+      <div class="lead-title">Menos volume, mais receita — e o melhor mês de faturamento do ano.</div>
+      <div class="lead-text">
+        Agosto vendeu <strong>1.765 planos (−21,7% vs Jul)</strong>, mas entregou <strong>recorde nas duas linhas de receita</strong>:
+        Fat. Clínica <strong>R$ 1.392.078 (+4,9%)</strong> e Fat. Plano <strong>R$ 600.207 (+12,2%)</strong>.
+        Julho foi um pico de volume comprado com campanha agressiva de adesão (1ª mensalidade grátis · adesão R$ 9,90);
+        agosto é a <strong>monetização dessa base</strong>. Faturamento total do mês: <strong>R$ 1.992.285</strong> — o maior de 2026.
+        <br><br>
+        <span class="lead-flag">⚠️ Onde olhar</span> A queda de volume não é uniforme: Paulista PE −49%, Ipatinga −41%, Cosmópolis −32% e São Miguel −29%
+        puxam o resultado. Sorocaba (−13%) e Barreiro (−13%) seguraram. <strong>Porto Seguro estreia</strong> com 63 planos no primeiro mês.
       </div>
     </div>
+
     <div class="kpi-row">
       <div class="kpi-card">
-        <div class="kpi-label">Fat. Clínica – Jun/26</div>
-        <div class="kpi-value">R$ 1.181.917</div>
-        <div class="kpi-sub">26 du · Mês anterior</div>
-        <span class="kpi-var up">▲ +15,1% vs Mai</span>
+        <div class="kpi-label">Fat. Clínica – Ago/26 🏆</div>
+        <div class="kpi-value">R$ 1.392.078</div>
+        <div class="kpi-sub">26 du · Recorde do ano</div>
+        <span class="kpi-var up">▲ +4,9% vs Jul</span>
       </div>
       <div class="kpi-card blue">
-        <div class="kpi-label">Fat. Plano – Jun/26</div>
-        <div class="kpi-value">R$ 516.238</div>
-        <div class="kpi-sub">Mês anterior</div>
-        <span class="kpi-var down">▼ -0,5% vs Mai</span>
+        <div class="kpi-label">Fat. Plano – Ago/26 🏆</div>
+        <div class="kpi-value">R$ 600.207</div>
+        <div class="kpi-sub">Recorde do ano · 1ª vez acima de R$ 600 mil</div>
+        <span class="kpi-var up">▲ +12,2% vs Jul</span>
       </div>
       <div class="kpi-card green">
-        <div class="kpi-label">Venda Planos – Jun/26</div>
-        <div class="kpi-value">1.862 planos</div>
-        <div class="kpi-sub">Mês anterior</div>
-        <span class="kpi-var up">▲ +48,8% vs Mai</span>
+        <div class="kpi-label">Venda Planos – Ago/26</div>
+        <div class="kpi-value">1.765 planos</div>
+        <div class="kpi-sub">2º maior do ano · após pico de Jul</div>
+        <span class="kpi-var down">▼ −21,7% vs Jul</span>
       </div>
     </div>
-    <!-- ── Comparativo Até Dia 20 ── -->
+
+    <div class="kpi-row">
+      <div class="kpi-card" style="border-left-color:#1E7B45">
+        <div class="kpi-label">Fat. Total – Ago/26 (Clínica + Plano)</div>
+        <div class="kpi-value">R$ 1.992.285</div>
+        <div class="kpi-sub">R$ 76.626 por dia útil</div>
+        <span class="kpi-var up">▲ +7,0% vs Jul</span>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-label">Acumulado Jan–Ago/26</div>
+        <div class="kpi-value">R$ 12,66 mi</div>
+        <div class="kpi-sub">Clínica R$ 8,67 mi · Plano R$ 3,99 mi</div>
+        <span class="kpi-var up">▲ +67,6% vs Jan–Ago/25</span>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">Planos vendidos Jan–Ago/26</div>
+        <div class="kpi-value">12.427 planos</div>
+        <div class="kpi-sub">vs 4.656 no mesmo período de 2025</div>
+        <span class="kpi-var up">▲ +166,9% YoY</span>
+      </div>
+    </div>
+
     <div class="section">
-      <div class="section-header">📅 Comparativo Acumulado: Até 20/Jul vs Até 20/Jun</div>
+      <div class="section-header">⚖️ Volume × Receita — o que mudou de Julho para Agosto</div>
       <div class="section-body">
-        <div style="background:#FFF3CD;border:1px solid #FBBF24;border-radius:8px;padding:10px 14px;font-size:11px;color:#7A4F00;margin-bottom:12px;line-height:1.6">
-          ⚠️ <strong>Não compare os valores absolutos diretamente.</strong> Julho iniciou na Quarta-feira → apenas <strong>17 du</strong> até dia 20. Junho iniciou na Segunda-feira → <strong>18 du</strong> até dia 20.<br>
-          O correto é comparar o <strong style="color:#1E7B45">ritmo diário (Var. p/du)</strong> — e nesse critério <strong style="color:#1E7B45">julho está à frente em todos os indicadores.</strong> A linha de projeção mostra o que julho acumularia se também tivesse 18 du.
+        <div class="tend-note" style="margin-bottom:12px">
+          💡 <strong>Por que o painel não deve ser lido como "mês de queda":</strong> o único indicador que recuou foi a <em>quantidade</em> de planos novos.
+          Todas as linhas de receita subiram. A base vendida em julho passou a faturar em agosto — é o comportamento esperado de uma campanha de adesão com desconto na 1ª mensalidade.
         </div>
         <table>
-          <thead>
-            <tr>
-              <th>Indicador</th>
-              <th>Jul/26 · até 20/07 (17 du)</th>
-              <th>Jun/26 · até 20/06 (18 du)</th>
-              <th>Var. Bruta</th>
-              <th>Méd/du · Jul</th>
-              <th>Méd/du · Jun</th>
-              <th style="background:#1E7B45">▶ Var. p/du (ritmo)</th>
-              <th style="background:#1E7B45">Proj. Jul · 18 du</th>
-            </tr>
-          </thead>
-          <tbody id="comp-tbody"></tbody>
-          <tfoot id="comp-tfoot"></tfoot>
+          <thead><tr><th>Indicador</th><th>Jul/26</th><th>Ago/26</th><th>Variação</th><th style="text-align:left">Leitura</th></tr></thead>
+          <tbody id="vr-tbody"></tbody>
         </table>
       </div>
     </div>
@@ -199,8 +212,14 @@
         <div class="chart-body"><canvas id="chartPlano"></canvas></div>
       </div>
     </div>
+
+    <div class="chart-wrap" style="margin-bottom:16px">
+      <div class="chart-title">💰 Faturamento Total por Mês (Clínica + Plano) · Jan–Ago/26</div>
+      <div class="chart-body" style="height:280px"><canvas id="chartFatTotal"></canvas></div>
+    </div>
+
     <div class="section">
-      <div class="section-header">📋 Consolidado Jan–Jul 2026</div>
+      <div class="section-header">📋 Consolidado Jan–Ago 2026</div>
       <div class="section-body">
         <table>
           <thead><tr><th>Mês</th><th>Du</th><th>Fat. Clínica (R$)</th><th>Var. Clínica</th><th>Fat. Plano (R$)</th><th>Var. Plano</th><th>Venda Planos</th><th>Var. Vendas</th><th>Campanha do Mês</th></tr></thead>
@@ -275,42 +294,140 @@
   </div>
 </div>
 
-<!-- ══ SEMANAL ══ -->
+<!-- ══ POR UNIDADE ══ -->
 <div id="tab-unidades" class="tab-panel">
   <div class="content">
     <div class="tend-note">
-      🏪 <strong>Análise por Unidade – Julho/26 (parcial · 17 de 27 dias úteis)</strong><br>
-      Fat. Serviço = total faturado antes de deduções · Fat. Comanda = valor líquido faturado por comanda · Venda Planos = planos novos comercializados
+      🏪 <strong>Análise por Unidade – Agosto/26 (mês fechado · 26 du)</strong><br>
+      Fat. Total = Fat. Clínica + Fat. Plano · Δ = variação vs Julho/26 · Fonte: planilha consolidada "Venda e Fat. (Plano e Clínica)"
+    </div>
+
+    <div class="kpi-row" style="grid-template-columns:repeat(4,1fr)">
+      <div class="kpi-card">
+        <div class="kpi-label">Maior Fat. Total – Ago/26</div>
+        <div class="kpi-value" style="font-size:17px">Campina Grande</div>
+        <div class="kpi-sub">R$ 413.687 · 20,8% da rede</div>
+        <span class="kpi-var up">▲ +11,3% vs Jul</span>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">Maior alta em vendas</div>
+        <div class="kpi-value" style="font-size:17px">Porto Seguro</div>
+        <div class="kpi-sub">63 planos · unidade nova</div>
+        <span class="kpi-var up">▲ Estreia em Ago/26</span>
+      </div>
+      <div class="kpi-card" style="border-left-color:#C00000">
+        <div class="kpi-label">Maior queda em vendas</div>
+        <div class="kpi-value" style="font-size:17px">Paulista PE</div>
+        <div class="kpi-sub">180 → 91 planos</div>
+        <span class="kpi-var down">▼ −49,4% vs Jul</span>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-label">Unidades em operação</div>
+        <div class="kpi-value">11</div>
+        <div class="kpi-sub">10 com histórico + Porto Seguro (nova)</div>
+        <span class="kpi-var up">▲ +1 vs Jul</span>
+      </div>
     </div>
 
     <div class="chart-wrap" style="margin-bottom:16px">
-      <div class="chart-title">📊 Fatur. Comanda por Unidade · Jul/26 (R$)</div>
-      <div class="chart-body" style="height:340px"><canvas id="chartFatUnidade"></canvas></div>
+      <div class="chart-title">💰 Faturamento Total por Unidade · Ago/26 (Clínica + Plano)</div>
+      <div class="chart-body" style="height:360px"><canvas id="chartFatUnidade"></canvas></div>
     </div>
 
     <div class="chart-wrap" style="margin-bottom:16px">
-      <div class="chart-title">🏅 Venda de Planos Novos por Unidade · Jul/26 (Qtd)</div>
-      <div class="chart-body" style="height:320px"><canvas id="chartVendasUnidade"></canvas></div>
+      <div class="chart-title">🏅 Venda de Planos Novos por Unidade · Ago/26 vs Jul/26</div>
+      <div class="chart-body" style="height:340px"><canvas id="chartVendasUnidade"></canvas></div>
     </div>
 
     <div class="section">
-      <div class="section-header">Tabela – Faturamento por Unidade · Jul/26 (parcial)</div>
+      <div class="section-header">📋 Tabela Consolidada por Unidade · Agosto/26</div>
       <div class="section-body">
+        <div class="legend-row" style="margin-bottom:12px">
+          <span class="legend-item"><span class="legend-box" style="background:#E6F5EC"></span> Crescimento vs Jul</span>
+          <span class="legend-item"><span class="legend-box" style="background:#FFF9E6"></span> Queda até 25%</span>
+          <span class="legend-item"><span class="legend-box" style="background:#FDECEA"></span> Queda acima de 25% — atenção</span>
+        </div>
         <table>
           <thead>
             <tr>
               <th>Unidade</th>
-              <th>Fat. Serviço (R$)</th>
-              <th>Fat. Comanda (R$)</th>
-              <th>Diferença (R$)</th>
-              <th>% do Total Comanda</th>
-              <th>Venda Planos</th>
-              <th>% Vendas</th>
+              <th>Planos Ago</th>
+              <th>Δ Planos</th>
+              <th>Fat. Plano (R$)</th>
+              <th>Δ Plano</th>
+              <th>Fat. Clínica (R$)</th>
+              <th>Δ Clínica</th>
+              <th>Fat. Total (R$)</th>
+              <th>% Rede</th>
             </tr>
           </thead>
           <tbody id="unidade-tbody"></tbody>
           <tfoot id="unidade-tfoot"></tfoot>
         </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">🎯 Prioridades de Agosto → Setembro</div>
+      <div class="section-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+          <div style="background:#FDECEA;border-radius:8px;padding:14px;border-left:4px solid #C00000">
+            <div style="font-size:11px;font-weight:800;color:#C00000;margin-bottom:8px">🔴 REAGIR — queda de vendas acima de 25%</div>
+            <div style="font-size:11px;color:#333;line-height:1.7" id="acao-vermelho"></div>
+          </div>
+          <div style="background:#FFF9E6;border-radius:8px;padding:14px;border-left:4px solid #C09000">
+            <div style="font-size:11px;font-weight:800;color:#856000;margin-bottom:8px">🟡 MONITORAR — queda até 25%</div>
+            <div style="font-size:11px;color:#333;line-height:1.7" id="acao-amarelo"></div>
+          </div>
+          <div style="background:#E6F5EC;border-radius:8px;padding:14px;border-left:4px solid #1E7B45">
+            <div style="font-size:11px;font-weight:800;color:#1E7B45;margin-bottom:8px">🟢 REPLICAR — receita em alta</div>
+            <div style="font-size:11px;color:#333;line-height:1.7" id="acao-verde"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SEMANAL ══ -->
+<div id="tab-semanal" class="tab-panel">
+  <div class="content">
+    <div class="tend-note">
+      📅 <strong>Venda de Planos por Semana · Agosto/26 vs Julho/26</strong><br>
+      Semanas equivalentes: S1 (01–09) · S2 (10–16) · S3 (17–23) · S4 (24–31).
+      <strong>Não inclui televendas</strong> — por isso o total semanal (1.545) é menor que o total do mês (1.765).
+    </div>
+
+    <div class="chart-wrap" style="margin-bottom:16px">
+      <div class="chart-title">📊 Total da Rede por Semana · Ago/26 vs Jul/26</div>
+      <div class="chart-body" style="height:280px"><canvas id="chartSemanalTotal"></canvas></div>
+    </div>
+
+    <div class="chart-wrap" style="margin-bottom:16px">
+      <div class="chart-title">🏪 Venda de Planos por Unidade e Semana · Agosto/26</div>
+      <div class="chart-body" style="height:360px"><canvas id="chartSemanalUnidade"></canvas></div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">📋 Detalhe Semanal por Unidade · Ago/26 × Jul/26</div>
+      <div class="section-body">
+        <table style="font-size:11px">
+          <thead>
+            <tr>
+              <th rowspan="2" style="vertical-align:bottom">Unidade</th>
+              <th colspan="4" style="text-align:center;background:#4A5F86">Julho/26</th>
+              <th colspan="4" style="text-align:center;background:#E8630A">Agosto/26</th>
+              <th rowspan="2" style="vertical-align:bottom">Δ Total</th>
+            </tr>
+            <tr>
+              <th>S1</th><th>S2</th><th>S3</th><th>S4</th>
+              <th>S1</th><th>S2</th><th>S3</th><th>S4</th>
+            </tr>
+          </thead>
+          <tbody id="semanal-tbody"></tbody>
+          <tfoot id="semanal-tfoot"></tfoot>
+        </table>
+        <div style="margin-top:12px;font-size:11px;color:#666;background:#f5f5f5;border-radius:8px;padding:10px 14px;line-height:1.7" id="semanal-insight"></div>
       </div>
     </div>
   </div>
@@ -320,84 +437,149 @@
 <div id="tab-banhos" class="tab-panel">
   <div class="content">
     <div class="tend-note">
-      🛁 <strong>Banhos por Unidade – Comparativo Jul/26 (1–20) vs Jun/26 (1–20)</strong><br>
-      Fonte: BI · Serviço/Produto · Grupo = Banho · Quantidade Serviços/Produtos<br>
-      <strong>Nota metodológica:</strong> Período idêntico: dias 1–20 de cada mês · Jun = 18 dias Mon-Sáb · Jul = 17 dias Mon-Sáb (apenas 2 Terças).
+      🛁 <strong>Banhos por Unidade – Meses fechados: Jun/26 · Jul/26 · Ago/26</strong><br>
+      Fonte: planilha consolidada, aba "Venda de Banhos" · Comparação de meses completos (sem recorte parcial).
     </div>
 
-    <!-- Ranking Jul -->
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">Total de Banhos – Ago/26</div>
+        <div class="kpi-value">6.735</div>
+        <div class="kpi-sub">vs 7.099 em Jul · 5.778 em Jun</div>
+        <span class="kpi-var down">▼ −5,1% vs Jul</span>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">Maior crescimento – Ago/26</div>
+        <div class="kpi-value" style="font-size:18px">Sorocaba</div>
+        <div class="kpi-sub">305 → 443 banhos</div>
+        <span class="kpi-var up">▲ +45,2% vs Jul</span>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-label">Líder em volume – Ago/26</div>
+        <div class="kpi-value" style="font-size:18px">São Miguel</div>
+        <div class="kpi-sub">1.093 banhos · 16,2% da rede</div>
+        <span class="kpi-var down">▼ −9,8% vs Jul</span>
+      </div>
+    </div>
+
     <div class="chart-wrap" style="margin-bottom:16px">
-      <div class="chart-title">🏆 Ranking de Banhos por Unidade · Jul/26 (1–20) – Qtd Serviços</div>
+      <div class="chart-title">🏆 Ranking de Banhos por Unidade · Ago/26</div>
       <div class="chart-body" style="height:340px"><canvas id="chartBanhosRanking"></canvas></div>
     </div>
 
-    <!-- Taxa diária Jul vs Jun -->
     <div class="chart-wrap" style="margin-bottom:16px">
-      <div class="chart-title">📊 Total de Banhos por Unidade – Jul/26 vs Jun/26 (dias 1–20)</div>
-      <div style="background:#EEF2F9;border:1px solid #B0C2E8;padding:8px 14px;font-size:11px;color:#1F3864;line-height:1.6;margin-bottom:8px">
-        💡 <strong>Taxa diária</strong> = banhos totais ÷ dias Mon-Sáb do período (Jun=18, Jul=17).
-      </div>
+      <div class="chart-title">📊 Evolução por Unidade · Jun × Jul × Ago 2026 (meses fechados)</div>
       <div class="chart-body" style="height:340px"><canvas id="chartBanhosTaxa"></canvas></div>
     </div>
 
-    <!-- Crescimento % -->
     <div class="chart-wrap" style="margin-bottom:16px">
-      <div class="chart-title">📈 Crescimento % em Banhos por Unidade (taxa diária Jul vs Jun)</div>
+      <div class="chart-title">📈 Variação % de Banhos por Unidade · Ago vs Jul</div>
+      <div style="background:#EEF2F9;border:1px solid #B0C2E8;padding:8px 14px;font-size:11px;color:#1F3864;line-height:1.6">
+        💡 Julho foi o pico de banhos do trimestre (7.099). Agosto recua 5,1%, mas segue <strong>16,6% acima de junho</strong> — o patamar da rede subiu.
+      </div>
       <div class="chart-body" style="height:280px"><canvas id="chartBanhosCrescimento"></canvas></div>
     </div>
 
-    <!-- Seg-Qui -->
-    <div class="chart-wrap" style="margin-bottom:16px">
-      <div class="chart-title">🗓️ Banhos Seg–Qui por Unidade · Jul vs Jun (taxa por dia Seg–Qui)</div>
-      <div style="background:#EEF2F9;border:1px solid #B0C2E8;padding:8px 14px;font-size:11px;color:#1F3864;margin-bottom:8px">
-        💡 Total de banhos realizados em dias Seg–Qui no período 1–20. Jun = 12 dias Seg-Qui · Jul = 11 dias Seg-Qui.
-      </div>
-      <div class="chart-body" style="height:320px"><canvas id="chartBanhosSegQui"></canvas></div>
-    </div>
-
-    <!-- Sábados -->
-    <div class="chart-wrap" style="margin-bottom:16px">
-      <div class="chart-title">📅 Banhos nos Sábados por Unidade · Jul vs Jun (total 3 sábados)</div>
-      <div style="background:#EEF2F9;border:1px solid #B0C2E8;padding:8px 14px;font-size:11px;color:#1F3864;margin-bottom:8px">
-        💡 Ambos os períodos têm <strong>3 sábados</strong> — comparação direta. Sorocaba foi a única unidade com queda (−35%).
-      </div>
-      <div class="chart-body" style="height:320px"><canvas id="chartBanhosSab"></canvas></div>
-    </div>
-
-    <!-- Tabela -->
     <div class="section">
-      <div class="section-header">Tabela – Banhos por Unidade · Jul/26 × Jun/26 (período 1–20)</div>
+      <div class="section-header">📋 Tabela – Banhos por Unidade · Jun × Jul × Ago 2026</div>
       <div class="section-body">
         <table>
           <thead>
             <tr>
               <th>Unidade</th>
-              <th>Total Jul (17d)</th>
-              <th>Total Jun (18d)</th>
-              <th>Taxa Jul/dia</th>
-              <th>Taxa Jun/dia</th>
-              <th>Δ% Taxa</th>
-              <th>Seg–Qui Jul</th>
-              <th>Sáb Jul</th>
-              <th>Rank Jul</th>
+              <th>Jun/26</th>
+              <th>Jul/26</th>
+              <th>Ago/26</th>
+              <th>Δ% Ago vs Jul</th>
+              <th>Δ% Ago vs Jun</th>
+              <th>% da Rede (Ago)</th>
+              <th>Rank Ago</th>
             </tr>
           </thead>
           <tbody id="banhos-tbody"></tbody>
+          <tfoot id="banhos-tfoot"></tfoot>
         </table>
       </div>
     </div>
 
-    <div class="tend-note" style="margin-top:16px;background:#EEF2F9;border-color:#B0C2E8">
-      📊 <strong>Dados reais por dia da semana · Jun 1–20 vs Jul 1–20 (fonte: BI Serviço/Produto)</strong><br>
-      Destaques: Contagem +55% Seg–Qui · Paulista PE +84% Seg–Qui · Sorocaba −35% nos Sábados · São Miguel lidera Seg–Qui (41/dia) e Sábados (52,7/sáb).
+    <div class="tend-note" style="margin-top:16px;background:#EEF2F9;border-color:#B0C2E8" id="banhos-insight"></div>
+  </div>
+</div>
+
+<!-- ══ YoY ══ -->
+<div id="tab-yoy" class="tab-panel">
+  <div class="content">
+    <div class="tend-note">
+      📈 <strong>Cruzamento Ano vs Ano — 2025 × 2026</strong><br>
+      Base: totais mensais da rede. Comparação Jan–Ago de cada ano (2026 fechado até agosto).
+      <em>Nota: Jul/25 de Itaim Paulista é um dado atípico (R$ 13.741) — o YoY de julho na clínica está ajustado na base da planilha.</em>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi-card green">
+        <div class="kpi-label">Planos vendidos · Jan–Ago</div>
+        <div class="kpi-value">12.427 <span style="font-size:13px;color:#888">vs 4.656</span></div>
+        <div class="kpi-sub">2026 vs 2025</div>
+        <span class="kpi-var up">▲ +166,9%</span>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-label">Fat. Plano · Jan–Ago</div>
+        <div class="kpi-value">R$ 3,99 mi <span style="font-size:13px;color:#888">vs R$ 2,55 mi</span></div>
+        <div class="kpi-sub">2026 vs 2025</div>
+        <span class="kpi-var up">▲ +56,3%</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Fat. Clínica · Jan–Ago</div>
+        <div class="kpi-value">R$ 8,67 mi <span style="font-size:13px;color:#888">vs R$ 5,00 mi</span></div>
+        <div class="kpi-sub">2026 vs 2025</div>
+        <span class="kpi-var up">▲ +73,3%</span>
+      </div>
+    </div>
+
+    <div class="chart-wrap" style="margin-bottom:16px">
+      <div class="chart-title">📊 Planos Vendidos por Mês · 2025 × 2026</div>
+      <div class="chart-body" style="height:300px"><canvas id="chartYoyPlanos"></canvas></div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-wrap">
+        <div class="chart-title">💙 Fat. Plano · 2025 × 2026</div>
+        <div class="chart-body" style="height:260px"><canvas id="chartYoyFatPlano"></canvas></div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">🧡 Fat. Clínica · 2025 × 2026</div>
+        <div class="chart-body" style="height:260px"><canvas id="chartYoyFatClinica"></canvas></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">📋 Comparativo Mensal 2025 × 2026</div>
+      <div class="section-body">
+        <table style="font-size:11px">
+          <thead>
+            <tr>
+              <th>Métrica / Mês</th>
+              <th>Jan</th><th>Fev</th><th>Mar</th><th>Abr</th><th>Mai</th><th>Jun</th><th>Jul</th><th>Ago</th>
+              <th style="background:#E8630A">Acum. Jan–Ago</th>
+            </tr>
+          </thead>
+          <tbody id="yoy-tbody"></tbody>
+        </table>
+        <div style="margin-top:14px;font-size:11px;color:#666;background:#f5f5f5;border-radius:8px;padding:10px 14px;line-height:1.7">
+          💡 <strong>Leitura:</strong> em agosto de 2025 a rede vendeu 804 planos e faturou R$ 1,00 mi (clínica + plano).
+          Em agosto de 2026: <strong>1.765 planos</strong> e <strong>R$ 1,99 mi</strong> — a operação praticamente <strong>dobrou de tamanho em 12 meses</strong>,
+          com um número maior de unidades em operação (11 vs 7).
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
 <!-- ══ QCA / QIA / REC. ÚNICOS ══ -->
 <div id="tab-indicadores" class="tab-panel">
   <div class="content">
     <div class="tend-note">
-      📊 <strong>QCA · QIA · Recebimento de Clientes Únicos – Jul/26 (parcial · 17 de 27 du)</strong><br>
+      📊 <strong>QCA · QIA · Recebimento de Clientes Únicos – Jul/26 — dado histórico (sem atualização de agosto)</strong><br>
       QCA = Quantidade de Clientes Ativos (plano) · QIA = Quantidade de Itens Arrecadados · Rec. Únicos = Quantidade de clientes únicos (sem plano)
     </div>
 
@@ -435,7 +617,7 @@
     </div>
 
     <div class="section">
-      <div class="section-header">Tabela – QCA · QIA · Rec. Únicos por Unidade · Jul/26 (parcial)</div>
+      <div class="section-header">Tabela – QCA · QIA · Rec. Únicos por Unidade · Jul/26 — histórico</div>
       <div class="section-body">
         <table>
           <thead>
@@ -459,7 +641,7 @@
 <!-- ══ SERVIÇOS/PRODUTOS ══ -->
 <div id="tab-servicos" class="tab-panel">
   <div class="content">
-    <div class="tend-note">📊 <strong>Serviços/Produtos por Unidade — Jun/26 vs Jul/26</strong><br>Quantidade de serviços/produtos realizados por dia da semana em cada unidade. Dados de Julho/26 fechados (27 du).</div>
+    <div class="tend-note">📊 <strong>Serviços/Produtos por Unidade — Jun/26 vs Jul/26</strong><br>Quantidade de serviços/produtos realizados por dia da semana em cada unidade. Dados de Julho/26 fechados (27 du). <strong>Bloco histórico</strong> — aguardando extração de agosto no Power BI.</div>
 
     <div class="section">
       <div class="section-header">Serviços/Produtos por Unidade · Jun × Jul 2026 — Qtd por Dia da Semana</div>
@@ -560,142 +742,16 @@
   </div>
 </div>
 
-<div class="footer">Pet de Todos · Análise de Vendas 2026 · Atualizado em 05/08/2026 · Fonte: Power BI + Google Sheets</div>
-
-<!-- ══ TAXA DE ATIVAÇÃO ══ -->
-<div id="tab-ativacao" class="tab-panel">
-  <div class="content">
-    <div class="tend-note">📊 <strong>Taxa de Ativação da Base</strong> — % de clientes com plano ativo que utilizaram a clínica no mês. Fonte: Power BI "Utilização da Clínica" · 9 unidades monitoradas · Jul/26 fechado.</div>
-
-    <!-- KPIs globais -->
-    <div class="kpi-row" style="grid-template-columns:repeat(4,1fr)">
-      <div class="kpi-card blue">
-        <div class="kpi-label">Base Total Monitorada – Jul/26</div>
-        <div class="kpi-value">26.612</div>
-        <div class="kpi-sub">CPFs ativos · 9 unidades no BI</div>
-        <span class="kpi-var up">▲ 5.681 utilizando clínica</span>
-      </div>
-      <div class="kpi-card green">
-        <div class="kpi-label">Taxa Média de Ativação – Jul/26</div>
-        <div class="kpi-value">21,3%</div>
-        <div class="kpi-sub">Ponderada por base ativa</div>
-        <span class="kpi-var down">▼ Meta ≥ 30% — abaixo do ideal</span>
-      </div>
-      <div class="kpi-card" style="border-left-color:#1E7B45">
-        <div class="kpi-label">Melhor Unidade – Jul/26</div>
-        <div class="kpi-value">51,5%</div>
-        <div class="kpi-sub">Paulista PE · 335 de 650 CPFs</div>
-        <span class="kpi-var up">▲ Unidade nova, alta ativação</span>
-      </div>
-      <div class="kpi-card" style="border-left-color:#C00000">
-        <div class="kpi-label">Pior Taxa – Jul/26</div>
-        <div class="kpi-value">13,2%</div>
-        <div class="kpi-sub">Barreiro · 850 de 6.453 CPFs</div>
-        <span class="kpi-var down">▼ Base grande, baixíssima ativação</span>
-      </div>
-    </div>
-
-    <!-- Gráficos -->
-    <div class="chart-grid">
-      <div class="chart-wrap">
-        <div class="chart-title">📊 Taxa de Ativação por Unidade – Julho 2026 (ranking)</div>
-        <div class="chart-body" style="height:260px"><canvas id="chartAtivacaoRanking"></canvas></div>
-      </div>
-      <div class="chart-wrap">
-        <div class="chart-title">📈 Evolução da Taxa de Ativação · Jan–Jul/26 (unidades c/ hist. completo)</div>
-        <div class="chart-body" style="height:260px"><canvas id="chartAtivacaoEvolucao"></canvas></div>
-      </div>
-    </div>
-
-    <!-- Tabela detalhada -->
-    <div class="section">
-      <div class="section-header">📋 Detalhamento por Unidade – Julho 2026 · Dados reais Power BI</div>
-      <div class="section-body">
-        <div style="font-size:11px;color:#555;margin-bottom:12px;line-height:1.6">
-          Dados extraídos do painel <strong>"Utilização da Clínica"</strong> no Power BI. Taxa de Ativação = CPFs Usando Clínica ÷ CPFs Ativos.
-          <strong style="color:#C00000">Meta da rede: ≥ 30% de ativação.</strong>
-          Unidades abaixo de 20% requerem ação imediata de agendamento.
-        </div>
-        <table id="tbl-ativacao"></table>
-        <div style="display:flex;gap:20px;margin-top:12px;font-size:11px">
-          <span style="display:flex;align-items:center;gap:6px"><span style="background:#E6F5EC;border-radius:4px;padding:2px 8px;color:#1E7B45;font-weight:700">Verde</span> ≥ 30% — ativação saudável</span>
-          <span style="display:flex;align-items:center;gap:6px"><span style="background:#FFF9E6;border-radius:4px;padding:2px 8px;color:#856000;font-weight:700">Amarelo</span> 20–29% — atenção</span>
-          <span style="display:flex;align-items:center;gap:6px"><span style="background:#FDECEA;border-radius:4px;padding:2px 8px;color:#C00000;font-weight:700">Vermelho</span> &lt; 20% — risco alto de churn</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Histórico mensal por unidade -->
-    <div class="section">
-      <div class="section-header">🗓️ Histórico de Ativação por Unidade · Jan–Jul/26</div>
-      <div class="section-body">
-        <table id="tbl-hist-ativacao" style="font-size:11px"></table>
-      </div>
-    </div>
-
-    <!-- Ações recomendadas -->
-    <div class="section">
-      <div class="section-header">🎯 Plano de Ação por Faixa de Ativação – Agosto 2026</div>
-      <div class="section-body">
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
-          <div style="background:#FDECEA;border-radius:8px;padding:14px;border-left:4px solid #C00000">
-            <div style="font-size:11px;font-weight:800;color:#C00000;margin-bottom:8px">🔴 AÇÃO URGENTE (&lt;20%) — Barreiro (13,2%) · São Miguel (15,6%) · Itaim (17,8%)</div>
-            <div style="font-size:11px;color:#333;line-height:1.7">
-              • Disparo de WhatsApp segmentado para clientes captados em Jul que ainda não agendaram<br>
-              • Usar vacina antirrábica 50% OFF (campanha "Pai de Pet") como gancho de 1º agendamento<br>
-              • Priorizar clientes recentes: base Barreiro tem 6.453 ativos com apenas 13% ativados<br>
-              • Meta: elevar taxa para ≥ 20% até o final de agosto
-            </div>
-          </div>
-          <div style="background:#FFF9E6;border-radius:8px;padding:14px;border-left:4px solid #C09000">
-            <div style="font-size:11px;font-weight:800;color:#856000;margin-bottom:8px">🟡 MONITORAR (20–29%) — Dona Clara (22,1%) · Sorocaba (27,9%)</div>
-            <div style="font-size:11px;color:#333;line-height:1.7">
-              • Acompanhar agendamentos semanais em agosto — risco de queda com base nova de julho<br>
-              • Reforçar "Pet Tranquilo" para novos clientes — Sorocaba cresceu base 33% em Jul (+205)<br>
-              • Sorocaba: base pequena mas crescendo rápido — manter ativação acima de 25%<br>
-              • Meta: elevar para ≥ 30% em setembro
-            </div>
-          </div>
-          <div style="background:#E6F5EC;border-radius:8px;padding:14px;border-left:4px solid #1E7B45">
-            <div style="font-size:11px;font-weight:800;color:#1E7B45;margin-bottom:8px">🟢 REPLICAR (≥30%) — Campina GR (31,3%) · Ipatinga (32,5%) · Contagem (40,8%) · Paulista PE (51,5%)</div>
-            <div style="font-size:11px;color:#333;line-height:1.7">
-              • Mapear práticas de onboarding e agendamento ativo dessas unidades<br>
-              • Paulista PE (51,5% com base nova) e Contagem (40,8% crescendo rápido) são referência<br>
-              • Criar playbook: o que elas fazem diferente na semana 1 do cliente?<br>
-              • Escalar esse processo para Barreiro e São Miguel como prioridade imediata
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
+<div class="footer">Pet de Todos · Análise de Vendas 2026 · Atualizado em 02/09/2026 · Fonte: Power BI + Planilha consolidada "Venda e Fat. (Plano e Clínica)"</div>
 
 <script>
 // ── DADOS MENSAIS ──
-const meses = ['Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26'];
-const diasUteis = [27,24,26,26,26,26,27];
-const fatClinica = [879312.72,848652.47,1013310.18,1004936.04,1026980.34,1181917.44,1327208.53];
-const fatPlano   = [437073.57,423338.56,480962.19,477913.16,518574.29,516238.31,534722.13];
-const vendaPlanos = [1162,1116,1305,1711,1252,1862,2254];
-const isParcial = [false,false,false,false,false,false,false];
-
-// ── DADOS SEMANAIS (normalizados para bater com KPI) ──
-// Junho: fator 0.8854 aplicado nos valores brutos do Power BI
-const junhoSemanas = {
-  labels: ['Semana 1\n(Jun 1–7)','Semana 2\n(Jun 8–14)','Semana 3\n(Jun 15–21)','Semana 4\n(Jun 22–28)','Semana 5\n(Jun 29–30)'],
-  periodos: ['01/06–07/06','08/06–14/06','15/06–21/06','22/06–28/06','29/06–30/06'],
-  valores: [214540, 229063, 223694, 235288, 68693],
-  duDias: [6,6,6,6,2]
-};
-// Julho: S1, S2 e S3 reais; S4-S5 tendência (média 40.860/du)
-const julhoSemanas = {
-  periodos: ['01/07–05/07','06/07–12/07','13/07–19/07','20/07–26/07','27/07–31/07'],
-  valores:  [177303.95, 245096.04, 236944.15, 35173.51, 189645],
-  tipos:    ['Real','Real','Real','Em curso','Tendência'],
-  duDias:   [4,6,6,6,5]
-};
+const meses = ['Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26','Ago/26'];
+const diasUteis = [27,24,26,26,26,26,27,26];
+const fatClinica = [879312.72,848652.47,1013310.18,1004936.04,1026980.34,1181917.44,1327208.53,1392078.14];
+const fatPlano   = [437073.57,423338.56,480962.19,477913.16,518574.29,516238.31,534722.13,600207.01];
+const vendaPlanos = [1162,1116,1305,1711,1252,1862,2254,1765];
+const isParcial = [false,false,false,false,false,false,false,false];
 
 function fmt(v) { return v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
 function fmtPct(v) { return (v>=0?'+':'')+(v*100).toFixed(1)+'%'; }
@@ -728,8 +784,11 @@ const campanhas = {
     { tipo:'Clínica', cor:'#C00000', nome:'Prev. Ocular & Dermato', desc:'50% desc. especialista dermato e oftalmo' },
     { tipo:'Plano',   cor:'#1F3864', nome:'Copa do Mundo 🏆', desc:'Novo plano + 1 banho/mês · R$ 39,90' }
   ],
-  'Jul/26*': [
+  'Jul/26': [
     { tipo:'Plano',   cor:'#1F3864', nome:'Vacina', desc:'1 mensalidade grátis · adesão R$ 9,90' }
+  ],
+  'Ago/26': [
+    { tipo:'Plano',   cor:'#999999', nome:'A preencher', desc:'Aguardando confirmação das campanhas de agosto' }
   ]
 };
 
@@ -821,126 +880,6 @@ function fillVendas() {
   });
 }
 
-const planosJun = [243, 364, 368, 699, 182];
-const planosJul = [287, 456, 505, 96, null]; // S4 em andamento (1 du), S5 não iniciou
-
-function fillPlanosSemanais() {
-  const tbody = document.getElementById('planos-semanal-tbody');
-  const tfoot = document.getElementById('planos-semanal-tfoot');
-  let totJun=0, totJulReal=0;
-  const tipos = ['Real','Real','Real','Em curso','—'];
-  planosJun.forEach((jun, i) => {
-    const jul = planosJul[i];
-    const tipo = tipos[i];
-    const isReal = tipo === 'Real' || tipo === 'Em curso';
-    const hasJul = jul !== null;
-    totJun += jun;
-    if (isReal && hasJul) totJulReal += jul;
-    const varR = hasJul ? jul - jun : null;
-    const varP = hasJul ? varR / jun : null;
-    tbody.innerHTML += `<tr class="${isReal ? '' : 'parcial-row'}">
-      <td>Semana ${i+1}</td>
-      <td style="text-align:center">${jun.toLocaleString('pt-BR')}</td>
-      <td style="text-align:center">${hasJul ? jul.toLocaleString('pt-BR') : '<span style="color:#aaa">—</span>'}</td>
-      <td style="text-align:center"><span style="font-size:10px;padding:2px 7px;border-radius:10px;background:${isReal?'#E6F5EC':'#EEF2F9'};color:${isReal?'#1E7B45':'#1F3864'};font-weight:600">${tipo}</span></td>
-      <td class="${varR !== null ? varClass(varR) : ''}">${varR !== null ? varArrow(varR) + ' ' + Math.abs(varR).toLocaleString('pt-BR') : '<span style="color:#aaa">—</span>'}</td>
-      <td class="${varP !== null ? varClass(varP) : ''}">${varP !== null ? varArrow(varP) + ' ' + fmtPct(varP) : '<span style="color:#aaa">—</span>'}</td>
-    </tr>`;
-  });
-  tfoot.innerHTML = `
-    <tr>
-      <td>TOTAL</td>
-      <td style="text-align:center"><strong>${totJun.toLocaleString('pt-BR')}</strong></td>
-      <td style="text-align:center"><strong>${totJulReal.toLocaleString('pt-BR')}</strong> (S1–S4 parcial)</td>
-      <td colspan="3" style="font-size:10px;color:#555">Ritmo Jul S1–S3: ${Math.round(totJulReal/3).toLocaleString('pt-BR')}/sem · Jun média: ${Math.round(totJun/5).toLocaleString('pt-BR')}/sem</td>
-    </tr>`;
-}
-
-function fillSemanal() {
-  const tbody=document.getElementById('semanal-tbody');
-  let totJun=0,totJulReal=0;
-  junhoSemanas.valores.forEach((jun,i)=>{
-    const jul=julhoSemanas.valores[i];
-    const tipo=julhoSemanas.tipos[i];
-    const varR=jul-jun; const varP=varR/jun;
-    const isReal=tipo==='Real';
-    if(isReal) totJulReal+=jul;
-    totJun+=jun;
-    tbody.innerHTML+=`<tr class="${isReal?'':'parcial-row'}">
-      <td>Semana ${i+1}</td>
-      <td style="text-align:center;font-size:11px">${junhoSemanas.periodos[i]}</td>
-      <td>R$ ${fmt(jun)}</td>
-      <td style="text-align:center;font-size:11px">${julhoSemanas.periodos[i]}</td>
-      <td>R$ ${fmt(jul)}</td>
-      <td style="text-align:center"><span style="font-size:10px;padding:2px 7px;border-radius:10px;background:${isReal?'#E6F5EC':'#EEF2F9'};color:${isReal?'#1E7B45':'#1F3864'};font-weight:600">${tipo}</span></td>
-      <td class="${varClass(varR)}">${varArrow(varR)} R$ ${fmt(Math.abs(varR))}</td>
-      <td class="${varClass(varR)}">${varArrow(varR)} ${fmtPct(varP)}</td>
-    </tr>`;
-  });
-  const totJul=julhoSemanas.valores.reduce((a,b)=>a+b,0);
-  document.getElementById('semanal-tfoot').innerHTML=`
-    <tr>
-      <td colspan="2">TOTAL Jun (fechado)</td>
-      <td>R$ ${fmt(totJun)}</td>
-      <td colspan="2">Jul real acumulado</td>
-      <td></td>
-      <td colspan="2">R$ ${fmt(totJulReal)}</td>
-    </tr>
-    <tr>
-      <td colspan="5">Projeção Jul (Total mês ao ritmo atual)</td>
-      <td></td>
-      <td colspan="2" style="color:#1F3864">R$ ${fmt(totJul)} (${fmtPct((totJul-totJun)/totJun)} vs Jun)</td>
-    </tr>`;
-
-  // Insights
-  const s1var=((julhoSemanas.valores[0]-junhoSemanas.valores[0])/junhoSemanas.valores[0]*100).toFixed(1);
-  const s2var=((julhoSemanas.valores[1]-junhoSemanas.valores[1])/junhoSemanas.valores[1]*100).toFixed(1);
-  const projecaoAnual=totJul*12;
-  document.getElementById('semanal-insights').innerHTML=`
-    <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:8px;font-size:12px">
-      <li>🟢 <strong>Semana 1 real:</strong> R$ ${fmt(julhoSemanas.valores[0])} vs R$ ${fmt(junhoSemanas.valores[0])} em Jun S1 → <strong class="${s1var>=0?'var-up':'var-down'}">${s1var>=0?'+':''}${s1var}%</strong>. Julho começou com 4 dias úteis (Qua–Sab) vs 6 de Junho.</li>
-      <li>🟢 <strong>Semana 2 real:</strong> R$ ${fmt(julhoSemanas.valores[1])} vs R$ ${fmt(junhoSemanas.valores[1])} em Jun S2 → <strong class="${s2var>=0?'var-up':'var-down'}">${s2var>=0?'+':''}${s2var}%</strong>. Semana completa (Seg–Dom). Média diária de Jul S2 = R$ ${fmt(julhoSemanas.valores[1]/6)}.</li>
-      <li>📈 <strong>Semana 3 real:</strong> R$ 236.944,15 vs R$ 223.694,00 em Jun S3 → <strong class="var-up">+5,9%</strong>. Média diária atual Jul: R$ 37.929 vs R$ 37.359 em Jun → <strong class="var-up">+1,5%</strong>. Projeção Jul: R$ 1.024.076.</li>
-      <li>⚠️ <strong>Semana 4 em andamento</strong> (iniciou 20/07, 1 du real: R$ 35.173,51). <strong>Semana 5</strong> = projeção por tendência (R$ 37.929/du). Atualizar após cada semana completa.</li>
-    </ul>`;
-}
-
-// ── COMPARATIVO ATÉ DIA 20 ──
-function fillComparativo() {
-  const tbody = document.getElementById('comp-tbody');
-  const tfoot = document.getElementById('comp-tfoot');
-  const rows = [
-    { label:'Fat. Clínica',  julV:644788.88,  junV:667297,           julDu:17, junDu:18, isNum:false, est:false },
-    { label:'Fat. Plano',    julV:338722.45,  junV:Math.round(516333*18/26), julDu:17, junDu:18, isNum:false, est:true  },
-    { label:'Venda Planos',  julV:1344,    junV:Math.round(1856*18/26),   julDu:17, junDu:18, isNum:true,  est:true  }
-  ];
-  const GREEN_CELL = 'background:#E6F5EC;color:#1E7B45;font-weight:700';
-  rows.forEach(r => {
-    const varBruta = (r.julV - r.junV) / r.junV;
-    const medJul   = r.julV / r.julDu;
-    const medJun   = r.junV / r.junDu;
-    const varDu    = (medJul - medJun) / medJun;
-    const proj18   = medJul * 18;
-    const varProj  = (proj18 - r.junV) / r.junV;
-    const fmtV = v => r.isNum ? Math.round(v).toLocaleString('pt-BR') : 'R$ ' + fmt(v);
-    const fmtM = v => r.isNum ? v.toFixed(1) : 'R$ ' + fmt(v);
-    const est  = r.est ? ' <em style="font-size:10px;color:#999">(est.)</em>' : '';
-    tbody.innerHTML += `<tr>
-      <td>${r.label}</td>
-      <td><strong>${fmtV(r.julV)}</strong></td>
-      <td>${fmtV(r.junV)}${est}</td>
-      <td class="${varClass(varBruta)}">${varArrow(varBruta)} ${fmtPct(varBruta)}</td>
-      <td>${fmtM(medJul)}</td>
-      <td>${fmtM(medJun)}</td>
-      <td style="${GREEN_CELL}"><strong>${varArrow(varDu)} ${fmtPct(varDu)}</strong></td>
-      <td style="${GREEN_CELL}">${fmtV(proj18)} <span style="font-size:10px;font-weight:400">(${varArrow(varProj)} ${fmtPct(varProj)} vs Jun)</span></td>
-    </tr>`;
-  });
-  tfoot.innerHTML = `<tr style="font-size:10px;color:#555;font-style:italic;background:#F9F9F9">
-    <td colspan="8">* Fat. Clínica Jun: dado real (S1+S2+S3 das semanas). Fat. Plano e Venda Planos Jun: estimativa proporcional (18/26 du). Proj. Jul = média diária Jul × 18 du.</td>
-  </tr>`;
-}
-
 // ── GRÁFICOS ──
 const ORANGE='#E8630A', NAVY='#1F3864', ORANGE_LIGHT='rgba(232,99,10,0.15)', GRAY='rgba(150,150,150,0.35)';
 let charts={};
@@ -972,26 +911,6 @@ function createCharts() {
     options:{responsive:true,maintainAspectRatio:false,plugins:{datalabels:{display:false},legend:{display:false}},scales:{y:{grid:{color:'#eee'}},x:{grid:{display:false}}}}
   });
 
-  // Semanal chart
-  const semLabels=['S1','S2','S3','S4','S5'];
-  const julRealData=[177303.95,245096.04,236944.15,35173.51,null];
-  const julTendData=[null,null,null,null,189645];
-  charts.semanal=new Chart(document.getElementById('chartSemanal'),{
-    type:'bar',
-    data:{
-      labels:semLabels,
-      datasets:[
-        {label:'Junho/26',data:junhoSemanas.valores,backgroundColor:'rgba(232,99,10,0.8)',borderColor:ORANGE,borderWidth:1.5,borderRadius:4,order:2},
-        {label:'Julho/26 (Real)',data:julRealData,backgroundColor:'rgba(31,56,100,0.85)',borderColor:NAVY,borderWidth:1.5,borderRadius:4,order:1},
-        {label:'Julho/26 (Tendência)',data:julTendData,backgroundColor:'rgba(31,56,100,0.28)',borderColor:NAVY,borderWidth:1.5,borderRadius:4,borderDash:[5,3],order:1}
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{datalabels:{display:false},legend:{position:'bottom',labels:{font:{size:11},boxWidth:14}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': R$ '+fmt(ctx.raw)}}},
-      scales:{y:{ticks:{callback:v=>'R$'+Math.round(v/1000)+'k',font:{size:10}},grid:{color:'#eee'},stacked:false},x:{grid:{display:false}}}
-    }
-  });
 }
 
 function showTab(name,btn) {
@@ -1006,95 +925,113 @@ function showTab(name,btn) {
         const canvas=document.getElementById(id);
         if(canvas){const ex=Chart.getChart(canvas);if(ex)ex.destroy();}
       });
-      createChartBanhosRanking();createChartBanhosTaxa();createChartBanhosCrescimento();createChartBanhosSegQui();createChartBanhosSab();populateBanhosTable();
+      createChartBanhosRanking();createChartBanhosTaxa();createChartBanhosCrescimento();populateBanhosTable();
     }
+    if(name==='semanal'){ fillSemanal(); createChartsSemanal(); }
+    if(name==='yoy'){ fillYoy(); createChartsYoy(); }
   },50);
 }
 
-// ── DADOS POR UNIDADE – JULHO 2026 (fechado · 27 du) ──
-// Ordenados por Fat. Clínica (maior → menor) — Fonte: Planilha consolidada
-const unidades = {
-  nomes: ['Campina Grande','Barreiro','Dona Clara','Ipatinga','São Miguel Paulista','Paulista Pernambuco','Itaim Paulista','Contagem','Sorocaba'],
-  abrev: ['Camp.GR','Barreiro','D.Clara','Ipatinga','S.Miguel','Paulista PE','Itaim','Contagem','Sorocaba'],
-  fatServico:  [287717.96, 196594.66, 145870.11, 136446.43, 134357.43, 131242.97, 128419.09, 103606.01, 62953.87],
-  fatComanda:  [287717.96, 196594.66, 145870.11, 136446.43, 134357.43, 131242.97, 128419.09, 103606.01, 62953.87]
-};
-// Venda Planos por unidade (Jul/26 parcial · 16 du) – ordenado por volume
-const vendasUnidade = {
-  nomes:   ['Itaim Paulista','Sorocaba','Contagem','Campina Grande','Barreiro','Ipatinga','Paulista Pernambuco','Dona Clara','São Miguel Paulista','Cosmópolis'],
-  abrev:   ['Itaim','Sorocaba','Contagem','Camp.GR','Barreiro','Ipatinga','Paulista PE','D.Clara','S.Miguel','Cosmópolis'],
-  qtd:     [320, 310, 291, 284, 243, 210, 180, 146, 144, 126]
-};
+// ── DADOS POR UNIDADE – AGOSTO 2026 (fechado · 26 du) ──
+// Fonte: planilha "Venda e Fat. (Plano e Clínica).xlsx" · abas 2026
+const UN      = ['Barreiro','Campina Grande','Contagem','Cosmópolis','Dona Clara','Ipatinga','Itaim Paulista','Paulista Pernambuco','Porto Seguro','São Miguel Paulista','Sorocaba'];
+const UN_AB   = ['Barreiro','Camp.GR','Contagem','Cosmóp.','D.Clara','Ipatinga','Itaim','Paulista PE','P.Seguro','S.Miguel','Sorocaba'];
+const UN_NOVA = ['Porto Seguro'];
+
+const planosAgo     = [212,212,260,86,109,123,236,91,63,102,271];
+const planosJulU    = [243,284,291,126,146,210,320,180,0,144,310];
+const fatPlanoAgo   = [115141.94,91328.59,39697.70,39.96,64254.95,63285.61,83326.65,23561.52,84.85,84999.38,34485.86];
+const fatPlanoJulU  = [107547.73,83836.42,27259.00,0,59307.72,57906.34,77112.63,18780.55,0,82001.07,20970.67];
+const fatClinAgo    = [194975.72,322357.97,136711.69,0,144131.50,126842.34,145995.81,127941.29,0,126308.99,66812.83];
+const fatClinJulU   = [196594.66,287717.96,103766.01,0,145870.11,136446.43,128419.09,131082.97,0,134357.43,62953.87];
+
+const fatTotalAgo  = UN.map((_,i)=>fatPlanoAgo[i]+fatClinAgo[i]);
+const fatTotalJulU = UN.map((_,i)=>fatPlanoJulU[i]+fatClinJulU[i]);
+const REDE_AGO     = fatTotalAgo.reduce((a,b)=>a+b,0);
+
+function pctVar(now, prev) { return (prev && prev>0) ? (now-prev)/prev : null; }
+function cellVar(v) {
+  if (v===null) return '<td style="text-align:center;color:#aaa">novo</td>';
+  const bg = v>=0 ? 'background:#E6F5EC;color:#1E7B45' : v>-0.25 ? 'background:#FFF9E6;color:#856000' : 'background:#FDECEA;color:#C00000';
+  return `<td style="text-align:center;font-weight:700;${bg}">${varArrow(v)} ${fmtPct(v)}</td>`;
+}
 
 function fillUnidades() {
   const tbody = document.getElementById('unidade-tbody');
-  const totalComanda = unidades.fatComanda.reduce((a,b)=>a+b,0);
-  const totalServico = unidades.fatServico.reduce((a,b)=>a+b,0);
-  const totalVendas  = vendasUnidade.qtd.reduce((a,b)=>a+b,0);
-
-  // Map vendas by unit name
-  const vendasMap = {};
-  vendasUnidade.nomes.forEach((n,i) => vendasMap[n] = vendasUnidade.qtd[i]);
-  vendasMap['Cosmópolis'] = 71; // not in fat table
-
-  unidades.nomes.forEach((nome, i) => {
-    const serv = unidades.fatServico[i];
-    const com  = unidades.fatComanda[i];
-    const diff = serv - com;
-    const pctCom = (com / totalComanda * 100).toFixed(1);
-    const vp = vendasMap[nome] || '—';
-    const pctVP = vp !== '—' ? (vp/totalVendas*100).toFixed(1)+'%' : '—';
-    const isBest = com === Math.max(...unidades.fatComanda);
-    tbody.innerHTML += `<tr class="${isBest?'best-month':''}">
-      <td>${nome}${isBest?' ⭐':''}</td>
-      <td>R$ ${fmt(serv)}</td>
-      <td>R$ ${fmt(com)}</td>
-      <td style="color:#777">R$ ${fmt(diff)}</td>
-      <td style="text-align:center"><strong>${pctCom}%</strong></td>
-      <td style="text-align:center">${typeof vp==='number'?vp.toLocaleString('pt-BR'):vp}</td>
-      <td style="text-align:center">${pctVP}</td>
+  if (!tbody) return;
+  const ord = UN.map((_,i)=>i).sort((a,b)=>fatTotalAgo[b]-fatTotalAgo[a]);
+  ord.forEach(i => {
+    const nova = UN_NOVA.includes(UN[i]);
+    const isTop = i === ord[0];
+    tbody.innerHTML += `<tr class="${isTop?'best-month':''}">
+      <td>${UN[i]}${isTop?' ⭐':''}${nova?' <span style="background:#1F3864;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">NOVA</span>':''}</td>
+      <td style="text-align:center"><strong>${planosAgo[i].toLocaleString('pt-BR')}</strong></td>
+      ${cellVar(pctVar(planosAgo[i], planosJulU[i]))}
+      <td>R$ ${fmt(fatPlanoAgo[i])}</td>
+      ${cellVar(pctVar(fatPlanoAgo[i], fatPlanoJulU[i]))}
+      <td>${fatClinAgo[i] ? 'R$ '+fmt(fatClinAgo[i]) : '<span style="color:#aaa">—</span>'}</td>
+      ${fatClinAgo[i] ? cellVar(pctVar(fatClinAgo[i], fatClinJulU[i])) : '<td style="text-align:center;color:#aaa">—</td>'}
+      <td><strong>R$ ${fmt(fatTotalAgo[i])}</strong></td>
+      <td style="text-align:center">${(fatTotalAgo[i]/REDE_AGO*100).toFixed(1)}%</td>
     </tr>`;
   });
-  // Cosmópolis row (no fat data)
-  tbody.innerHTML += `<tr class="parcial-row"><td>Cosmópolis</td><td>—</td><td>—</td><td>—</td><td>—</td><td>71</td><td>${(71/totalVendas*100).toFixed(1)}%</td></tr>`;
   document.getElementById('unidade-tfoot').innerHTML =
-    `<tr><td>TOTAL</td><td>R$ ${fmt(totalServico)}</td><td>R$ ${fmt(totalComanda)}</td><td></td><td>100%</td><td>${totalVendas.toLocaleString('pt-BR')}</td><td>100%</td></tr>`;
+    `<tr><td>TOTAL REDE</td>
+      <td style="text-align:center">1.765</td>
+      <td style="text-align:center">▼ −21,7%</td>
+      <td>R$ ${fmt(fatPlanoAgo.reduce((a,b)=>a+b,0))}</td>
+      <td style="text-align:center">▲ +12,2%</td>
+      <td>R$ ${fmt(fatClinAgo.reduce((a,b)=>a+b,0))}</td>
+      <td style="text-align:center">▲ +4,9%</td>
+      <td>R$ ${fmt(REDE_AGO)}</td>
+      <td style="text-align:center">100%</td></tr>`;
+
+  // Blocos de ação
+  const vermelho=[], amarelo=[], verde=[];
+  UN.forEach((n,i)=>{
+    const dp = pctVar(planosAgo[i], planosJulU[i]);
+    const dt = pctVar(fatTotalAgo[i], fatTotalJulU[i]);
+    if (dp===null) return;
+    if (dp <= -0.25) vermelho.push(`<strong>${n}</strong> ${fmtPct(dp)} (${planosJulU[i]}→${planosAgo[i]})`);
+    else if (dp < 0) amarelo.push(`<strong>${n}</strong> ${fmtPct(dp)}`);
+    if (dt !== null && dt > 0.05) verde.push(`<strong>${n}</strong> receita ${fmtPct(dt)}`);
+  });
+  const li = arr => arr.length ? '• ' + arr.join('<br>• ') : '—';
+  document.getElementById('acao-vermelho').innerHTML = li(vermelho) +
+    '<br><br><em>Ação: revisar oferta local e agenda comercial. Estas unidades concentram a queda de volume da rede em agosto.</em>';
+  document.getElementById('acao-amarelo').innerHTML = li(amarelo) +
+    '<br><br><em>Ação: acompanhar semanalmente. Queda dentro do esperado pós-campanha de julho.</em>';
+  document.getElementById('acao-verde').innerHTML = li(verde) +
+    '<br><br><em>Ação: mapear o que sustentou a receita mesmo com menos vendas novas e replicar nas unidades em vermelho.</em>';
 }
 
-// ── DADOS BANHOS POR UNIDADE (fonte: BI Serviço/Produto, Grupo=Banho, período 01–20 de cada mês) ──
+// ── DADOS BANHOS POR UNIDADE (meses fechados · aba "Venda de Banhos") ──
 const banhosUnidades = ['Barreiro','Campina Grande','Contagem','Dona Clara','Ipatinga','Itaim Paulista','Paulista Pernambuco','São Miguel Paulista','Sorocaba'];
-const banhosJulArr = [660, 692, 309, 551, 443, 672, 209, 714, 175];  // Jul 1-20 (Mon-Sat, 17 dias)
-const banhosJunArr = [573, 662, 211, 537, 506, 609, 130, 706, 166];  // Jun 1-20 (Mon-Sat, 18 dias)
-const banhosJulDu = 17;  // dias Mon-Sat em Jul 1-20
-const banhosJunDu = 18;  // dias Mon-Sat em Jun 1-20
-// Seg-Qui: Jul=11 dias (2 Ter), Jun=12 dias (3 de cada)
-const segQuiJul = [389, 415, 186, 308, 277, 413, 108, 452, 105];
-const segQuiJun = [346, 379, 131, 302, 300, 384,  64, 404,  88];
-// Sábados: 3 Sáb em cada período
-const sabJul = [127, 140, 65, 115,  94, 107, 60, 158, 34];
-const sabJun = [ 95, 132, 32,  85,  92, 103, 37, 137, 52];
-const banhosTaxaJul = banhosJulArr.map(v => +(v/banhosJulDu).toFixed(1));
-const banhosTaxaJun = banhosJunArr.map(v => +(v/banhosJunDu).toFixed(1));
-const banhosCrescPct = banhosTaxaJul.map((tj, i) => +((tj/banhosTaxaJun[i]-1)*100).toFixed(1));
-const banhosRankOrder = banhosJulArr.map((v,i)=>({v,i})).sort((a,b)=>b.v-a.v).map(x=>x.i);
+const banhosJunArr = [814, 934, 278, 755, 706, 822, 199, 1039, 231];
+const banhosJulArr = [1002,1110, 487, 861, 748,1054, 320, 1212, 305];
+const banhosAgoArr = [917, 1026, 535, 793, 704, 952, 272, 1093, 443];
+const banhosTotAgo = banhosAgoArr.reduce((a,b)=>a+b,0);
+const banhosVarJul = banhosAgoArr.map((v,i)=>+((v/banhosJulArr[i]-1)*100).toFixed(1));
+const banhosVarJun = banhosAgoArr.map((v,i)=>+((v/banhosJunArr[i]-1)*100).toFixed(1));
+const banhosRankOrder = banhosAgoArr.map((v,i)=>({v,i})).sort((a,b)=>b.v-a.v).map(x=>x.i);
 const banhosRankLabel = banhosRankOrder.map(i=>banhosUnidades[i]);
-const banhosRankJul   = banhosRankOrder.map(i=>banhosJulArr[i]);
+const banhosRankAgo   = banhosRankOrder.map(i=>banhosAgoArr[i]);
 
 function createChartBanhosRanking() {
   if (!document.getElementById('chartBanhosRanking')) return;
-  const colors = banhosRankJul.map((_,i) => i===0?'#E8630A':i<4?'#F49D5A':'rgba(232,99,10,0.4)');
+  const colors = banhosRankAgo.map((_,i) => i===0?'#E8630A':i<4?'#F49D5A':'rgba(232,99,10,0.4)');
   charts.banhosRanking = new Chart(document.getElementById('chartBanhosRanking'), {
     type:'bar',
-    data:{ labels:banhosRankLabel, datasets:[{label:'Banhos Jul/26',data:banhosRankJul,backgroundColor:colors,borderRadius:4}] },
+    data:{ labels:banhosRankLabel, datasets:[{label:'Banhos Ago/26',data:banhosRankAgo,backgroundColor:colors,borderRadius:4}] },
     options:{
       indexAxis:'y', responsive:true, maintainAspectRatio:false,
       plugins:{
         legend:{display:false},
-        tooltip:{callbacks:{label:ctx=>`${ctx.raw} banhos (${(ctx.raw/banhosJulDu).toFixed(1)}/du)`}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.raw} banhos (${(ctx.raw/banhosTotAgo*100).toFixed(1)}% da rede)`}},
         datalabels:{anchor:'end',align:'end',formatter:v=>v,color:'#333',font:{size:11,weight:'bold'}}
       },
       scales:{x:{grid:{color:'#eee'},ticks:{font:{size:10}}},y:{grid:{display:false},ticks:{font:{size:11}}}},
-      layout:{padding:{right:40}}
+      layout:{padding:{right:44}}
     }
   });
 }
@@ -1106,19 +1043,19 @@ function createChartBanhosTaxa() {
     data:{
       labels:banhosUnidades,
       datasets:[
-        {label:'Jul/26 · total banhos',data:banhosJulArr,backgroundColor:'#E8630A',borderRadius:3},
-        {label:'Jun/26 · total banhos',data:banhosJunArr,backgroundColor:'rgba(232,99,10,0.35)',borderRadius:3}
+        {label:'Jun/26',data:banhosJunArr,backgroundColor:'rgba(31,56,100,0.30)',borderRadius:3},
+        {label:'Jul/26',data:banhosJulArr,backgroundColor:'rgba(31,56,100,0.70)',borderRadius:3},
+        {label:'Ago/26',data:banhosAgoArr,backgroundColor:'#E8630A',borderRadius:3}
       ]
     },
     options:{
       responsive:true, maintainAspectRatio:false,
       plugins:{
-        legend:{position:'top',labels:{font:{size:10}}},
+        legend:{position:'top',labels:{font:{size:10},boxWidth:12}},
         tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw} banhos`}},
-        datalabels:{anchor:'end',align:'top',formatter:v=>v,color:'#333',font:{size:9,weight:'bold'}}
+        datalabels:{display:false}
       },
-      scales:{y:{grid:{color:'#eee'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}},
-      layout:{padding:{top:16}}
+      scales:{y:{grid:{color:'#eee'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}}
     }
   });
 }
@@ -1130,156 +1067,264 @@ function createChartBanhosCrescimento() {
     data:{
       labels:banhosUnidades,
       datasets:[{
-        label:'Δ% Taxa Diária Jul vs Jun',
-        data:banhosCrescPct,
-        backgroundColor:banhosCrescPct.map(v=>v>=0?'#27ae60':'#e74c3c'),
-        borderRadius:4
+        label:'Δ% Ago vs Jul',
+        data:banhosVarJul,
+        backgroundColor:banhosVarJul.map(v=>v>=0?'#1E7B45':'#C00000'),
+        borderRadius:3
       }]
     },
     options:{
       responsive:true, maintainAspectRatio:false,
       plugins:{
         legend:{display:false},
-        tooltip:{callbacks:{label:ctx=>`${ctx.raw>0?'+':''}${ctx.raw}%`}},
-        datalabels:{anchor:'end',align:'top',formatter:v=>`${v>0?'+':''}${v}%`,color:'#333',font:{size:10,weight:'bold'}}
+        tooltip:{callbacks:{label:ctx=>`${ctx.raw>=0?'+':''}${ctx.raw}% vs Jul`}},
+        datalabels:{anchor:v=>v.raw>=0?'end':'start',align:v=>v.raw>=0?'top':'bottom',formatter:v=>(v>=0?'+':'')+v+'%',color:'#333',font:{size:10,weight:'bold'}}
       },
       scales:{y:{grid:{color:'#eee'},ticks:{callback:v=>v+'%',font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}},
-      layout:{padding:{top:20}}
+      layout:{padding:{top:20,bottom:12}}
     }
   });
 }
 
 function populateBanhosTable() {
   const tbody = document.getElementById('banhos-tbody');
-  if (!tbody) return;
-  const sorted = banhosUnidades.map((u,i)=>({u,i})).sort((a,b)=>banhosJulArr[b.i]-banhosJulArr[a.i]);
-  tbody.innerHTML = sorted.map(({u,i},rank)=>{
-    const txJul = (banhosJulArr[i]/banhosJulDu).toFixed(1);
-    const txJun = (banhosJunArr[i]/banhosJunDu).toFixed(1);
-    const delta = +((txJul/txJun-1)*100).toFixed(1);
-    const sq = segQuiJul[i]; const sqTx = (sq/11).toFixed(1);
-    const sb = sabJul[i]; const sbTx = (sb/3).toFixed(1);
-    return `<tr>
-      <td>${rank===0?'🥇 ':rank===1?'🥈 ':rank===2?'🥉 ':''}${u}</td>
-      <td><strong>${banhosJulArr[i]}</strong></td>
-      <td>${banhosJunArr[i]}</td>
-      <td><strong>${txJul}</strong></td>
-      <td>${txJun}</td>
-      <td style="color:${delta>=0?'#27ae60':'#e74c3c'};font-weight:600">${delta>0?'+':''}${delta}%</td>
-      <td>${sq} (${sqTx}/d)</td>
-      <td>${sb} (${sbTx}/sáb)</td>
-      <td style="text-align:center">${rank+1}°</td>
+  if (!tbody || tbody.innerHTML.trim() !== '') return;
+  const rank = {}; banhosRankOrder.forEach((idx,pos)=>rank[idx]=pos+1);
+  banhosUnidades.forEach((n,i)=>{
+    const vj = banhosVarJul[i], vu = banhosVarJun[i];
+    tbody.innerHTML += `<tr class="${rank[i]===1?'best-month':''}">
+      <td>${n}${rank[i]===1?' ⭐':''}</td>
+      <td>${banhosJunArr[i].toLocaleString('pt-BR')}</td>
+      <td>${banhosJulArr[i].toLocaleString('pt-BR')}</td>
+      <td><strong>${banhosAgoArr[i].toLocaleString('pt-BR')}</strong></td>
+      <td class="${vj>=0?'var-up':'var-down'}" style="text-align:center">${vj>=0?'▲ +':'▼ '}${vj}%</td>
+      <td class="${vu>=0?'var-up':'var-down'}" style="text-align:center">${vu>=0?'▲ +':'▼ '}${vu}%</td>
+      <td style="text-align:center">${(banhosAgoArr[i]/banhosTotAgo*100).toFixed(1)}%</td>
+      <td style="text-align:center"><strong>${rank[i]}º</strong></td>
     </tr>`;
-  }).join('');
-}
-
-function createChartBanhosSegQui() {
-  if (!document.getElementById('chartBanhosSegQui')) return;
-  charts.banhosSegQui = new Chart(document.getElementById('chartBanhosSegQui'), {
-    type:'bar',
-    data:{
-      labels:banhosUnidades,
-      datasets:[
-        {label:'Jul/26 · banhos Seg-Qui',data:segQuiJul,backgroundColor:'#E8630A',borderRadius:3},
-        {label:'Jun/26 · banhos Seg-Qui',data:segQuiJun,backgroundColor:'rgba(232,99,10,0.35)',borderRadius:3}
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{
-        legend:{position:'top',labels:{font:{size:10}}},
-        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw} banhos`}},
-        datalabels:{anchor:'end',align:'top',formatter:v=>v,color:'#333',font:{size:9,weight:'bold'}}
-      },
-      scales:{y:{grid:{color:'#eee'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}},
-      layout:{padding:{top:16}}
-    }
   });
-}
-
-function createChartBanhosSab() {
-  if (!document.getElementById('chartBanhosSab')) return;
-  charts.banhosSab = new Chart(document.getElementById('chartBanhosSab'), {
-    type:'bar',
-    data:{
-      labels:banhosUnidades,
-      datasets:[
-        {label:'Jul/26 · banhos nos Sábados',data:sabJul,backgroundColor:'#1F3864',borderRadius:3},
-        {label:'Jun/26 · banhos nos Sábados',data:sabJun,backgroundColor:'rgba(31,56,100,0.35)',borderRadius:3}
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{
-        legend:{position:'top',labels:{font:{size:10}}},
-        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw} banhos`}},
-        datalabels:{anchor:'end',align:'top',formatter:v=>v,color:'#333',font:{size:9,weight:'bold'}}
-      },
-      scales:{y:{grid:{color:'#eee'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}},
-      layout:{padding:{top:16}}
-    }
-  });
+  const tf = document.getElementById('banhos-tfoot');
+  if (tf) tf.innerHTML = `<tr><td>TOTAL REDE</td><td>5.778</td><td>7.099</td><td>6.735</td>
+    <td style="text-align:center;color:#C00000">▼ −5,1%</td>
+    <td style="text-align:center;color:#1E7B45">▲ +16,6%</td>
+    <td style="text-align:center">100%</td><td></td></tr>`;
+  const ins = document.getElementById('banhos-insight');
+  if (ins) ins.innerHTML = `📊 <strong>Leitura de agosto:</strong> a rede fez 6.735 banhos — 5,1% abaixo do pico de julho, mas <strong>16,6% acima de junho</strong>.
+    Apenas <strong>Sorocaba (+45,2%)</strong> e <strong>Contagem (+9,9%)</strong> cresceram sobre julho; as demais recuaram entre 6% e 15%.
+    <strong>São Miguel Paulista</strong> segue líder absoluto (1.093 banhos · 16,2% da rede) e <strong>Sorocaba</strong> é a operação que mais ganhou tração no trimestre (231 → 443 banhos, +91,8% desde junho).`;
 }
 
 function createChartsUnidade() {
-  // Sorted by Fat. Comanda descending (already sorted in data)
-  const labels = [...unidades.nomes].reverse();
-  const values = [...unidades.fatComanda].reverse();
-  const maxVal = Math.max(...values);
-
-  charts.fatUnidade = new Chart(document.getElementById('chartFatUnidade'), {
-    type: 'bar',
-    data: {
-          labels: labels,
-      datasets: [{
-        label: 'Fat. Comanda',
-        data: values,
-        backgroundColor: values.map(v => v === maxVal ? '#E8630A' : 'rgba(232,99,10,0.75)'),
-        borderRadius: 4
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => 'R$ ' + fmt(ctx.raw) } },
-        datalabels: false
+  const el1 = document.getElementById('chartFatUnidade');
+  if (el1) {
+    const ord = UN.map((_,i)=>i).sort((a,b)=>fatTotalAgo[a]-fatTotalAgo[b]);
+    charts.fatUnidade = new Chart(el1, {
+      type:'bar',
+      data:{
+        labels: ord.map(i=>UN[i]),
+        datasets:[
+          {label:'Fat. Clínica',data:ord.map(i=>fatClinAgo[i]),backgroundColor:'#E8630A',borderRadius:3,stack:'s'},
+          {label:'Fat. Plano',  data:ord.map(i=>fatPlanoAgo[i]),backgroundColor:'#1F3864',borderRadius:3,stack:'s'}
+        ]
       },
-      scales: {
-        x: { ticks: { callback: v => 'R$'+Math.round(v/1000)+'k', font:{size:10} }, grid:{color:'#eee'} },
-        y: { grid:{display:false}, ticks:{font:{size:11}} }
+      options:{
+        indexAxis:'y', responsive:true, maintainAspectRatio:false,
+        plugins:{
+          legend:{position:'top',labels:{font:{size:10},boxWidth:12}},
+          tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': R$ '+fmt(ctx.raw)}},
+          datalabels:{display:false}
+        },
+        scales:{x:{stacked:true,grid:{color:'#eee'},ticks:{callback:v=>'R$'+Math.round(v/1000)+'k',font:{size:10}}},y:{stacked:true,grid:{display:false},ticks:{font:{size:11}}}}
       }
-    }
+    });
+  }
+  const el2 = document.getElementById('chartVendasUnidade');
+  if (el2) {
+    const ord = UN.map((_,i)=>i).sort((a,b)=>planosAgo[b]-planosAgo[a]);
+    charts.vendasUnidade = new Chart(el2, {
+      type:'bar',
+      data:{
+        labels: ord.map(i=>UN_AB[i]),
+        datasets:[
+          {label:'Jul/26',data:ord.map(i=>planosJulU[i]),backgroundColor:'rgba(31,56,100,0.35)',borderRadius:3},
+          {label:'Ago/26',data:ord.map(i=>planosAgo[i]),backgroundColor:'#E8630A',borderRadius:3}
+        ]
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{
+          legend:{position:'top',labels:{font:{size:10},boxWidth:12}},
+          tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw+' planos'}},
+          datalabels:{anchor:'end',align:'top',formatter:v=>v||'',color:'#555',font:{size:9,weight:'bold'}}
+        },
+        scales:{y:{grid:{color:'#eee'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}},
+        layout:{padding:{top:18}}
+      }
+    });
+  }
+}
+
+// ── SEMANAL: VENDA DE PLANOS POR UNIDADE (Ago/26 vs Jul/26) ──
+const semLabels4 = ['S1','S2','S3','S4'];
+const julSem = [[66,33,57,64],[85,61,55,81],[76,59,54,65],[19,20,39,48],[49,27,25,17],[59,45,53,30],[80,63,68,73],[64,38,33,45],[0,0,0,0],[37,19,24,24],[65,57,61,55]];
+const agoSem = [[59,38,49,55],[71,41,38,61],[65,44,51,76],[31,8,14,35],[30,15,22,23],[17,33,18,39],[63,47,47,54],[30,12,25,23],[0,0,22,21],[20,14,16,20],[52,47,54,45]];
+const julSemTot = semLabels4.map((_,s)=>julSem.reduce((a,u)=>a+u[s],0));
+const agoSemTot = semLabels4.map((_,s)=>agoSem.reduce((a,u)=>a+u[s],0));
+
+function fillSemanal() {
+  const tbody = document.getElementById('semanal-tbody');
+  if (!tbody) return;
+  const soma = a => a.reduce((x,y)=>x+y,0);
+  const ord = UN.map((_,i)=>i).sort((a,b)=>soma(agoSem[b])-soma(agoSem[a]));
+  ord.forEach(i=>{
+    const tJ = soma(julSem[i]), tA = soma(agoSem[i]);
+    const d = tJ>0 ? (tA-tJ)/tJ : null;
+    const cells = s => s.map(v=>`<td style="text-align:center">${v||'<span style="color:#ccc">—</span>'}</td>`).join('');
+    tbody.innerHTML += `<tr>
+      <td>${UN[i]}</td>
+      ${cells(julSem[i])}
+      ${agoSem[i].map(v=>`<td style="text-align:center;background:#FFF7F0;font-weight:600">${v||'<span style="color:#ccc">—</span>'}</td>`).join('')}
+      ${d===null?'<td style="text-align:center;color:#aaa">novo</td>':`<td style="text-align:center;font-weight:700" class="${d>=0?'var-up':'var-down'}">${varArrow(d)} ${fmtPct(d)}</td>`}
+    </tr>`;
   });
+  const tJ = soma(julSemTot), tA = soma(agoSemTot);
+  document.getElementById('semanal-tfoot').innerHTML = `<tr>
+    <td>TOTAL</td>
+    ${julSemTot.map(v=>`<td style="text-align:center">${v}</td>`).join('')}
+    ${agoSemTot.map(v=>`<td style="text-align:center">${v}</td>`).join('')}
+    <td style="text-align:center" class="var-down">▼ ${fmtPct((tA-tJ)/tJ)}</td>
+  </tr>`;
+  document.getElementById('semanal-insight').innerHTML =
+    `💡 <strong>Onde a venda caiu:</strong> a S2 de agosto (10–16/08) foi a semana mais fraca do bimestre — 299 vendas contra 422 na S2 de julho (−29,1%).
+     A recuperação vem na <strong>S4 (24–31/08): 452 vendas, quase o nível de julho (502)</strong> e a melhor semana do mês.
+     <strong>Contagem</strong> foi a única unidade a superar julho na S4 (65 → 76) e <strong>Porto Seguro</strong> entrou em operação a partir da S3.
+     <br><br>⚠️ Os números desta aba <strong>não incluem televendas</strong>: 1.545 vendas nas semanas vs 1.765 no fechamento do mês — a diferença (220) é canal televendas.`;
+}
 
-  // Venda Planos
-  charts.vendasUnidade = new Chart(document.getElementById('chartVendasUnidade'), {
-    type: 'bar',
-    data: {
-      labels: vendasUnidade.abrev,
-      datasets: [{
-        label: 'Planos Vendidos',
-        data: vendasUnidade.qtd,
-        backgroundColor: vendasUnidade.qtd.map((v,i) => {
-          const max = Math.max(...vendasUnidade.qtd);
-          return v === max ? '#E8630A' : 'rgba(31,56,100,0.7)';
-        }),
-        borderRadius: 4
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ctx.raw + ' planos' } }
-      },
-      scales: {
-        x: { grid: { color: '#eee' } },
-        y: { grid: { display: false } }
-      }
-    }
+function createChartsSemanal() {
+  const el = document.getElementById('chartSemanalTotal');
+  if (el && !Chart.getChart(el)) {
+    charts.semTotal = new Chart(el, {
+      type:'bar',
+      data:{ labels:['S1 (01–09)','S2 (10–16)','S3 (17–23)','S4 (24–31)'],
+        datasets:[
+          {label:'Julho/26',data:julSemTot,backgroundColor:'rgba(31,56,100,0.4)',borderRadius:4},
+          {label:'Agosto/26',data:agoSemTot,backgroundColor:'#E8630A',borderRadius:4}
+        ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:14}},
+          tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw+' planos'}},
+          datalabels:{anchor:'end',align:'top',formatter:v=>v,color:'#333',font:{size:11,weight:'bold'}}},
+        scales:{y:{grid:{color:'#eee'}},x:{grid:{display:false}}},layout:{padding:{top:20}}}
+    });
+  }
+  const el2 = document.getElementById('chartSemanalUnidade');
+  if (el2 && !Chart.getChart(el2)) {
+    const soma = a => a.reduce((x,y)=>x+y,0);
+    const ord = UN.map((_,i)=>i).sort((a,b)=>soma(agoSem[b])-soma(agoSem[a]));
+    const cores = ['rgba(232,99,10,0.35)','rgba(232,99,10,0.55)','rgba(232,99,10,0.78)','#E8630A'];
+    charts.semUnidade = new Chart(el2, {
+      type:'bar',
+      data:{ labels:ord.map(i=>UN_AB[i]),
+        datasets: semLabels4.map((s,si)=>({label:s+' Ago',data:ord.map(i=>agoSem[i][si]),backgroundColor:cores[si],borderRadius:2,stack:'a'})) },
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}},datalabels:{display:false},
+          tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw}}},
+        scales:{y:{stacked:true,grid:{color:'#eee'}},x:{stacked:true,grid:{display:false},ticks:{font:{size:9}}}}}
+    });
+  }
+}
+
+// ── YoY 2025 × 2026 (aba "YoY 2025 vs 2026") ──
+const yoyMeses  = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago'];
+const yPlanos25 = [556,585,378,709,538,581,505,804];
+const yPlanos26 = [1162,1116,1305,1711,1252,1862,2254,1765];
+const yFatPl25  = [306822,322137,317288,295881,297331,336386,341650,334526];
+const yFatPl26  = [437074,423339,480962,477913,518574,516238,534722,600207];
+const yFatCl25  = [654432,623604,620829,592541,684530,581020,578155,669286];
+const yFatCl26  = [879313,848652,1013310,1004936,1026980,1181917,1327209,1392078];
+
+function fillYoy() {
+  const tbody = document.getElementById('yoy-tbody');
+  if (!tbody || tbody.innerHTML.trim() !== '') return;
+  const soma = a => a.reduce((x,y)=>x+y,0);
+  const grupos = [
+    { nome:'Planos vendidos', a:yPlanos25, b:yPlanos26, money:false },
+    { nome:'Fat. Plano',      a:yFatPl25,  b:yFatPl26,  money:true  },
+    { nome:'Fat. Clínica',    a:yFatCl25,  b:yFatCl26,  money:true  }
+  ];
+  const f = (v,m) => m ? 'R$ '+Math.round(v).toLocaleString('pt-BR') : Math.round(v).toLocaleString('pt-BR');
+  grupos.forEach(g => {
+    tbody.innerHTML += `<tr style="background:#f4f4f4"><td colspan="10" style="font-weight:800;color:#1F3864;font-size:11px;padding:6px 10px">${g.nome.toUpperCase()}</td></tr>`;
+    tbody.innerHTML += `<tr><td style="padding-left:18px;color:#777">2025</td>${g.a.map(v=>`<td>${f(v,g.money)}</td>`).join('')}<td style="background:#FDE9D9;font-weight:700">${f(soma(g.a),g.money)}</td></tr>`;
+    tbody.innerHTML += `<tr><td style="padding-left:18px;color:#1F3864;font-weight:700">2026</td>${g.b.map(v=>`<td style="font-weight:600">${f(v,g.money)}</td>`).join('')}<td style="background:#FDE9D9;font-weight:800">${f(soma(g.b),g.money)}</td></tr>`;
+    const varsM = g.b.map((v,i)=>(v-g.a[i])/g.a[i]);
+    const varAc = (soma(g.b)-soma(g.a))/soma(g.a);
+    tbody.innerHTML += `<tr><td style="padding-left:18px;color:#888;font-style:italic">Var. YoY</td>${varsM.map(v=>`<td class="${v>=0?'var-up':'var-down'}" style="text-align:center">${varArrow(v)} ${fmtPct(v)}</td>`).join('')}<td class="${varAc>=0?'var-up':'var-down'}" style="background:#E6F5EC;text-align:center;font-weight:800">${varArrow(varAc)} ${fmtPct(varAc)}</td></tr>`;
+  });
+}
+
+function createChartsYoy() {
+  const mk = (id, d25, d26, cor25, cor26, money) => {
+    const el = document.getElementById(id);
+    if (!el || Chart.getChart(el)) return;
+    charts[id] = new Chart(el, {
+      type:'bar',
+      data:{ labels:yoyMeses, datasets:[
+        {label:'2025',data:d25,backgroundColor:cor25,borderRadius:3},
+        {label:'2026',data:d26,backgroundColor:cor26,borderRadius:3}
+      ]},
+      options:{ responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{position:'bottom',labels:{font:{size:11},boxWidth:14}},
+          datalabels:{display:false},
+          tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+(money?'R$ '+Math.round(ctx.raw).toLocaleString('pt-BR'):ctx.raw.toLocaleString('pt-BR'))}} },
+        scales:{ y:{grid:{color:'#eee'},ticks:{font:{size:10},callback:v=>money?'R$'+Math.round(v/1000)+'k':v}}, x:{grid:{display:false}} } }
+    });
+  };
+  mk('chartYoyPlanos',    yPlanos25, yPlanos26, 'rgba(150,150,150,0.45)', '#1E7B45', false);
+  mk('chartYoyFatPlano',  yFatPl25,  yFatPl26,  'rgba(31,56,100,0.30)',   '#1F3864', true);
+  mk('chartYoyFatClinica',yFatCl25,  yFatCl26,  'rgba(232,99,10,0.30)',   '#E8630A', true);
+}
+
+// ── VOLUME × RECEITA (Resumo) ──
+function fillVolumeReceita() {
+  const tbody = document.getElementById('vr-tbody');
+  if (!tbody || tbody.innerHTML.trim() !== '') return;
+  const rows = [
+    ['Fat. Clínica',           'R$ 1.327.208,53', 'R$ 1.392.078,14', 0.0489,  'Recorde do ano'],
+    ['Fat. Plano',             'R$ 534.722,13',   'R$ 600.207,01',   0.12246,  'Recorde do ano — 1ª vez acima de R$ 600 mil'],
+    ['Fat. Total',             'R$ 1.861.930,66', 'R$ 1.992.285,15', 0.0700,  'Maior faturamento mensal de 2026'],
+    ['Receita por dia útil',   'R$ 68.960',       'R$ 76.626',       0.1112,  'Ritmo diário sobe com 1 dia útil a menos'],
+    ['Venda de planos novos',  '2.254',           '1.765',          -0.2170,  'Único indicador em queda — normalização pós-campanha'],
+    ['Fat. Plano ÷ plano novo','R$ 237',          'R$ 340',          0.4334,  'Menos dependência de desconto de adesão: a base madura sustenta a receita']
+  ];
+  rows.forEach(r => {
+    const v = r[3];
+    tbody.innerHTML += `<tr>
+      <td>${r[0]}</td>
+      <td>${r[1]}</td>
+      <td><strong>${r[2]}</strong></td>
+      <td style="text-align:center;font-weight:700;${v>=0?'background:#E6F5EC;color:#1E7B45':'background:#FDECEA;color:#C00000'}">${varArrow(v)} ${fmtPct(v)}</td>
+      <td style="text-align:left;font-size:11px;color:#555">${r[4]}</td>
+    </tr>`;
+  });
+}
+
+function createChartFatTotal() {
+  const el = document.getElementById('chartFatTotal');
+  if (!el || Chart.getChart(el)) return;
+  charts.fatTotal = new Chart(el, {
+    type:'bar',
+    data:{ labels:meses, datasets:[
+      {label:'Fat. Clínica',data:fatClinica,backgroundColor:'#E8630A',borderRadius:3,stack:'t'},
+      {label:'Fat. Plano',  data:fatPlano,  backgroundColor:'#1F3864',borderRadius:3,stack:'t'}
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{position:'bottom',labels:{font:{size:11},boxWidth:14}},
+        datalabels:{display:false},
+        tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': R$ '+fmt(ctx.raw),
+          footer:items=>'Total: R$ '+fmt(items.reduce((a,i)=>a+i.raw,0))}} },
+      scales:{ y:{stacked:true,grid:{color:'#eee'},ticks:{callback:v=>'R$'+Math.round(v/1000)+'k',font:{size:10}}}, x:{stacked:true,grid:{display:false}} } }
   });
 }
 
@@ -1321,50 +1366,6 @@ function fillIndicadores() {
     <td style="text-align:right">${totRec.toLocaleString('pt-BR')}</td>
     <td style="text-align:right">—</td>
   </tr>`;
-}
-
-function createChartPlanosSemanais() {
-  const labels = ['S1','S2','S3'];
-  const junData = planosJun.slice(0,3);
-  const julData = planosJul.slice(0,3);
-  charts.planosSemanais = new Chart(document.getElementById('chartPlanosSemanais'), {
-    type: 'bar',
-    data: {
-      labels: ['S1','S2','S3','S4','S5'],
-      datasets: [
-        {
-          label: 'Junho/26',
-          data: planosJun,
-          backgroundColor: 'rgba(232,99,10,0.8)',
-          borderColor: '#E8630A',
-          borderWidth: 1.5,
-          borderRadius: 4,
-          order: 2
-        },
-        {
-          label: 'Julho/26 (Real)',
-          data: planosJul,
-          backgroundColor: 'rgba(31,56,100,0.85)',
-          borderColor: '#1F3864',
-          borderWidth: 1.5,
-          borderRadius: 4,
-          order: 1
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 14 } },
-        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.raw !== null ? ctx.raw.toLocaleString('pt-BR') + ' planos' : '—') } }
-      },
-      scales: {
-        y: { ticks: { font: { size: 10 } }, grid: { color: '#eee' }, title: { display: true, text: 'Planos vendidos', font: { size: 10 } } },
-        x: { grid: { display: false } }
-      }
-    }
-  });
 }
 
 function createChartEquilibrio() {
@@ -1522,326 +1523,7 @@ function createChartsIndicadores() {
 }
 
 
-// ── DADOS CHURN (BI – Dez/24 a Jul/26) ──
-const churnMeses = ['Dez/24','Jan/25','Fev/25','Mar/25','Abr/25','Mai/25','Jun/25','Jul/25','Ago/25','Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26*'];
-const churnPct   = [1.17,1.48,2.41,4.35,2.59,1.87,6.55,0.97,1.26,1.38,1.36,1.21,1.21,1.71,1.28,1.67,1.65,1.62,1.58,1.16];
-const churnInterr= [190,241,399,728,422,310,1097,157,210,238,250,232,244,358,279,377,386,402,402,312];
-
-// ── TAXA DE ATIVAÇÃO ─────────────────────────────────────────────────────────
-function fillAtivacao() {
-  // ── DADOS REAIS POWER BI · "Utilização da Clínica" · coletados em 05/08/2026 ──
-  const mesesAt = ['Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26'];
-
-  // null = dados não disponíveis para aquele mês (unidade ainda não existia no BI)
-  const unidadesBi = [
-    { nome: 'Barreiro',          cor: '#1F3864',
-      ativos: [5904,5995,6083,6195,6277,6368,6453],
-      usando:  [677, 675, 805, 832, 784, 774, 850],
-      inadimpl:[35,  28,  49,  42,  41,  36,  45 ] },
-    { nome: 'São Miguel Paulista', cor: '#9B59B6',
-      ativos: [5119,5179,5175,5182,5170,5169,5204],
-      usando:  [794, 725, 778, 796, 724, 765, 811],
-      inadimpl:[57,  64,  70,  77,  64,  63,  77 ] },
-    { nome: 'Itaim Paulista',    cor: '#E8630A',
-      ativos: [4063,4079,4207,4353,4388,4504,4592],
-      usando:  [641, 625, 714, 719, 725, 716, 817],
-      inadimpl:[null,null,null,null,null,null,null] },
-    { nome: 'Campina Grande',    cor: '#2ECC71',
-      ativos: [2008,2208,2433,2616,2752,2901,3054],
-      usando:  [739, 718, 820, 856, 837, 777, 956],
-      inadimpl:[43,  43,  39,  32,  39,  23,  37 ] },
-    { nome: 'Dona Clara',        cor: '#3498DB',
-      ativos: [2537,2630,2676,2738,2729,2773,2810],
-      usando:  [516, 503, 504, 546, 542, 557, 620],
-      inadimpl:[35,  22,  23,  32,  31,  32,  43 ] },
-    { nome: 'Ipatinga',          cor: '#F39C12',
-      ativos: [1165,1368,1541,1687,1803,1929,2058],
-      usando:  [498, 516, 596, 607, 609, 612, 668],
-      inadimpl:[30,  32,  41,  43,  38,  31,  37 ] },
-    { nome: 'Contagem',          cor: '#1ABC9C',
-      ativos: [null,null,108, 390, 608, 783, 962],
-      usando:  [null,null,null,137, 284, 393, null], // Jul coletado como 393 (Mai=137,Jun=284)
-      inadimpl:[null,null,null,4,   8,   18,  null] },
-    { nome: 'Paulista PE',       cor: '#E74C3C',
-      ativos: [null,null,null,null,null,505, 650],
-      usando:  [null,null,null,null,null,216, 335],
-      inadimpl:[null,null,null,null,null,9,   16 ] },
-    { nome: 'Sorocaba',          cor: '#8E44AD',
-      ativos: [196, 260, 331, 428, 488, 624, 829],
-      usando:  [null,56,  108, 144, 147, 172, 231],
-      inadimpl:[null,6,   8,   11,  4,   6,   19 ] },
-  ];
-
-  // Corrigir Contagem Jul (usando = 393 confirmado)
-  unidadesBi[6].usando[6] = 393;
-
-  // ── CHART 1: Ranking de ativação em julho (barras horizontais) ──
-  const rankData = unidadesBi.map(u => {
-    const a = u.ativos[6], s = u.usando[6];
-    return { nome: u.nome.replace('São Miguel Paulista','S. Miguel'), taxa: (a && s) ? +(s/a*100).toFixed(1) : null, cor: u.cor };
-  }).filter(d => d.taxa !== null).sort((a,b) => b.taxa - a.taxa);
-
-  charts.ativacaoRanking = new Chart(document.getElementById('chartAtivacaoRanking'), {
-    type: 'bar',
-    data: {
-      labels: rankData.map(d => d.nome),
-      datasets: [{
-        label: 'Taxa de Ativação (%)',
-        data: rankData.map(d => d.taxa),
-        backgroundColor: rankData.map(d => d.taxa >= 30 ? 'rgba(30,123,69,0.75)' : d.taxa >= 20 ? 'rgba(192,144,0,0.75)' : 'rgba(192,0,0,0.7)'),
-        borderColor: rankData.map(d => d.taxa >= 30 ? '#1E7B45' : d.taxa >= 20 ? '#856000' : '#C00000'),
-        borderWidth: 1.5, borderRadius: 4
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        datalabels: { anchor: 'end', align: 'right', formatter: v => v + '%', font: { size: 10, weight: 700 }, color: '#333' },
-        tooltip: { callbacks: { label: ctx => 'Taxa: ' + ctx.raw + '%' } },
-        annotation: { annotations: { meta: { type:'line', xMin:30, xMax:30, borderColor:'#1E7B45', borderWidth:1.5, borderDash:[4,3], label:{content:'Meta 30%',enabled:true,position:'start',font:{size:9},color:'#1E7B45'} } } }
-      },
-      scales: {
-        x: { min: 0, max: 60, ticks: { callback: v => v + '%', font: { size: 10 } }, grid: { color: '#eee' } },
-        y: { ticks: { font: { size: 10 } }, grid: { display: false } }
-      }
-    }
-  });
-
-  // ── CHART 2: Evolução da taxa (unidades com histórico completo) ──
-  const unidadesCompletas = unidadesBi.filter(u => u.ativos.every(v => v !== null) && u.usando.every(v => v !== null));
-  charts.ativacaoEvolucao = new Chart(document.getElementById('chartAtivacaoEvolucao'), {
-    type: 'line',
-    data: {
-      labels: mesesAt,
-      datasets: unidadesCompletas.map(u => ({
-        label: u.nome.replace('São Miguel Paulista','S. Miguel').replace('Itaim Paulista','Itaim').replace('Campina Grande','Camp.GR'),
-        data: u.usando.map((s,i) => s !== null && u.ativos[i] ? +(s/u.ativos[i]*100).toFixed(1) : null),
-        borderColor: u.cor,
-        backgroundColor: 'transparent',
-        borderWidth: 2,
-        pointRadius: 3.5,
-        pointHoverRadius: 6,
-        tension: 0.3,
-        spanGaps: true
-      }))
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { position: 'top', labels: { font: { size: 9 }, padding: 8, usePointStyle: true, boxWidth: 8 } },
-        datalabels: { display: false },
-        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.raw + '%' } }
-      },
-      scales: {
-        y: { min: 10, max: 45, ticks: { callback: v => v + '%', font: { size: 10 } }, grid: { color: '#eee' } },
-        x: { ticks: { font: { size: 10 } }, grid: { display: false } }
-      }
-    }
-  });
-
-  // ── TABELA DETALHADA JULHO ──
-  const nivelar = taxa => taxa >= 30 ? 'verde' : taxa >= 20 ? 'amarelo' : 'vermelho';
-  const cores   = { verde: '#E6F5EC', amarelo: '#FFF9E6', vermelho: '#FDECEA' };
-  const txtCor  = { verde: '#1E7B45', amarelo: '#856000', vermelho: '#C00000' };
-  const badges  = { verde: '🟢', amarelo: '🟡', vermelho: '🔴' };
-
-  const tbl = document.getElementById('tbl-ativacao');
-  tbl.innerHTML = `<thead><tr>
-    <th style="text-align:left">Unidade</th>
-    <th>CPFs Ativos</th>
-    <th>CPFs Usando</th>
-    <th>Taxa Ativação</th>
-    <th>Base Inativa</th>
-    <th>Inadimpl.</th>
-    <th>Status</th>
-  </tr></thead><tbody id="tbl-at-body"></tbody>`;
-  const tbody = document.getElementById('tbl-at-body');
-
-  let totAtivos=0, totUsando=0;
-  unidadesBi.sort((a,b)=>{
-    const ta = a.ativos[6]&&a.usando[6] ? a.usando[6]/a.ativos[6] : -1;
-    const tb = b.ativos[6]&&b.usando[6] ? b.usando[6]/b.ativos[6] : -1;
-    return tb - ta;
-  }).forEach(u => {
-    const a = u.ativos[6], s = u.usando[6], in_ = u.inadimpl[6];
-    if (!a) return;
-    const taxa = s ? +(s/a*100).toFixed(1) : null;
-    const nivel = taxa !== null ? nivelar(taxa) : 'amarelo';
-    const inativa = s ? a - s : null;
-    if (s) { totAtivos += a; totUsando += s; }
-    tbody.innerHTML += `<tr style="background:${cores[nivel]}">
-      <td style="font-weight:700">${badges[nivel]} ${u.nome}</td>
-      <td style="text-align:right">${a.toLocaleString('pt-BR')}</td>
-      <td style="text-align:right">${s !== null ? s.toLocaleString('pt-BR') : '—'}</td>
-      <td style="text-align:center;font-weight:800;color:${txtCor[nivel]}">${taxa !== null ? taxa + '%' : '—'}</td>
-      <td style="text-align:right;color:#C00000">${inativa !== null ? inativa.toLocaleString('pt-BR') : '—'}</td>
-      <td style="text-align:right;color:#888">${in_ !== null ? in_.toLocaleString('pt-BR') : '—'}</td>
-      <td style="text-align:center;font-weight:700;color:${txtCor[nivel]}">${nivel==='verde'?'Saudável':nivel==='amarelo'?'Atenção':'Alto risco'}</td>
-    </tr>`;
-  });
-  // (Sorocaba incluída no loop acima com dados reais)
-
-  // ── TABELA HISTÓRICO MENSAL ──
-  const tblH = document.getElementById('tbl-hist-ativacao');
-  const mAbrev = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul'];
-  let hdr = `<thead><tr><th style="text-align:left;min-width:120px">Unidade</th>`;
-  mAbrev.forEach(m => hdr += `<th colspan="2" style="text-align:center;background:#1F3864;border-left:1px solid rgba(255,255,255,0.2)">${m}</th>`);
-  hdr += `</tr><tr><th style="background:#2a4a8a;font-size:10px"></th>`;
-  mAbrev.forEach(() => hdr += `<th style="background:#2a4a8a;font-size:9px;font-weight:500;text-align:right">Usando</th><th style="background:#2a4a8a;font-size:9px;font-weight:500;text-align:center">Taxa</th>`);
-  hdr += `</tr></thead><tbody>`;
-  tblH.innerHTML = hdr;
-  const tbodyH = document.createElement('tbody');
-  tblH.appendChild(tbodyH);
-  unidadesBi.forEach(u => {
-    let row = `<tr><td style="font-weight:600">${u.nome.replace('São Miguel Paulista','S. Miguel').replace('Itaim Paulista','Itaim')}</td>`;
-    mesesAt.forEach((_,i) => {
-      const a = u.ativos[i], s = u.usando[i];
-      const taxa = (a && s) ? +(s/a*100).toFixed(0) : null;
-      const bg = taxa===null ? '' : taxa>=30 ? 'background:#E6F5EC' : taxa>=20 ? 'background:#FFF9E6' : 'background:#FDECEA';
-      const tc = taxa===null ? '#aaa' : taxa>=30 ? '#1E7B45' : taxa>=20 ? '#856000' : '#C00000';
-      row += `<td style="text-align:right;${bg}">${s!==null&&s!==undefined?s.toLocaleString('pt-BR'):'—'}</td>`;
-      row += `<td style="text-align:center;font-weight:700;color:${tc};${bg}">${taxa!==null?taxa+'%':'—'}</td>`;
-    });
-    row += `</tr>`;
-    tbodyH.innerHTML += row;
-  });
-}
-
-fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillUnidades(); fillIndicadores(); fillComparativo(); createCharts(); createChartsUnidade(); createChartsIndicadores(); createChartEquilibrio(); createChartChurn(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); createChartBanhosSegQui(); createChartBanhosSab(); populateBanhosTable(); fillAtivacao();
-
-function createChartChurn() {
-  if (!document.getElementById('chartChurn')) return;
-  const is2026 = churnMeses.map(m => m.includes('/26') || m.includes('Dez/25'));
-  charts.churn = new Chart(document.getElementById('chartChurn'), {
-    type: 'bar',
-    data: {
-      labels: churnMeses,
-      datasets: [{
-        label: 'Churn (%)',
-        data: churnPct,
-        backgroundColor: churnMeses.map((m,i) => i >= 13 ? '#E8630A' : 'rgba(232,99,10,0.3)'),
-        borderRadius: 3
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ctx.raw.toFixed(2) + '% · ' + churnInterr[ctx.dataIndex].toLocaleString('pt-BR') + ' cancel.' } }
-      },
-      scales: {
-        y: { ticks: { callback: v => v.toFixed(1)+'%', font: {size:10} }, grid: {color:'#eee'} },
-        x: { grid: {display:false}, ticks: {font:{size:9}, maxRotation:45} }
-      }
-    }
-  });
-}
-
-function showCalcTab(name) {
-  document.querySelectorAll('.calc-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.calc-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('calctab-'+name).classList.add('active');
-  const tabs = ['ltv','cac','roi','roas'];
-  document.querySelectorAll('.calc-tab')[tabs.indexOf(name)].classList.add('active');
-}
-
-function fmtBR(v) { return 'R$ ' + Math.round(v).toLocaleString('pt-BR'); }
-function fmtDec(v,d) { return v.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d}); }
-
-function calcMetrics() {
-  const arpu  = parseFloat(document.getElementById('c-arpu').value)  || 0;
-  const vida  = parseFloat(document.getElementById('c-vida').value)  || 4;
-  const clinic= parseFloat(document.getElementById('c-clinic').value)|| 0;
-  const marg  = parseFloat(document.getElementById('c-margem').value)|| 1;
-
-  document.getElementById('c-vida-out').textContent = Math.round(vida)+' meses';
-  document.getElementById('c-margem-out').textContent = Math.round(marg)+'%';
-
-  const arpuTotal = arpu + clinic;
-  const churnImpl = 100/vida;
-  const ltvBruto = arpuTotal * vida;
-  const ltvMargem = ltvBruto * (marg/100);
-
-  document.getElementById('r-ltv-bruto').textContent = fmtBR(ltvBruto);
-  document.getElementById('r-ltv-bruto-sub').textContent = 'R$ '+fmtDec(arpuTotal,2)+' × '+Math.round(vida)+' meses (churn implícito: '+fmtDec(churnImpl,1)+'%/mês)';
-  document.getElementById('r-ltv-margem').textContent = fmtBR(ltvMargem);
-  document.getElementById('r-vida').textContent = Math.round(vida)+' meses';
-  document.getElementById('r-arpu-total').textContent = 'R$ '+fmtDec(arpuTotal,2);
-
-  // CAC
-  const midia  = parseFloat(document.getElementById('c-midia').value)  || 0;
-  const equipe = parseFloat(document.getElementById('c-equipe').value) || 0;
-  const outros = parseFloat(document.getElementById('c-outros').value) || 0;
-  const novos  = parseFloat(document.getElementById('c-novos').value)  || 1;
-  const totalInv = midia + equipe + outros;
-  const cac = totalInv > 0 ? totalInv / novos : 0;
-
-  document.getElementById('r-invest').textContent = fmtBR(totalInv);
-  document.getElementById('r-proj-novos').textContent = Math.round(novos).toLocaleString('pt-BR');
-
-  if (cac > 0) {
-    document.getElementById('r-cac').textContent = fmtBR(cac);
-    document.getElementById('r-cac-sub').textContent = fmtBR(totalInv)+' ÷ '+Math.round(novos).toLocaleString('pt-BR')+' novos clientes';
-    const ratio = ltvMargem / cac;
-    document.getElementById('r-ratio').textContent = fmtDec(ratio,1)+'× LTV';
-    const pctLtv = (cac/ltvBruto*100);
-    const bench = pctLtv < 10 ? 'Excelente' : pctLtv < 20 ? 'Bom' : pctLtv < 33 ? 'Atenção' : 'Crítico';
-    document.getElementById('r-bench').textContent = bench;
-    document.getElementById('r-bench-sub').textContent = 'CAC representa '+fmtDec(pctLtv,1)+'% do LTV bruto';
-
-    const lucro = ltvMargem - cac;
-    const payback = arpuTotal*(marg/100) > 0 ? cac/(arpuTotal*(marg/100)) : 0;
-    const roi = (lucro/cac)*100;
-
-    document.getElementById('r-roi').textContent = (roi>=0?'+':'')+Math.round(roi)+'%';
-    document.getElementById('r-payback').textContent = fmtDec(payback,1)+' meses';
-    document.getElementById('r-lucro').textContent = (lucro>=0?'+':'')+fmtBR(lucro);
-    document.getElementById('r-proj-receita').textContent = fmtBR(ltvBruto*novos);
-    document.getElementById('r-proj-lucro').textContent = (lucro>=0?'+':'')+fmtBR(lucro*novos);
-
-    const roiC = document.getElementById('r-roi-card');
-    const payC = document.getElementById('r-payback-card');
-    const lucC = document.getElementById('r-lucro-card');
-    roiC.className = 'ckpi'+(roi<0?' red':roi>100?' green':' navy');
-    payC.className = 'ckpi'+(payback>vida?' red':payback<vida/3?' green':' navy');
-    lucC.className = 'ckpi'+(lucro<0?' red':' green');
-  } else {
-    ['r-cac','r-ratio','r-bench','r-roi','r-payback','r-lucro','r-proj-receita','r-proj-lucro'].forEach(id => {
-      const el = document.getElementById(id); if(el) el.textContent = '—';
-    });
-    document.getElementById('r-cac-sub').textContent = 'Informe os custos para calcular';
-    document.getElementById('r-bench-sub').textContent = 'CAC representa —% do LTV bruto';
-  }
-
-  // ROAS
-  const rMidia = parseFloat(document.getElementById('r-roas-midia').value) || 0;
-  const rConv  = parseFloat(document.getElementById('r-roas-conv').value)  || 0;
-  const rTick  = parseFloat(document.getElementById('r-roas-ticket').value)|| 0;
-  const rMeses = parseInt(document.getElementById('r-roas-meses').value)   || 1;
-  document.getElementById('r-roas-meses-out').textContent = rMeses+' '+(rMeses===1?'mês':'meses');
-
-  if (rMidia > 0 && rConv > 0) {
-    const recAtrib = rConv * rTick * rMeses;
-    const roas = recAtrib / rMidia;
-    const cpa  = rMidia / rConv;
-    document.getElementById('r-roas-val').textContent  = fmtDec(roas,2)+'×';
-    document.getElementById('r-roas-sub').textContent  = fmtBR(recAtrib)+' receita ÷ '+fmtBR(rMidia)+' verba';
-    document.getElementById('r-roas-rec').textContent  = fmtBR(recAtrib);
-    document.getElementById('r-roas-rec-sub').textContent = Math.round(rConv)+' conv. × R$ '+fmtDec(rTick,2)+' × '+rMeses+(rMeses===1?' mês':' meses');
-    document.getElementById('r-cpa').textContent       = fmtBR(cpa);
-    const roasBench = roas >= 6 ? 'Excelente' : roas >= 4 ? 'Bom' : roas >= 2 ? 'Atenção' : 'Crítico';
-    document.getElementById('r-roas-bench').textContent = roasBench;
-    document.getElementById('r-roas-bench-card').className = 'ckpi'+(roas>=4?' green':roas>=2?'':' red');
-  } else {
-    ['r-roas-val','r-roas-rec','r-cpa','r-roas-bench'].forEach(id => {
-      const el = document.getElementById(id); if(el) el.textContent = '—';
-    });
-    document.getElementById('r-roas-sub').textContent = 'Informe verba e conversões';
-    document.getElementById('r-roas-rec-sub').textContent = 'Conversões × ticket × meses';
-  }
-}
+fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillUnidades(); fillIndicadores(); fillVolumeReceita(); fillSemanal(); fillYoy(); createCharts(); createChartFatTotal(); createChartsUnidade(); createChartsIndicadores(); createChartEquilibrio(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); populateBanhosTable(); createChartsSemanal(); createChartsYoy();
 
 </script>
 </body>
