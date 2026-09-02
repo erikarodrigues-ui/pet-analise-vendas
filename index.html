@@ -132,15 +132,21 @@
 
     <div class="lead-box">
       <div class="lead-tag">Leitura do mês · Agosto/26</div>
-      <div class="lead-title">Menos volume, mais receita — e o melhor mês de faturamento do ano.</div>
+      <div class="lead-title">Recorde de receita e alerta na aquisição — o painel de agosto tem duas histórias.</div>
       <div class="lead-text">
-        Agosto vendeu <strong>1.765 planos (−21,7% vs Jul)</strong>, mas entregou <strong>recorde nas duas linhas de receita</strong>:
-        Fat. Clínica <strong>R$ 1.392.078 (+4,9%)</strong> e Fat. Plano <strong>R$ 600.207 (+12,2%)</strong>.
-        Julho foi um pico de volume comprado com campanha agressiva de adesão (1ª mensalidade grátis · adesão R$ 9,90);
-        agosto é a <strong>monetização dessa base</strong>. Faturamento total do mês: <strong>R$ 1.992.285</strong> — o maior de 2026.
+        <strong>Receita:</strong> agosto é o melhor mês de 2026. Recorde nas duas linhas — Fat. Clínica <strong>R$ 1.392.078 (+4,9%)</strong> e
+        Fat. Plano <strong>R$ 600.207 (+12,2%)</strong>, total de <strong>R$ 1.992.285 (+7,0%)</strong>. A base conquistada em julho entrou faturando.
         <br><br>
-        <span class="lead-flag">⚠️ Onde olhar</span> A queda de volume não é uniforme: Paulista PE −49%, Ipatinga −41%, Cosmópolis −32% e São Miguel −29%
-        puxam o resultado. Sorocaba (−13%) e Barreiro (−13%) seguraram. <strong>Porto Seguro estreia</strong> com 63 planos no primeiro mês.
+        <strong>Aquisição:</strong> alerta. Foram <strong>1.765 planos (−21,7% vs Jul)</strong> — e não dá para tratar como acomodação pós-pico,
+        porque agosto rodou <strong>duas campanhas o mês inteiro</strong>: "Pai de Pet é 10" (R$ 10 nas 2 primeiras mensalidades + adesão R$ 10)
+        e "Mês do Pet Tranquilo" (planos de R$ 29,90 com antirrábica inclusa). <strong>Estímulo igual ou maior que o de julho, com 22% menos venda.</strong>
+        <br><br>
+        <span class="lead-flag">💡 Hipótese</span> O desconto total subiu, mas o <strong>desembolso no ato dobrou</strong>: em julho o cliente pagava
+        R$ 9,90 para assinar (1ª mensalidade grátis); em agosto, R$ 20,00 (adesão R$ 10 + 1ª mensalidade R$ 10). Para o público C/D, quem trava a
+        conversão costuma ser o valor à vista, não o desconto acumulado. Setembro testa isso na prática — a oferta volta a zerar a 1ª mensalidade.
+        <br><br>
+        <span class="lead-flag">⚠️ Onde olhar</span> A queda se concentra em Paulista PE −49%, Ipatinga −41%, Cosmópolis −32% e São Miguel −29%;
+        Sorocaba (−13%) e Barreiro (−13%) seguraram. <strong>Porto Seguro estreia</strong> com 63 planos no primeiro mês.
       </div>
     </div>
 
@@ -190,8 +196,9 @@
       <div class="section-header">⚖️ Volume × Receita — o que mudou de Julho para Agosto</div>
       <div class="section-body">
         <div class="tend-note" style="margin-bottom:12px">
-          💡 <strong>Por que o painel não deve ser lido como "mês de queda":</strong> o único indicador que recuou foi a <em>quantidade</em> de planos novos.
-          Todas as linhas de receita subiram. A base vendida em julho passou a faturar em agosto — é o comportamento esperado de uma campanha de adesão com desconto na 1ª mensalidade.
+          💡 <strong>Duas mensagens, não uma:</strong> em receita, agosto é o melhor mês do ano — todas as linhas subiram e o ritmo diário cresceu 11,1%
+          mesmo com um dia útil a menos. Em aquisição, o mês pede investigação — duas campanhas agressivas rodando o mês inteiro e ainda assim 21,7% menos
+          planos novos. Apresente as duas leituras juntas: celebrar só a receita esconde o problema de conversão; olhar só o volume esconde o recorde.
         </div>
         <table>
           <thead><tr><th>Indicador</th><th>Jul/26</th><th>Ago/26</th><th>Variação</th><th style="text-align:left">Leitura</th></tr></thead>
@@ -619,7 +626,8 @@ const campanhas = {
     { tipo:'Plano',   cor:'#1F3864', nome:'Vacina', desc:'1 mensalidade grátis · adesão R$ 9,90' }
   ],
   'Ago/26': [
-    { tipo:'Plano',   cor:'#999999', nome:'A preencher', desc:'Aguardando confirmação das campanhas de agosto' }
+    { tipo:'Plano',   cor:'#1F3864', nome:'Pai de Pet é 10', desc:'R$ 10,00 nas 2 primeiras mensalidades (de R$ 39,90) · adesão R$ 10,00 (de R$ 25,00) · mês inteiro' },
+    { tipo:'Plano',   cor:'#1F3864', nome:'Mês do Pet Tranquilo', desc:'Planos a partir de R$ 29,90 · vacina antirrábica inclusa · adesão R$ 9,90 em 2× · fidelidade 12 meses · mês inteiro' }
   ]
 };
 
@@ -1126,8 +1134,8 @@ function fillVolumeReceita() {
     ['Fat. Plano',             'R$ 534.722,13',   'R$ 600.207,01',   0.12246,  'Recorde do ano — 1ª vez acima de R$ 600 mil'],
     ['Fat. Total',             'R$ 1.861.930,66', 'R$ 1.992.285,15', 0.0700,  'Maior faturamento mensal de 2026'],
     ['Receita por dia útil',   'R$ 68.960',       'R$ 76.626',       0.1112,  'Ritmo diário sobe com 1 dia útil a menos'],
-    ['Venda de planos novos',  '2.254',           '1.765',          -0.2170,  'Único indicador em queda — normalização pós-campanha'],
-    ['Fat. Plano ÷ plano novo','R$ 237',          'R$ 340',          0.4334,  'Menos dependência de desconto de adesão: a base madura sustenta a receita']
+    ['Venda de planos novos',  '2.254',           '1.765',          -0.2170,  'Queda com 2 campanhas ativas o mês inteiro — investigar conversão por unidade'],
+    ['Fat. Plano ÷ plano novo','R$ 237',          'R$ 340',          0.4334,  'A receita cresce sem depender do volume de adesões — a base madura sustenta o resultado']
   ];
   rows.forEach(r => {
     const v = r[3];
