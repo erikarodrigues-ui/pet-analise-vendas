@@ -107,7 +107,7 @@
   <div class="header-logo">Pet<span>de</span><br>Todos</div>
   <div class="header-title">
     <h1>Análise de Vendas – 2026</h1>
-    <p>Janeiro a Agosto 2026 · Fonte: Power BI + Google Sheets · Atualizado em 02/09/2026</p>
+    <p>Janeiro a Agosto 2026 · Fonte: Power BI + Google Sheets · Atualizado em 09/09/2026</p>
   </div>
   <div class="header-badges">
     <div class="badge">🔒 8 meses fechados</div>
@@ -121,6 +121,7 @@
   <button class="nav-btn" onclick="showTab('plano',this)">Fat. Plano</button>
   <button class="nav-btn" onclick="showTab('vendas',this)">Venda de Planos</button>
   <button class="nav-btn" onclick="showTab('unidades',this)">Por Unidade – Ago/26</button>
+  <button class="nav-btn" onclick="showTab('performance',this)">Performance por Unidade</button>
   <button class="nav-btn" onclick="showTab('semanal',this)">Semanal Ago × Jul</button>
   <button class="nav-btn" onclick="showTab('banhos',this)">Banhos por Unidade</button>
   <button class="nav-btn" onclick="showTab('yoy',this)">2025 × 2026</button>
@@ -438,6 +439,179 @@
   </div>
 </div>
 
+<!-- ══ PERFORMANCE POR UNIDADE 2026 ══ -->
+<div id="tab-performance" class="tab-panel">
+  <div class="content">
+
+    <div class="tend-note">
+      📈 <strong>Performance por Unidade – Ano 2026</strong><br>
+      Visão consolidada de todas as unidades, mês a mês. <strong>Jan–Ago fechados</strong> · Set–Dez aguardando fechamento.
+      Fonte: planilha consolidada "Venda e Fat. (Plano e Clínica)", aba 2026.
+    </div>
+
+    <div class="kpi-row" style="grid-template-columns:repeat(4,1fr)">
+      <div class="kpi-card green">
+        <div class="kpi-label">🏆 Maior crescimento</div>
+        <div class="kpi-value" style="font-size:17px">Campina Grande</div>
+        <div class="kpi-sub">R$ 284.773 (Jan) → R$ 413.687 (Ago)</div>
+        <span class="kpi-var up">▲ +45,3% no ano</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">💰 Maior faturamento acumulado</div>
+        <div class="kpi-value" style="font-size:17px">Campina Grande</div>
+        <div class="kpi-sub">R$ 2,66 mi · 21,0% da rede</div>
+        <span class="kpi-var up">▲ Líder também em Ago</span>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-label">🎯 Mais planos vendidos</div>
+        <div class="kpi-value" style="font-size:17px">Campina Grande</div>
+        <div class="kpi-sub">1.849 planos · Jan–Ago</div>
+        <span class="kpi-var up">▲ Itaim 2º (1.635) · Ipatinga 3º (1.569)</span>
+      </div>
+      <div class="kpi-card" style="border-left-color:#C00000">
+        <div class="kpi-label">🔻 Maior queda de performance</div>
+        <div class="kpi-value" style="font-size:17px">São Miguel Paulista</div>
+        <div class="kpi-sub">R$ 262.585 (Jan) → R$ 211.308 (Ago)</div>
+        <span class="kpi-var down">▼ −19,5% no ano</span>
+      </div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi-card" style="border-left-color:#1E7B45">
+        <div class="kpi-label">🚀 Maior expansão (unidade nova)</div>
+        <div class="kpi-value" style="font-size:17px">Contagem</div>
+        <div class="kpi-sub">Abriu em Mar/26 · R$ 176.409 em Ago</div>
+        <span class="kpi-var up">▲ Já é a 5ª maior da rede</span>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-label">Faturamento da rede · Jan–Ago/26</div>
+        <div class="kpi-value">R$ 12,66 mi</div>
+        <div class="kpi-sub">11 unidades em operação</div>
+        <span class="kpi-var up">▲ Ago é o melhor mês do ano</span>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">Planos vendidos · Jan–Ago/26</div>
+        <div class="kpi-value">12.427 planos</div>
+        <div class="kpi-sub">Média de 1.553/mês</div>
+        <span class="kpi-var up">▲ Pico em Jul (2.254)</span>
+      </div>
+    </div>
+
+    <!-- Semáforo -->
+    <div class="section">
+      <div class="section-header">🚦 Situação atual da rede — tendência de faturamento (Ago vs Jun/26)</div>
+      <div class="section-body">
+        <div id="perf-semaforo" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px"></div>
+      </div>
+    </div>
+
+    <!-- Small multiples -->
+    <div class="section">
+      <div class="section-header">📉 Evolução do faturamento total por unidade · Jan–Ago/26</div>
+      <div class="section-body">
+        <div style="font-size:11px;color:#666;margin-bottom:12px">
+          Faturamento total = Fat. Plano + Fat. Clínica. Cada mini-gráfico usa a própria escala da unidade — a leitura é a <strong>forma da curva</strong>, não a altura comparada entre elas.
+        </div>
+        <div id="perf-sparks" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px"></div>
+      </div>
+    </div>
+
+    <!-- Ganho absoluto -->
+    <div class="chart-wrap" style="margin-bottom:16px">
+      <div class="chart-title">💵 Ganho de faturamento mensal — Ago/26 vs 1º mês de operação (R$)</div>
+      <div style="background:#EEF2F9;border:1px solid #B0C2E8;padding:8px 14px;font-size:11px;color:#1F3864;line-height:1.6">
+        💡 Em reais, não em %. Unidades que abriram durante 2026 saem de bases próximas de zero — em percentual elas distorceriam qualquer ranking.
+      </div>
+      <div class="chart-body" style="height:340px"><canvas id="chartPerfGanho"></canvas></div>
+    </div>
+
+    <div class="chart-wrap" style="margin-bottom:16px">
+      <div class="chart-title">🏦 Faturamento acumulado Jan–Ago/26 por unidade (Plano + Clínica)</div>
+      <div class="chart-body" style="height:340px"><canvas id="chartPerfAcum"></canvas></div>
+    </div>
+
+    <!-- Tabelas -->
+    <div class="section">
+      <div class="section-header">📋 Planos vendidos por unidade · 2026</div>
+      <div class="section-body">
+        <div id="perf-legenda"></div>
+        <div style="overflow-x:auto"><table style="font-size:11px" id="tbl-perf-planos"></table></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">📋 Faturamento de Planos por unidade · 2026 (R$)</div>
+      <div class="section-body">
+        <div style="overflow-x:auto"><table style="font-size:11px" id="tbl-perf-fp"></table></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">📋 Faturamento de Clínica por unidade · 2026 (R$)</div>
+      <div class="section-body">
+        <div style="overflow-x:auto"><table style="font-size:11px" id="tbl-perf-fc"></table></div>
+      </div>
+    </div>
+
+    <!-- Divergência volume x receita -->
+    <div class="section">
+      <div class="section-header">🔍 O que as três tabelas revelam juntas — volume x receita por unidade</div>
+      <div class="section-body">
+        <div class="tend-note" style="margin-bottom:12px">
+          💡 Comparando as tabelas de <strong>planos vendidos</strong> e <strong>faturamento de planos</strong> nas 6 unidades maduras,
+          aparece um padrão que nenhuma delas mostra sozinha: <strong>4 de 6 vendem menos planos em agosto do que em janeiro, mas 5 de 6 faturam mais.</strong>
+        </div>
+        <table>
+          <thead><tr><th>Unidade madura</th><th>Planos vendidos<br>Jan → Ago</th><th>Fat. Plano<br>Jan → Ago</th><th style="text-align:left">Leitura</th></tr></thead>
+          <tbody>
+            <tr><td>Ipatinga</td><td class="var-down">▼ −53,6%</td><td class="var-up">▲ +59,9%</td><td style="text-align:left;font-size:11px;color:#555">Caso extremo: metade do volume, receita 60% maior. Cresce só pela base instalada.</td></tr>
+            <tr><td>Campina Grande</td><td class="var-down">▼ −10,2%</td><td class="var-up">▲ +44,3%</td><td style="text-align:left;font-size:11px;color:#555">Maior faturamento da rede com volume em queda — mesma dinâmica.</td></tr>
+            <tr><td>Barreiro</td><td class="var-up">▲ +33,3%</td><td class="var-up">▲ +5,4%</td><td style="text-align:left;font-size:11px;color:#555">Vende muito mais e fatura pouco mais: ticket da venda nova caindo.</td></tr>
+            <tr><td>Itaim Paulista</td><td class="var-up">▲ +114,5%</td><td class="var-up">▲ +26,0%</td><td style="text-align:left;font-size:11px;color:#555">Única unidade madura com crescimento real de aquisição.</td></tr>
+            <tr><td>Dona Clara</td><td class="var-down">▼ −6,8%</td><td class="var-up">▲ +4,7%</td><td style="text-align:left;font-size:11px;color:#555">Praticamente parada nas duas frentes.</td></tr>
+            <tr class="parcial-row" style="background:#FDECEA !important;color:#C00000;font-style:normal"><td>São Miguel Paulista</td><td class="var-down">▼ −26,1%</td><td class="var-down">▼ −11,7%</td><td style="text-align:left;font-size:11px;color:#C00000"><strong>Única em queda nas duas.</strong> Perde volume e perde receita — prioridade da rede.</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:14px;font-size:11.5px;color:#333;background:#f5f5f5;border-radius:8px;padding:12px 14px;line-height:1.8">
+          <strong>Consequência prática:</strong> o crescimento de receita de 2026 está vindo da <strong>base já conquistada</strong> — reajuste, mix e retenção —
+          e não da venda nova. Isso sustenta o resultado no curto prazo, mas é um motor que desacelera sozinho:
+          sem reposição de volume, a base para de crescer e o faturamento estabiliza. <strong>Ipatinga e Campina Grande</strong> são as que mais dependem desse efeito hoje.
+        </div>
+      </div>
+    </div>
+
+    <!-- Rankings -->
+    <div class="section">
+      <div class="section-header">🥇 Rankings do ano · Jan–Ago/26</div>
+      <div class="section-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" id="perf-rankings"></div>
+      </div>
+    </div>
+
+    <!-- Qualidade de dado -->
+    <div class="section">
+      <div class="section-header">⚠️ Ressalvas de base — ler antes de apresentar</div>
+      <div class="section-body">
+        <div style="font-size:11.5px;color:#333;line-height:1.85">
+          <strong style="color:#C00000">1. Cosmópolis e Porto Seguro vendem planos mas não têm faturamento registrado.</strong>
+          Cosmópolis: <strong>458 planos</strong> no ano e <strong>R$ 40,07</strong> de faturamento acumulado. Porto Seguro: <strong>63 planos</strong> e <strong>R$ 84,85</strong>.
+          A receita dessas unidades não está sendo alocada a elas na planilha. Elas ficam <strong>fora dos rankings de faturamento</strong> deste painel — incluí-las as colocaria
+          artificialmente como as piores da rede.
+          <br><br>
+          <strong style="color:#C00000">2. Junho/26 não fecha na clínica.</strong>
+          A soma das unidades dá <strong>R$ 1.178.193,44</strong>; o Total da aba 2026 registra <strong>R$ 1.181.917,44</strong>.
+          Diferença de <strong>R$ 3.724,00</strong> sem unidade atribuída. As tabelas desta aba usam os valores por unidade; os KPIs do Resumo Executivo usam o Total da planilha.
+          <br><br>
+          <strong>3. Crescimento percentual só entre unidades maduras.</strong>
+          Seis unidades operam desde Jan/26 (Barreiro, Campina Grande, Dona Clara, Ipatinga, Itaim, São Miguel) — só entre elas o % é comparável.
+          As demais abriram ao longo do ano e são avaliadas por <strong>ganho absoluto em R$</strong>.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- ══ BANHOS POR UNIDADE ══ -->
 <div id="tab-banhos" class="tab-panel">
   <div class="content">
@@ -580,7 +754,7 @@
   </div>
 </div>
 
-<div class="footer">Pet de Todos · Análise de Vendas 2026 · Atualizado em 02/09/2026 · Fonte: Power BI + Planilha consolidada "Venda e Fat. (Plano e Clínica)"</div>
+<div class="footer">Pet de Todos · Análise de Vendas 2026 · Atualizado em 09/09/2026 · Fonte: Power BI + Planilha consolidada "Venda e Fat. (Plano e Clínica)"</div>
 
 <script>
 // ── DADOS MENSAIS ──
@@ -768,6 +942,7 @@ function showTab(name,btn) {
     }
     if(name==='semanal'){ fillSemanal(); createChartsSemanal(); }
     if(name==='yoy'){ fillYoy(); createChartsYoy(); }
+    if(name==='performance'){ fillPerformance(); fillPerfSparks(); createChartsPerf(); }
   },50);
 }
 
@@ -1167,7 +1342,277 @@ function createChartFatTotal() {
   });
 }
 
-fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillUnidades(); fillVolumeReceita(); fillSemanal(); fillYoy(); createCharts(); createChartFatTotal(); createChartsUnidade(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); populateBanhosTable(); createChartsSemanal(); createChartsYoy();
+// ── PERFORMANCE POR UNIDADE 2026 (fonte: planilha consolidada, aba 2026) ──
+const perfUN   = ["Barreiro", "Campina Grande", "Contagem", "Cosmópolis", "Dona Clara", "Ipatinga", "Itaim Paulista", "Paulista Pernambuco", "Porto Seguro", "São Miguel Paulista", "Sorocaba"];
+const perfAB   = ['Barreiro','Camp.GR','Contagem','Cosmóp.','D.Clara','Ipatinga','Itaim','Paulista PE','P.Seguro','S.Miguel','Sorocaba'];
+const perfMES  = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const MES_FECHADOS = 8;
+const perfPlanos = [[159,159,161,201,176,197,243,212],[236,219,262,220,164,252,284,212],[0,0,114,289,227,235,291,260],[0,0,0,138,37,71,126,86],[117,135,109,135,64,155,146,109],[265,241,217,176,148,189,210,123],[110,91,211,232,187,248,320,236],[54,73,49,107,98,166,180,91],[0,0,0,0,0,0,0,63],[138,129,88,101,80,136,144,102],[83,69,94,112,71,213,310,271]];
+const perfFP     = [[109252.52,102674.09,106864.19,108185.91,113360.48,106714.25,107547.73,115141.94],[63310.7,64114.24,76719.2,78298.56,82664.98,79118.54,83836.42,91328.59],[0.0,0.0,66.23,218.84,2860.11,20487.6,27259.0,39697.7],[0.0,0.0,0.0,0.11,0.0,0.0,0.0,39.96],[61377.44,58608.35,65434.3,61676.23,67906.93,61626.15,59307.72,64254.95],[39578.64,41890.62,49350.7,48534.38,54493.34,56310.09,57906.34,63285.61],[66145.07,59065.12,76494.27,71520.69,79288.46,75544.8,77112.63,83326.65],[5.72,7.92,1262.0,6836.02,12782.4,14607.5,18780.55,23561.52],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,84.85],[96247.46,92110.37,94317.15,89833.27,90649.29,86393.48,82001.07,84999.38],[1156.02,4867.85,10454.15,12809.15,14568.3,15435.9,20970.67,34485.86]];
+const perfFC     = [[162016.03,154269.16,205525.8,195764.41,189228.05,201803.76,196594.66,194975.72],[221462.6,201816.68,264329.41,251270.32,268071.1,227935.2,287717.96,322357.97],[0.0,0.0,0.0,0.0,36816.13,108606.2,103766.01,136711.69],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[111579.66,113384.85,128842.02,123920.69,137308.71,130796.25,145870.11,144131.5],[108197.52,117438.2,131352.6,132434.87,121453.17,126297.74,136446.43,126842.34],[109718.99,110233.14,115350.5,124156.36,118452.95,129274.45,128419.09,145995.81],[0.0,0.0,0.0,0.0,0.0,84966.02,131082.97,127941.29],[0,0,0,0,0,0,0,0],[166337.92,140862.07,143125.63,142844.03,118628.11,124549.44,134357.43,126308.99],[0.0,10648.37,24784.22,34545.36,37022.12,43964.38,62953.87,66812.83]];
+// unidades sem faturamento alocado na planilha — excluídas dos rankings de receita
+const perfSemFat = ['Cosmópolis','Porto Seguro'];
+
+// ── HELPERS DE PERFORMANCE ──
+const perfFatTotal = perfUN.map((_,i)=>perfMES.map((_,m)=> m<MES_FECHADOS ? perfFP[i][m]+perfFC[i][m] : null));
+const perfMadura   = perfUN.map((_,i)=> (perfFP[i][0]+perfFC[i][0]) >= 50000);   // operação relevante desde Jan/26
+const perfComFat   = perfUN.map(u=> !perfSemFat.includes(u));
+
+function perfSoma(a){ return a.slice(0,MES_FECHADOS).reduce((x,y)=>x+(y||0),0); }
+function perfMoeda(v){ return 'R$ '+Math.round(v).toLocaleString('pt-BR'); }
+function perfMi(v){ return 'R$ '+(v/1e6).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' mi'; }
+
+// primeiro mês em que o indicador atinge >= 10% do valor de agosto (evita distorção de ramp-up)
+function perfBase(serie){
+  const alvo = (serie[MES_FECHADOS-1]||0) * 0.10;
+  for (let m=0;m<MES_FECHADOS;m++) if ((serie[m]||0) > 0 && serie[m] >= alvo) return m;
+  return null;
+}
+function perfCresc(serie){
+  const b = perfBase(serie);
+  if (b===null || b===MES_FECHADOS-1) return null;
+  const base = serie[b];
+  if (!base) return null;
+  return { v:(serie[MES_FECHADOS-1]-base)/base, mes:perfMES[b] };
+}
+// tendência curta: Ago vs Jun
+function perfTend(serie){
+  const jun = serie[5], ago = serie[7];
+  const dot = c => `<span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:${c};box-shadow:0 0 0 1px rgba(0,0,0,.12)"></span>`;
+  if (!jun || jun<=0) return { cls:'nova', txt:'Sem base de comparação', badge:dot('#c9c9c9'), cor:'#777' };
+  const v = (ago-jun)/jun;
+  if (v >=  0.05) return { cls:'sobe', txt:'Crescendo', badge:dot('#1E7B45'), cor:'#1E7B45', v };
+  if (v <= -0.05) return { cls:'cai',  txt:'Caindo',    badge:dot('#C00000'), cor:'#C00000', v };
+  return { cls:'estavel', txt:'Estável', badge:dot('#E0A800'), cor:'#856000', v };
+}
+// heatmap: cor da célula pela variação vs mês anterior
+function perfHeat(cur, prev){
+  if (cur===null||cur===undefined) return '';
+  if (prev===null||prev===undefined||prev===0) return '';
+  const v=(cur-prev)/prev;
+  if (v >=  0.20) return 'background:#C6EBD5';
+  if (v >=  0.05) return 'background:#E9F7EF';
+  if (v <= -0.20) return 'background:#F9C9C4';
+  if (v <= -0.05) return 'background:#FDECEA';
+  return '';
+}
+
+// ── SEMÁFORO ──
+function fillPerfSemaforo(){
+  const box=document.getElementById('perf-semaforo');
+  if(!box || box.innerHTML.trim()!=='') return;
+  const grupos={ sobe:[], estavel:[], cai:[] };
+  perfUN.forEach((u,i)=>{
+    if(!perfComFat[i]) return;
+    const t=perfTend(perfFatTotal[i]);
+    if(grupos[t.cls]) grupos[t.cls].push(`<strong>${u}</strong> <span style="color:${t.cor}">${t.v>=0?'+':''}${(t.v*100).toFixed(1)}%</span>`);
+  });
+  const card=(titulo,cor,bg,itens,rodape)=>`
+    <div style="background:${bg};border-radius:8px;padding:14px;border-left:4px solid ${cor}">
+      <div style="font-size:11px;font-weight:800;color:${cor};margin-bottom:8px">${titulo} — ${itens.length} unidade${itens.length===1?'':'s'}</div>
+      <div style="font-size:11.5px;color:#333;line-height:1.9">${itens.length?itens.join('<br>'):'<span style="color:#999">nenhuma</span>'}</div>
+      <div style="font-size:10.5px;color:#666;margin-top:10px;font-style:italic">${rodape}</div>
+    </div>`;
+  box.innerHTML =
+    card('🟢 CRESCENDO (≥ +5%)','#1E7B45','#E6F5EC',grupos.sobe,'Faturamento de agosto acima do de junho.') +
+    card('🟡 ESTAGNADAS (−5% a +5%)','#856000','#FFF9E6',grupos.estavel,'Operação parada no mesmo patamar há 3 meses.') +
+    card('🔴 CAINDO (≤ −5%)','#C00000','#FDECEA',grupos.cai,'Perda de faturamento no trimestre.');
+  box.insertAdjacentHTML('afterend',
+    `<div style="grid-column:1/-1;margin-top:12px;font-size:11px;color:#7A5000;background:#FFF9F0;border:1px solid #F5C87A;border-radius:8px;padding:10px 14px;line-height:1.7">
+      ⚠️ <strong>Esta é a leitura de curto prazo (3 meses).</strong> Uma unidade pode estar estável no trimestre e em queda no ano —
+      é o caso de <strong>São Miguel Paulista</strong>: +0,2% de Jun para Ago, mas <strong>−19,5% de Jan para Ago</strong>.
+      Para a leitura anual, use a coluna <strong>Cresc.</strong> das tabelas abaixo.
+    </div>`);
+}
+
+// ── SMALL MULTIPLES ──
+function fillPerfSparks(){
+  const box=document.getElementById('perf-sparks');
+  if(!box) return;
+  if(box.innerHTML.trim()===''){
+    perfUN.forEach((u,i)=>{
+      const t=perfTend(perfFatTotal[i]);
+      const ago=perfFatTotal[i][MES_FECHADOS-1];
+      if(!perfComFat[i]){
+        box.innerHTML += `
+          <div style="border:1px dashed #E0A800;border-radius:8px;padding:10px 12px;background:#FFFBF0">
+            <div style="font-size:11.5px;font-weight:700;color:#1F3864;margin-bottom:4px">${u}</div>
+            <div style="font-size:10.5px;color:#856000;line-height:1.6">
+              <strong>${perfSoma(perfPlanos[i]).toLocaleString('pt-BR')} planos</strong> vendidos no ano<br>
+              Faturamento acumulado: <strong>${perfMoeda(perfSoma(perfFP[i])+perfSoma(perfFC[i]))}</strong>
+            </div>
+            <div style="font-size:10px;color:#856000;margin-top:8px;font-style:italic;border-top:1px solid #F0DDA8;padding-top:6px">
+              ⚠️ Receita não alocada a esta unidade na planilha — curva não representável.
+            </div>
+          </div>`;
+        return;
+      }
+      box.innerHTML += `
+        <div style="border:1px solid #eee;border-radius:8px;padding:10px 12px;background:#fff">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">
+            <span style="font-size:11.5px;font-weight:700;color:#1F3864">${u}</span>
+            <span style="font-size:10px;font-weight:700;color:${t.cor};display:inline-flex;align-items:center;gap:4px">${t.badge} ${t.txt}</span>
+          </div>
+          <div style="font-size:10.5px;color:#777;margin-bottom:6px">Ago: <strong style="color:#333">${perfMoeda(ago)}</strong></div>
+          <div style="height:56px"><canvas id="spark-${i}"></canvas></div>
+        </div>`;
+    });
+  }
+  perfUN.forEach((u,i)=>{
+    const el=document.getElementById('spark-'+i);
+    if(!el || !perfComFat[i] || Chart.getChart(el)) return;
+    const t=perfTend(perfFatTotal[i]);
+    const cor = t.cls==='cai' ? '#C00000' : t.cls==='estavel' ? '#C09000' : '#1E7B45';
+    charts['spark'+i]=new Chart(el,{
+      type:'line',
+      data:{ labels:perfMES.slice(0,MES_FECHADOS),
+        datasets:[{data:perfFatTotal[i].slice(0,MES_FECHADOS),borderColor:cor,backgroundColor:cor+'22',
+                   borderWidth:2,fill:true,tension:0.32,pointRadius:0,pointHoverRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},datalabels:{display:false},
+          tooltip:{callbacks:{label:ctx=>perfMoeda(ctx.raw)}}},
+        scales:{x:{display:false},y:{display:false,beginAtZero:false}}}
+    });
+  });
+}
+
+// ── TABELAS HEATMAP ──
+function perfTabela(elId, dados, fmtCel, mostrarPct){
+  const el=document.getElementById(elId);
+  if(!el || el.innerHTML.trim()!=='') return;
+  let head='<thead><tr><th style="text-align:left;position:sticky;left:0;background:#1F3864;z-index:2">Unidade</th>';
+  perfMES.forEach((m,i)=> head += `<th style="${i>=MES_FECHADOS?'opacity:.45':''}">${m}</th>`);
+  head += '<th style="background:#E8630A">Acum.</th><th style="background:#E8630A">Cresc.</th><th style="background:#E8630A">Tend.</th></tr></thead>';
+  const ord = perfUN.map((_,i)=>i).sort((a,b)=>perfSoma(dados[b])-perfSoma(dados[a]));
+  let body='<tbody>';
+  ord.forEach(i=>{
+    body += `<tr><td style="text-align:left;font-weight:600;position:sticky;left:0;background:#fff;z-index:1">${perfUN[i]}</td>`;
+    perfMES.forEach((_,m)=>{
+      if(m>=MES_FECHADOS){ body += '<td style="color:#ddd;text-align:center">·</td>'; return; }
+      const v=dados[i][m], prev=m>0?dados[i][m-1]:null;
+      body += `<td style="text-align:right;${perfHeat(v,prev)}">${v?fmtCel(v):'<span style="color:#ccc">—</span>'}</td>`;
+    });
+    const c=perfCresc(dados[i]);
+    const t=perfTend(dados[i]);
+    body += `<td style="text-align:right;font-weight:700;background:#FDE9D9">${fmtCel(perfSoma(dados[i]))}</td>`;
+    if(c===null){
+      body += '<td style="text-align:center;color:#999;background:#FFF7F0;font-size:10px">novo</td>';
+    } else if(!perfMadura[i] && mostrarPct){
+      body += `<td style="text-align:center;background:#FFF7F0;font-size:10px;color:#1F3864" title="Base ${c.mes}/26 — unidade em expansão">${c.v>=0?'+':''}${(c.v*100).toFixed(0)}%<br><span style="color:#999">vs ${c.mes}</span></td>`;
+    } else {
+      const cor=c.v>=0?'#1E7B45':'#C00000';
+      body += `<td style="text-align:center;font-weight:800;background:#FFF7F0;color:${cor}">${c.v>=0?'▲ +':'▼ '}${(c.v*100).toFixed(1)}%<br><span style="color:#999;font-weight:400;font-size:9px">vs ${c.mes}</span></td>`;
+    }
+    body += `<td style="text-align:center;background:#FFF7F0" title="${t.txt}">${t.badge}</td></tr>`;
+  });
+  body+='</tbody>';
+  el.innerHTML = head+body;
+}
+
+function fillPerfLegenda(){
+  const el=document.getElementById('perf-legenda');
+  if(!el || el.innerHTML.trim()!=='') return;
+  const q=(c,t)=>`<span style="display:inline-flex;align-items:center;gap:5px;margin-right:14px"><span style="width:15px;height:15px;border-radius:3px;background:${c};border:1px solid #ddd"></span>${t}</span>`;
+  el.innerHTML = `<div style="font-size:10.5px;color:#555;margin-bottom:10px;line-height:2">
+    <strong>Cor da célula = variação sobre o mês anterior:</strong>
+    ${q('#C6EBD5','≥ +20%')}${q('#E9F7EF','+5% a +20%')}${q('#fff','estável')}${q('#FDECEA','−5% a −20%')}${q('#F9C9C4','≤ −20%')}
+    <br><strong>Cresc.</strong> = Ago/26 contra o primeiro mês em que a unidade atingiu ao menos 10% do volume atual <em>deste indicador</em> (a coluna indica o mês-base) — por isso o % muda de tabela para tabela.
+    <strong>Tend.</strong> = Ago vs Jun/26 · <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#1E7B45;box-shadow:0 0 0 1px rgba(0,0,0,.12);vertical-align:-1px"></span> crescendo (≥ +5%) · <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#E0A800;box-shadow:0 0 0 1px rgba(0,0,0,.12);vertical-align:-1px"></span> estável · <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#C00000;box-shadow:0 0 0 1px rgba(0,0,0,.12);vertical-align:-1px"></span> caindo (≤ −5%) · <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#c9c9c9;box-shadow:0 0 0 1px rgba(0,0,0,.12);vertical-align:-1px"></span> sem base de comparação.
+  </div>`;
+}
+
+// ── GRÁFICOS ──
+function createChartsPerf(){
+  const el=document.getElementById('chartPerfGanho');
+  if(el && !Chart.getChart(el)){
+    const dados = perfUN.map((_,i)=>{
+      if(!perfComFat[i]) return null;
+      const b=perfBase(perfFatTotal[i]);
+      return { i, ganho: perfFatTotal[i][MES_FECHADOS-1] - (b===null?0:perfFatTotal[i][b]), madura:perfMadura[i] };
+    }).filter(Boolean).sort((a,b)=>a.ganho-b.ganho);
+    charts.perfGanho=new Chart(el,{
+      type:'bar',
+      data:{ labels:dados.map(d=>perfUN[d.i]),
+        datasets:[{data:dados.map(d=>d.ganho),
+          backgroundColor:dados.map(d=>d.ganho<0?'#C00000':(d.madura?'#E8630A':'#1E7B45')),borderRadius:3}]},
+      options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false,
+        plugins:{legend:{display:false},
+          tooltip:{callbacks:{label:ctx=>perfMoeda(ctx.raw)+(dados[ctx.dataIndex].madura?' (unidade madura)':' (em expansão)')}},
+          datalabels:{anchor:'end',align:'end',formatter:v=>perfMoeda(v),color:'#333',font:{size:10,weight:'bold'}}},
+        scales:{x:{grid:{color:'#eee'},ticks:{callback:v=>'R$'+Math.round(v/1000)+'k',font:{size:10}}},y:{grid:{display:false},ticks:{font:{size:11}}}},
+        layout:{padding:{right:80}} }
+    });
+  }
+  const el2=document.getElementById('chartPerfAcum');
+  if(el2 && !Chart.getChart(el2)){
+    const ord=perfUN.map((_,i)=>i).filter(i=>perfComFat[i])
+      .sort((a,b)=>(perfSoma(perfFP[a])+perfSoma(perfFC[a]))-(perfSoma(perfFP[b])+perfSoma(perfFC[b])));
+    charts.perfAcum=new Chart(el2,{
+      type:'bar',
+      data:{ labels:ord.map(i=>perfUN[i]),
+        datasets:[
+          {label:'Fat. Clínica',data:ord.map(i=>perfSoma(perfFC[i])),backgroundColor:'#E8630A',borderRadius:3,stack:'s'},
+          {label:'Fat. Plano',  data:ord.map(i=>perfSoma(perfFP[i])),backgroundColor:'#1F3864',borderRadius:3,stack:'s'}
+        ]},
+      options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false,
+        plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}},datalabels:{display:false},
+          tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+perfMoeda(ctx.raw),
+            footer:it=>'Total: '+perfMoeda(it.reduce((a,x)=>a+x.raw,0))}}},
+        scales:{x:{stacked:true,grid:{color:'#eee'},ticks:{callback:v=>'R$'+Math.round(v/1000)+'k',font:{size:10}}},y:{stacked:true,grid:{display:false},ticks:{font:{size:11}}}} }
+    });
+  }
+}
+
+// ── RANKINGS ──
+function fillPerfRankings(){
+  const box=document.getElementById('perf-rankings');
+  if(!box || box.innerHTML.trim()!=='') return;
+  const lista=(titulo,cor,itens,nota)=>`
+    <div style="border:1px solid #eee;border-radius:8px;overflow:hidden">
+      <div style="background:${cor};color:#fff;font-size:11px;font-weight:800;padding:8px 12px">${titulo}</div>
+      <div style="padding:6px 0">${itens.map((t,k)=>`
+        <div style="display:flex;align-items:center;gap:10px;padding:6px 12px;border-bottom:1px solid #f4f4f4;font-size:11.5px">
+          <span style="width:20px;height:20px;border-radius:50%;background:${k===0?cor:'#eee'};color:${k===0?'#fff':'#666'};font-weight:800;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">${k+1}</span>
+          <span style="flex:1">${t.nome}</span><strong style="color:${t.cor||'#1F3864'}">${t.val}</strong>
+        </div>`).join('')}</div>
+      <div style="font-size:10px;color:#777;padding:8px 12px;font-style:italic;background:#fafafa">${nota}</div>
+    </div>`;
+
+  const maduras=perfUN.map((_,i)=>i).filter(i=>perfMadura[i]);
+  const cresc=maduras.map(i=>({i,c:perfCresc(perfFatTotal[i])})).filter(x=>x.c).sort((a,b)=>b.c.v-a.c.v);
+  const fatAc=perfUN.map((_,i)=>i).filter(i=>perfComFat[i])
+        .map(i=>({i,v:perfSoma(perfFP[i])+perfSoma(perfFC[i])})).sort((a,b)=>b.v-a.v);
+  const plan=perfUN.map((_,i)=>({i,v:perfSoma(perfPlanos[i])})).sort((a,b)=>b.v-a.v);
+  const exp=perfUN.map((_,i)=>i).filter(i=>!perfMadura[i]&&perfComFat[i])
+        .map(i=>({i,v:perfFatTotal[i][MES_FECHADOS-1]})).sort((a,b)=>b.v-a.v);
+  const queda=cresc.filter(x=>x.c.v<0).concat(
+        maduras.map(i=>({i,c:perfCresc(perfFatTotal[i])})).filter(x=>x.c&&x.c.v>=0).sort((a,b)=>a.c.v-b.c.v)
+      ).slice(0,4);
+  const rede=fatAc.reduce((a,x)=>a+x.v,0);
+
+  box.innerHTML =
+    lista('🏆 MAIOR CRESCIMENTO NO ANO','#1E7B45',
+      cresc.slice(0,5).map(x=>({nome:perfUN[x.i],val:(x.c.v>=0?'+':'')+(x.c.v*100).toFixed(1)+'%',cor:x.c.v>=0?'#1E7B45':'#C00000'})),
+      'Faturamento total de Ago/26 vs Jan/26 · só unidades em operação desde janeiro.') +
+    lista('💰 MAIOR FATURAMENTO ACUMULADO','#1F3864',
+      fatAc.slice(0,5).map(x=>({nome:perfUN[x.i],val:perfMi(x.v)+' · '+(x.v/rede*100).toFixed(1)+'%'})),
+      'Plano + Clínica, Jan–Ago/26. Cosmópolis e Porto Seguro fora — sem faturamento alocado.') +
+    lista('🎯 MAIS PLANOS VENDIDOS','#4A5F86',
+      plan.slice(0,5).map(x=>({nome:perfUN[x.i],val:x.v.toLocaleString('pt-BR')+' planos'})),
+      'Total vendido de Jan a Ago/26, todos os canais.') +
+    lista('⚠️ MENOR PERFORMANCE NO ANO','#C00000',
+      queda.map(x=>({nome:perfUN[x.i],val:(x.c.v>=0?'+':'')+(x.c.v*100).toFixed(1)+'%',cor:x.c.v>=0?'#856000':'#C00000'})),
+      'As 4 piores entre as unidades maduras. Valor positivo = cresceu, mas abaixo do resto da rede.');
+}
+
+function fillPerformance(){
+  fillPerfSemaforo(); fillPerfLegenda(); fillPerfRankings();
+  perfTabela('tbl-perf-planos', perfPlanos, v=>Math.round(v).toLocaleString('pt-BR'), true);
+  perfTabela('tbl-perf-fp',     perfFP,     v=>Math.round(v).toLocaleString('pt-BR'), true);
+  perfTabela('tbl-perf-fc',     perfFC,     v=>Math.round(v).toLocaleString('pt-BR'), true);
+}
+
+fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillUnidades(); fillVolumeReceita(); fillSemanal(); fillYoy(); createCharts(); createChartFatTotal(); createChartsUnidade(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); populateBanhosTable(); createChartsSemanal(); createChartsYoy(); fillPerformance();
 
 </script>
 </body>
