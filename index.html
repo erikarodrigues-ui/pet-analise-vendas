@@ -497,6 +497,47 @@
       </div>
     </div>
 
+    <!-- Média mensal de planos vendidos -->
+    <div class="section">
+      <div class="section-header">📊 Média mensal de planos vendidos por unidade · Jan/25 – Ago/26</div>
+      <div class="section-body">
+        <div class="tend-note" style="margin-bottom:14px">
+          🎯 <strong>Indicador de quantidade, não de receita.</strong> Mede quantos planos cada unidade vende, em média, por mês de operação.
+          Período: <strong>Jan/25 a Ago/26 (20 meses)</strong> — toda a série disponível na planilha.
+          <strong>Meses considerados = do 1º mês com venda registrada até Ago/26</strong>, para não diluir a média com meses em que a unidade ainda não existia.
+        </div>
+
+        <div class="kpi-row" id="med-kpis"></div>
+
+        <div class="chart-wrap" style="margin-bottom:16px;box-shadow:none;border:1px solid #eee">
+          <div class="chart-title">Média de planos vendidos por mês — ranking</div>
+          <div style="background:#EEF2F9;border:1px solid #B0C2E8;padding:8px 14px;font-size:11px;color:#1F3864;line-height:1.6">
+            💡 <span style="color:#1E7B45;font-weight:700">Verde</span> = acima da média da rede ·
+            <span style="color:#E8630A;font-weight:700">Laranja</span> = abaixo ·
+            <span style="color:#7B8AA8;font-weight:700">Cinza</span> = menos de 6 meses de operação, base curta demais para comparar.
+          </div>
+          <div class="chart-body" style="height:360px"><canvas id="chartMedia"></canvas></div>
+        </div>
+
+        <div style="overflow-x:auto"><table style="font-size:11.5px" id="tbl-media"></table></div>
+
+        <div style="margin-top:16px;background:#FFF9F0;border:1px solid #F5C87A;border-radius:8px;padding:14px 16px;font-size:11.5px;color:#7A5000;line-height:1.85">
+          ⚠️ <strong>Por que a média não é cortada pela data de inauguração.</strong>
+          As datas da aba "Unidades" são <strong>posteriores ao início das vendas</strong> em 7 das 11 unidades ativas — as unidades vendem plano antes da clínica abrir
+          (pré-venda e televendas), e as unidades de <em>virada</em> já operavam sob outra bandeira.
+          <br><br>
+          Cortar a série pela data de inauguração <strong>descartaria 2.292 planos efetivamente vendidos</strong> e deixaria
+          <strong>Cosmópolis</strong> (inaugura 09/2026) e <strong>Porto Seguro</strong> (10/2026) <strong>sem média possível</strong> — as duas já venderam 458 e 63 planos,
+          mas "inauguram" depois do fim dos dados.
+          <br><br>
+          Por isso a média usa o <strong>1º mês com venda registrada</strong> como início, e a coluna <strong>"Conferência pela data de inauguração"</strong>
+          mostra, unidade a unidade, qual seria o resultado pelo outro critério e quantos planos ele descartaria. As duas leituras ficam visíveis para validação.
+          <br><br>
+          <strong>Parnamirim</strong> (inaugura 11/2026) ainda não tem venda registrada e aparece na tabela sem média.
+        </div>
+      </div>
+    </div>
+
     <!-- Semáforo -->
     <div class="section">
       <div class="section-header">🚦 Situação atual da rede — tendência de faturamento (Ago vs Jun/26)</div>
@@ -942,7 +983,7 @@ function showTab(name,btn) {
     }
     if(name==='semanal'){ fillSemanal(); createChartsSemanal(); }
     if(name==='yoy'){ fillYoy(); createChartsYoy(); }
-    if(name==='performance'){ fillPerformance(); fillPerfSparks(); createChartsPerf(); }
+    if(name==='performance'){ fillPerformance(); fillMedia(); fillPerfSparks(); createChartsPerf(); createChartMedia(); }
   },50);
 }
 
@@ -1611,8 +1652,151 @@ function fillPerformance(){
   perfTabela('tbl-perf-fp',     perfFP,     v=>Math.round(v).toLocaleString('pt-BR'), true);
   perfTabela('tbl-perf-fc',     perfFC,     v=>Math.round(v).toLocaleString('pt-BR'), true);
 }
+// ── MÉDIA MENSAL DE PLANOS VENDIDOS POR UNIDADE (Jan/25 – Ago/26) ──
+// Fonte: abas 2025, 2026 e Unidades da planilha consolidada. Série = 20 meses.
+const medMESES = ["Jan/25", "Fev/25", "Mar/25", "Abr/25", "Mai/25", "Jun/25", "Jul/25", "Ago/25", "Set/25", "Out/25", "Nov/25", "Dez/25", "Jan/26", "Fev/26", "Mar/26", "Abr/26", "Mai/26", "Jun/26", "Jul/26", "Ago/26"];
+const medUN    = ["Barreiro", "Campina Grande", "Contagem", "Cosmópolis", "Dona Clara", "Ipatinga", "Itaim Paulista", "Paulista Pernambuco", "Parnamirim", "Porto Seguro", "São Miguel Paulista", "Sorocaba"];
+const medSerie = [
+  [165,179,116,183,136,132,160,130,207,137,220,172,159,159,161,201,176,197,243,212],   // Barreiro
+  [0,0,0,0,0,0,192,308,429,246,364,262,236,219,262,220,164,252,284,212],   // Campina Grande
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,114,289,227,235,291,260],   // Contagem
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,138,37,71,126,86],   // Cosmópolis
+  [128,124,90,145,122,121,123,102,195,125,133,127,117,135,109,135,64,155,146,109],   // Dona Clara
+  [0,0,0,0,0,0,0,0,123,315,229,276,265,241,217,176,148,189,210,123],   // Ipatinga
+  [107,154,97,204,111,164,109,104,194,80,140,90,110,91,211,232,187,248,320,236],   // Itaim Paulista
+  [0,0,0,0,0,0,0,0,0,0,0,0,54,73,49,107,98,166,180,91],   // Paulista Pernambuco
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],   // Parnamirim
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,63],   // Porto Seguro
+  [156,128,75,177,169,164,113,133,190,119,184,110,138,129,88,101,80,136,144,102],   // São Miguel Paulista
+  [0,0,0,0,0,0,0,0,0,23,44,48,83,69,94,112,71,213,310,271]   // Sorocaba
+];
+const medInaug = {"Barreiro": "2022-11", "Campina Grande": "2025-09", "Contagem": "2026-05", "Cosmópolis": "2026-09", "Dona Clara": "2023-05", "Ipatinga": "2025-10", "Itaim Paulista": "2023-09", "Paulista Pernambuco": "2026-07", "Parnamirim": "2026-11", "Porto Seguro": "2026-10", "São Miguel Paulista": "2022-05", "Sorocaba": "2026-02"};
 
-fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillUnidades(); fillVolumeReceita(); fillSemanal(); fillYoy(); createCharts(); createChartFatTotal(); createChartsUnidade(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); populateBanhosTable(); createChartsSemanal(); createChartsYoy(); fillPerformance();
+// ── CÁLCULO DA MÉDIA MENSAL DE PLANOS POR UNIDADE ──
+// Regra: meses considerados = do 1º mês com venda registrada até Ago/26 (operação comercial).
+// A data de inauguração é exibida ao lado e usada numa segunda coluna de conferência.
+function medIdxInaug(ym){ if(!ym) return null; const [y,m]=ym.split('-').map(Number); return (y-2025)*12+(m-1); }
+function medCalc(i){
+  const s = medSerie[i];
+  const first = s.findIndex(v=>v>0);
+  const ii = medIdxInaug(medInaug[medUN[i]]);
+  const total = first<0 ? 0 : s.slice(first).reduce((a,b)=>a+b,0);
+  const meses = first<0 ? 0 : s.length-first;
+  // conferência pela data de inauguração
+  let alt=null;
+  if(ii!==null && first>=0){
+    if(ii > s.length-1)      alt={ tipo:'fora' };                       // inaugura depois do fim dos dados
+    else if(ii > first){
+      const m2=s.length-ii, t2=s.slice(ii).reduce((a,b)=>a+b,0);
+      alt={ tipo:'difere', meses:m2, total:t2, media:t2/m2, descarta:total-t2 };
+    } else alt={ tipo:'igual' };                                        // inaugurada antes de Jan/25
+  }
+  return { i, nome:medUN[i], first, mesInicio:first<0?null:medMESES[first],
+           meses, total, media: meses?total/meses:null, inaug:medInaug[medUN[i]], alt };
+}
+const medDados  = medUN.map((_,i)=>medCalc(i));
+const medAtivas = medDados.filter(d=>d.meses>0);
+const medTotPlanos = medAtivas.reduce((a,d)=>a+d.total,0);
+const medTotMeses  = medAtivas.reduce((a,d)=>a+d.meses,0);
+const medRede      = medTotPlanos/medTotMeses;
+const medMes = ym => { if(!ym) return '—'; const [y,m]=ym.split('-');
+  return ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'][+m-1]+'/'+y.slice(2); };
+const med1 = v => (Math.round(v*10)/10).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1});
+
+function fillMedia(){
+  const kpi=document.getElementById('med-kpis');
+  if(kpi && kpi.innerHTML.trim()===''){
+    const comBase = medAtivas.filter(d=>d.meses>=6).sort((a,b)=>b.media-a.media);
+    const top=comBase[0], bot=comBase[comBase.length-1];
+    kpi.innerHTML = `
+      <div class="kpi-card green">
+        <div class="kpi-label">🥇 Maior média mensal</div>
+        <div class="kpi-value" style="font-size:17px">${top.nome}</div>
+        <div class="kpi-sub">${top.total.toLocaleString('pt-BR')} planos em ${top.meses} meses</div>
+        <span class="kpi-var up">▲ ${med1(top.media)} planos/mês</span>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-label">Média da rede</div>
+        <div class="kpi-value">${med1(medRede)} <span style="font-size:12px;color:#888">planos/mês</span></div>
+        <div class="kpi-sub">por unidade em operação</div>
+        <span class="kpi-var up">▲ ${medTotPlanos.toLocaleString('pt-BR')} planos ÷ ${medTotMeses} unidade-mês</span>
+      </div>
+      <div class="kpi-card" style="border-left-color:#C00000">
+        <div class="kpi-label">🔻 Menor média mensal</div>
+        <div class="kpi-value" style="font-size:17px">${bot.nome}</div>
+        <div class="kpi-sub">${bot.total.toLocaleString('pt-BR')} planos em ${bot.meses} meses</div>
+        <span class="kpi-var down">▼ ${med1(bot.media)} planos/mês</span>
+      </div>`;
+  }
+
+  const tb=document.getElementById('tbl-media');
+  if(tb && tb.innerHTML.trim()===''){
+    let h = `<thead><tr>
+      <th style="text-align:left">Unidade</th>
+      <th>Inaugurada em</th>
+      <th>1ª venda registrada</th>
+      <th>Meses considerados</th>
+      <th>Total de planos</th>
+      <th style="background:#E8630A">Média / mês</th>
+      <th>Conferência pela<br>data de inauguração</th>
+    </tr></thead><tbody>`;
+    const ord = medDados.slice().sort((a,b)=>(b.media??-1)-(a.media??-1));
+    ord.forEach(d=>{
+      if(d.meses===0){
+        h += `<tr class="parcial-row"><td style="text-align:left">${d.nome}</td><td style="text-align:center">${medMes(d.inaug)}</td>
+              <td colspan="4" style="text-align:center">Sem venda registrada no período — inaugura em ${medMes(d.inaug)}</td>
+              <td style="text-align:center">—</td></tr>`;
+        return;
+      }
+      let conf, cor='#555';
+      if(!d.alt || d.alt.tipo==='igual') conf='<span style="color:#1E7B45">✓ mesma base</span><br><span style="font-size:9px;color:#999">inaugurada antes de Jan/25</span>';
+      else if(d.alt.tipo==='fora'){ conf=`<span style="color:#C00000">não calculável</span><br><span style="font-size:9px;color:#999">inaugura ${medMes(d.inaug)}, após o fim dos dados</span>`; cor='#C00000'; }
+      else { conf=`<strong>${med1(d.alt.media)}</strong>/mês em ${d.alt.meses} meses<br><span style="font-size:9px;color:#C00000">descartaria ${d.alt.descarta.toLocaleString('pt-BR')} planos</span>`; cor='#856000'; }
+      const destaque = d.media>=medRede;
+      h += `<tr>
+        <td style="text-align:left;font-weight:600">${d.nome}</td>
+        <td style="text-align:center">${medMes(d.inaug)}</td>
+        <td style="text-align:center">${d.mesInicio}</td>
+        <td style="text-align:center">${d.meses}</td>
+        <td style="text-align:center">${d.total.toLocaleString('pt-BR')}</td>
+        <td style="text-align:center;font-weight:800;font-size:13px;background:${destaque?'#E6F5EC':'#FDECEA'};color:${destaque?'#1E7B45':'#C00000'}">${med1(d.media)}</td>
+        <td style="text-align:center;font-size:10.5px;color:${cor}">${conf}</td>
+      </tr>`;
+    });
+    h += `</tbody><tfoot><tr>
+      <td style="text-align:left">REDE</td><td></td><td></td>
+      <td style="text-align:center">${medTotMeses} unidade-mês</td>
+      <td style="text-align:center">${medTotPlanos.toLocaleString('pt-BR')}</td>
+      <td style="text-align:center">${med1(medRede)}</td><td></td></tr></tfoot>`;
+    tb.innerHTML=h;
+  }
+}
+
+function createChartMedia(){
+  const el=document.getElementById('chartMedia');
+  if(!el || Chart.getChart(el)) return;
+  const ord = medAtivas.slice().sort((a,b)=>a.media-b.media);
+  charts.media=new Chart(el,{
+    type:'bar',
+    data:{ labels:ord.map(d=>d.nome),
+      datasets:[{ data:ord.map(d=>Math.round(d.media*10)/10),
+        backgroundColor:ord.map(d=> d.meses<6 ? 'rgba(31,56,100,0.30)' : (d.media>=medRede?'#1E7B45':'#E8630A')),
+        borderRadius:3 }]},
+    options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false},
+        tooltip:{callbacks:{
+          label:ctx=>med1(ctx.raw)+' planos/mês',
+          afterLabel:ctx=>{const d=ord[ctx.dataIndex];
+            return d.total.toLocaleString('pt-BR')+' planos ÷ '+d.meses+' meses (desde '+d.mesInicio+')'+(d.meses<6?'\nbase curta — pouco comparável':'');}}},
+        datalabels:{anchor:'end',align:'end',formatter:v=>med1(v),color:'#333',font:{size:11,weight:'bold'}},
+        annotation:false },
+      scales:{ x:{grid:{color:'#eee'},ticks:{font:{size:10}},title:{display:true,text:'planos vendidos por mês',font:{size:10},color:'#888'}},
+               y:{grid:{display:false},ticks:{font:{size:11}}} },
+      layout:{padding:{right:56}} }
+  });
+}
+
+fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillUnidades(); fillVolumeReceita(); fillSemanal(); fillYoy(); createCharts(); createChartFatTotal(); createChartsUnidade(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); populateBanhosTable(); createChartsSemanal(); createChartsYoy(); fillPerformance(); fillMedia();
 
 </script>
 </body>
