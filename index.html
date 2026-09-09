@@ -523,17 +523,36 @@
 
         <div style="margin-top:16px;background:#FFF9F0;border:1px solid #F5C87A;border-radius:8px;padding:14px 16px;font-size:11.5px;color:#7A5000;line-height:1.85">
           ⚠️ <strong>Por que a média não é cortada pela data de inauguração.</strong>
-          As datas da aba "Unidades" são <strong>posteriores ao início das vendas</strong> em 7 das 11 unidades ativas — as unidades vendem plano antes da clínica abrir
-          (pré-venda e televendas), e as unidades de <em>virada</em> já operavam sob outra bandeira.
+          As datas da aba "Unidades" são a <strong>abertura da clínica</strong>, não o início da operação comercial. A venda de planos começa antes,
+          por pré-venda e televendas — por isso em 7 das 11 unidades ativas a 1ª venda é anterior à inauguração.
           <br><br>
-          Cortar a série pela data de inauguração <strong>descartaria 2.292 planos efetivamente vendidos</strong> e deixaria
-          <strong>Cosmópolis</strong> (inaugura 09/2026) e <strong>Porto Seguro</strong> (10/2026) <strong>sem média possível</strong> — as duas já venderam 458 e 63 planos,
-          mas "inauguram" depois do fim dos dados.
+          Cortar a série pela data da clínica <strong>descartaria 2.292 planos efetivamente vendidos</strong> e deixaria
+          <strong>Cosmópolis</strong> (clínica abre 09/2026) e <strong>Porto Seguro</strong> (10/2026) <strong>sem média possível</strong> — as duas já venderam 458 e 63 planos,
+          mas a clínica abre depois do fim dos dados.
           <br><br>
           Por isso a média usa o <strong>1º mês com venda registrada</strong> como início, e a coluna <strong>"Conferência pela data de inauguração"</strong>
           mostra, unidade a unidade, qual seria o resultado pelo outro critério e quantos planos ele descartaria. As duas leituras ficam visíveis para validação.
           <br><br>
-          <strong>Parnamirim</strong> (inaugura 11/2026) ainda não tem venda registrada e aparece na tabela sem média.
+          <strong>Parnamirim</strong> (clínica abre 11/2026) ainda não tem venda registrada e aparece na tabela sem média.
+        </div>
+
+        <div style="margin-top:20px;border-top:2px solid #eee;padding-top:18px">
+          <div style="font-size:13px;font-weight:800;color:#1F3864;margin-bottom:4px">🚪 Pré-venda × clínica aberta</div>
+          <div style="font-size:11.5px;color:#555;line-height:1.8;margin-bottom:12px">
+            Como a data da aba "Unidades" marca a abertura da clínica, o intervalo até a 1ª venda é a <strong>janela de pré-venda</strong>.
+            Comparando os dois períodos, aparece um padrão sem exceção: <strong>toda unidade vende mais depois que a clínica abre.</strong>
+          </div>
+          <div style="overflow-x:auto"><table style="font-size:11.5px" id="tbl-prevenda"></table></div>
+          <div style="margin-top:14px;background:#EEF2F9;border:1px solid #B0C2E8;border-radius:8px;padding:12px 15px;font-size:11.5px;color:#1F3864;line-height:1.85">
+            💡 <strong>O que isso diz sobre o playbook de abertura.</strong> A pré-venda funciona e não é pouco:
+            <strong>Campina Grande vendeu 250 planos/mês antes de abrir</strong> e <strong>Contagem, 201/mês</strong> — patamar de unidade madura, com a clínica ainda fechada.
+            Mas a abertura destrava volume em todas: <strong>Sorocaba mais que triplica</strong> (49,5 → 162,9/mês), Ipatinga sobe 77% e Paulista PE, 49%.
+            <br><br>
+            A leitura prática é que a pré-venda vale como aquecimento, mas o teto de venda só é atingido com a clínica operando —
+            o que sugere que <strong>alongar demais a janela de pré-venda tem custo de oportunidade</strong>. Paulista PE ficou 6 meses vendendo a 91/mês antes de abrir;
+            Campina Grande ficou 2 meses e já vendia a 250/mês. Vale investigar o que diferencia essas duas partidas antes de definir a janela das próximas aberturas —
+            <strong>Parnamirim</strong> é a próxima (11/2026).
+          </div>
         </div>
       </div>
     </div>
@@ -983,7 +1002,7 @@ function showTab(name,btn) {
     }
     if(name==='semanal'){ fillSemanal(); createChartsSemanal(); }
     if(name==='yoy'){ fillYoy(); createChartsYoy(); }
-    if(name==='performance'){ fillPerformance(); fillMedia(); fillPerfSparks(); createChartsPerf(); createChartMedia(); }
+    if(name==='performance'){ fillPerformance(); fillMedia(); fillPreVenda(); fillPerfSparks(); createChartsPerf(); createChartMedia(); }
   },50);
 }
 
@@ -1796,7 +1815,60 @@ function createChartMedia(){
   });
 }
 
-fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillUnidades(); fillVolumeReceita(); fillSemanal(); fillYoy(); createCharts(); createChartFatTotal(); createChartsUnidade(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); populateBanhosTable(); createChartsSemanal(); createChartsYoy(); fillPerformance(); fillMedia();
+// ── PRÉ-VENDA × CLÍNICA ABERTA ──
+// A data da aba "Unidades" é a abertura da CLÍNICA (confirmado). O intervalo entre a 1ª venda
+// e essa data é a janela de pré-venda: a unidade já comercializa plano antes de operar a clínica.
+function medPreVenda(i){
+  const s=medSerie[i], f=s.findIndex(v=>v>0), ii=medIdxInaug(medInaug[medUN[i]]);
+  if(f<0 || ii===null || ii<=f) return null;               // sem janela de pré-venda nos dados
+  const pre=s.slice(f, Math.min(ii,s.length));
+  const pos=ii<s.length ? s.slice(ii) : [];
+  const somar=a=>a.reduce((x,y)=>x+y,0);
+  return { nome:medUN[i], abriu:medInaug[medUN[i]], inicio:medMESES[f],
+           preMeses:pre.length, preTotal:somar(pre), preMedia:somar(pre)/pre.length,
+           posMeses:pos.length, posTotal:somar(pos), posMedia:pos.length?somar(pos)/pos.length:null };
+}
+
+function fillPreVenda(){
+  const tb=document.getElementById('tbl-prevenda');
+  if(!tb || tb.innerHTML.trim()!=='') return;
+  const linhas=medUN.map((_,i)=>medPreVenda(i)).filter(Boolean)
+                    .sort((a,b)=>(b.posMedia??-1)-(a.posMedia??-1));
+  let h=`<thead><tr>
+    <th style="text-align:left">Unidade</th>
+    <th>Clínica abriu</th>
+    <th colspan="2" style="background:#4A5F86">Pré-venda (antes de abrir)</th>
+    <th colspan="2" style="background:#1E7B45">Com clínica aberta</th>
+    <th style="background:#E8630A">Efeito da abertura</th>
+  </tr><tr>
+    <th style="text-align:left"></th><th></th>
+    <th style="background:#4A5F86;font-weight:400">período</th><th style="background:#4A5F86">média/mês</th>
+    <th style="background:#1E7B45;font-weight:400">período</th><th style="background:#1E7B45">média/mês</th>
+    <th style="background:#E8630A"></th>
+  </tr></thead><tbody>`;
+  let totPre=0;
+  linhas.forEach(d=>{
+    totPre+=d.preTotal;
+    const temPos=d.posMedia!==null;
+    const dlt=temPos ? (d.posMedia/d.preMedia-1) : null;
+    h+=`<tr>
+      <td style="text-align:left;font-weight:600">${d.nome}</td>
+      <td style="text-align:center">${medMes(d.abriu)}</td>
+      <td style="text-align:center;color:#666;font-size:10.5px">${d.preMeses} ${d.preMeses===1?'mês':'meses'}<br><span style="color:#999">${d.preTotal.toLocaleString('pt-BR')} planos</span></td>
+      <td style="text-align:center;font-weight:700;background:#EEF2F9;color:#1F3864">${med1(d.preMedia)}</td>
+      <td style="text-align:center;color:#666;font-size:10.5px">${temPos?`${d.posMeses} ${d.posMeses===1?'mês':'meses'}<br><span style="color:#999">${d.posTotal.toLocaleString('pt-BR')} planos</span>`:'<span style="color:#C09000">ainda não abriu</span>'}</td>
+      <td style="text-align:center;font-weight:700;background:${temPos?'#E6F5EC':'#FFF9E6'};color:${temPos?'#1E7B45':'#856000'}">${temPos?med1(d.posMedia):'—'}</td>
+      <td style="text-align:center;font-weight:800;color:${temPos?'#1E7B45':'#999'}">${temPos?'▲ +'+(dlt*100).toFixed(0)+'%':'—'}</td>
+    </tr>`;
+  });
+  h+=`</tbody><tfoot><tr><td colspan="7" style="text-align:left;font-weight:400;font-size:11px;background:#FDE9D9">
+    <strong>${totPre.toLocaleString('pt-BR')} planos</strong> foram vendidos em pré-venda, antes da clínica abrir —
+    exatamente o volume que seria descartado se a média cortasse pela data de inauguração.
+  </td></tr></tfoot>`;
+  tb.innerHTML=h;
+}
+
+fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillUnidades(); fillVolumeReceita(); fillSemanal(); fillYoy(); createCharts(); createChartFatTotal(); createChartsUnidade(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); populateBanhosTable(); createChartsSemanal(); createChartsYoy(); fillPerformance(); fillMedia(); fillPreVenda();
 
 </script>
 </body>
