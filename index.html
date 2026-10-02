@@ -759,15 +759,15 @@
 
     <!-- ÍNDICE BASE 100 -->
     <div class="section">
-      <div class="section-header">📈 Evolução Consolidada · Índice Base 100 (Jan/26 = 100)</div>
+      <div class="section-header">📈 Evolução Consolidada · Índice Base 100 (1º mês cheio de operação = 100)</div>
       <div class="section-body">
         <div style="font-size:11px;color:#555;line-height:1.7;margin-bottom:14px;background:#f7f7f7;border-radius:8px;padding:10px 14px">
-          Cada linha parte de <strong>100 em janeiro</strong>. Acima de 100 = está maior que em janeiro; abaixo = está menor.
-          Isso coloca Campina Grande (R$ 287 mil de clínica) e Dona Clara (R$ 116 mil) na mesma escala —
+          Cada linha parte de <strong>100 no seu primeiro mês cheio de operação</strong>. Acima de 100 = está maior que no início;
+          abaixo = está menor. Isso coloca Campina Grande (R$ 287 mil de clínica) e Dona Clara (R$ 116 mil) na mesma escala —
           <strong>o que se compara aqui é o ritmo, não o tamanho</strong>.
-          <br><strong>Sorocaba está fora deste gráfico:</strong> inaugurada em fev/26, ela parte de uma base quase zero
-          (R$ 1.156 de Fat. Plano em janeiro), o que geraria um índice de 2.721 e achataria todas as outras linhas.
-          Ela aparece em destaque logo abaixo e em todos os demais blocos.
+          <br><strong>Sorocaba entra a partir de março:</strong> inaugurada em fev/26, janeiro foi pré-venda e fevereiro mês parcial,
+          então o relógio dela começa em <strong>mar/26 = 100</strong> — é o <strong>*</strong> ao lado do nome dela na legenda, e a curva tracejada. Usar janeiro como base geraria um índice de 2.721 em Fat. Plano
+          e achataria todas as outras linhas — a curva seria matematicamente certa e visualmente inútil.
         </div>
         <div class="chart-wrap" style="margin-bottom:14px">
           <div class="chart-title">🎯 Venda de Planos Novos · índice base 100</div>
@@ -776,21 +776,13 @@
         <div class="chart-grid">
           <div class="chart-wrap">
             <div class="chart-title">💙 Fat. Plano · índice base 100</div>
-            <div class="chart-body" style="height:280px"><canvas id="bcIdxFatPlano"></canvas></div>
+            <div class="chart-body" style="height:320px"><canvas id="bcIdxFatPlano"></canvas></div>
           </div>
           <div class="chart-wrap">
             <div class="chart-title">🧡 Fat. Clínica · índice base 100</div>
-            <div class="chart-body" style="height:280px"><canvas id="bcIdxFatClin"></canvas></div>
+            <div class="chart-body" style="height:320px"><canvas id="bcIdxFatClin"></canvas></div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- SOROCABA -->
-    <div class="section">
-      <div class="section-header">🚀 Sorocaba · a unidade em rampa (inaugurada em fev/26)</div>
-      <div class="section-body">
-        <div id="bc-sorocaba"></div>
       </div>
     </div>
 
@@ -2519,6 +2511,7 @@ const BC_IND = [
   { k:'fatClin',  lab:'Fat. Clínica',    money:true,  cor:'#E8630A' }
 ];
 const bcAvg = a => a.reduce((x,y)=>x+y,0)/a.length;
+const bcBaseIdx = u => u.n === bcRampa ? 2 : 0;   // índice: 1º mês cheio de operação
 const bcT1  = v => bcAvg(v.slice(0,3));
 const bcT3  = v => bcAvg(v.slice(6,9));
 const bcN   = (v,m) => m ? 'R$ '+Math.round(v).toLocaleString('pt-BR') : Math.round(v).toLocaleString('pt-BR');
@@ -2589,43 +2582,10 @@ function fillBaseComp(){
      O crescimento de 2026 não é só efeito de abrir loja.
      ${retrai.length ? `<br><br>⚠️ <strong>A exceção é ${retrai.join(' e ')}</strong> — ${retrai.length>1?'as únicas unidades':'a única unidade'} que não acompanha${retrai.length>1?'m':''} o movimento.` : ''}`;
 
-  fillBcSorocaba();
   fillBcMatriz();
   fillBcSmall();
   fillBcTabela(ver);
   fillBcInsights(ver, {dP,dFP,dFC}, {tP,tFP,tFC});
-}
-
-// ── Sorocaba ──
-function fillBcSorocaba(){
-  const u = bcUn.find(x=>x.n===bcRampa);
-  if (!u) return;
-  const cards = BC_IND.map(i=>{
-    const s = bcStats(u,i.k);
-    return `<div style="flex:1;min-width:190px;background:#fff;border:1px solid #e3e3e3;border-left:4px solid ${i.cor};border-radius:8px;padding:12px 14px">
-      <div style="font-size:10px;font-weight:800;color:#777;text-transform:uppercase;letter-spacing:.4px">${i.lab}</div>
-      <div style="font-size:19px;font-weight:800;color:#1F3864;margin:4px 0">${bcN(s.v[8],i.money)}</div>
-      <div style="font-size:11px;color:#555">Jan/26: ${bcN(s.v[0],i.money)} · pico em ${bcMeses[s.iPico]}: ${bcN(s.pico,i.money)}</div>
-      <div style="font-size:11px;font-weight:700;color:#1E7B45;margin-top:4px">${bcArr(s.d)} ${bcPct(s.d)} · Jul–Set vs Jan–Mar</div>
-    </div>`;
-  }).join('');
-  document.getElementById('bc-sorocaba').innerHTML =
-    `<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px">${cards}</div>
-     <div class="chart-grid">
-       <div class="chart-wrap"><div class="chart-title">💰 Sorocaba · Faturamento mensal (Clínica + Plano)</div>
-         <div class="chart-body" style="height:250px"><canvas id="bcSorocabaR"></canvas></div></div>
-       <div class="chart-wrap"><div class="chart-title">🎯 Sorocaba · Planos vendidos por mês</div>
-         <div class="chart-body" style="height:250px"><canvas id="bcSorocabaP"></canvas></div></div>
-     </div>
-     <div style="margin-top:12px;font-size:11px;color:#333;background:#F3F1FA;border-left:4px solid #4a3aa7;border-radius:8px;padding:11px 14px;line-height:1.7">
-       🧭 <strong>Como ler Sorocaba:</strong> em 8 meses de clínica aberta ela já faz
-       <strong>${bcN(u.fatPlano[8]+u.fatClin[8],true)}</strong> por mês e vende mais planos que
-       <strong>${bcUn.filter(x=>x.n!==bcRampa && x.planos[8] < u.planos[8]).length} das 6 unidades maduras</strong>.
-       Mas o pico foi em <strong>${bcMeses[u.planos.indexOf(Math.max(...u.planos))]}</strong> (${Math.max(...u.planos)} planos)
-       e setembro fechou em <strong>${u.planos[8]}</strong> — <strong>a rampa ainda não virou patamar</strong>.
-       O teste real é o 4º trimestre: se estabilizar acima de 230 planos/mês, vira referência de ramp-up
-       para Contagem, Porto Seguro e Parnamirim.
-     </div>`;
 }
 
 // ── Matriz de evolução ──
@@ -2817,6 +2777,28 @@ function fillBcInsights(ver, deltas, tots){
       </div>
     </div>
 
+    <div style="grid-column:1 / -1;background:#F3F1FA;border-left:4px solid #4a3aa7;border-radius:8px;padding:14px">
+      <div style="font-size:11px;font-weight:800;color:#4a3aa7;margin-bottom:8px">🚀 5. Sorocaba: a rampa ainda não virou patamar</div>
+      <div style="font-size:11px;color:#333;line-height:1.75">
+        ${(()=>{
+          const u = bcUn.find(x=>x.n===bcRampa);
+          const pk = Math.max(...u.planos), ipk = u.planos.indexOf(pk);
+          const menores = bcUn.filter(x=>x.n!==bcRampa && x.planos[8] < u.planos[8]).length;
+          return `Em 8 meses de clínica aberta ela já faz <strong>${bcN(u.fatPlano[8]+u.fatClin[8],true)} por mês</strong>
+            e vende mais planos que <strong>${menores} das 6 unidades maduras</strong> — sozinha, cresce mais que toda a base junta
+            (<strong>${bcPct(bcStats(u,'planos').d)}</strong> em planos, <strong>${bcPct(bcStats(u,'fatPlano').d)}</strong> em Fat. Plano).
+            <br><br>
+            <strong>Mas o movimento virou:</strong> o pico foi em <strong>${bcMeses[ipk]}</strong> (${pk} planos) e setembro fechou em
+            <strong>${u.planos[8]}</strong> — três meses seguidos de queda. No gráfico de índice ela aparece tracejada, partindo de março,
+            e é a única curva que sobe forte e depois dobra para baixo.
+            <br><br>
+            <strong>O que observar:</strong> o 4º trimestre decide se Sorocaba estabiliza acima de <strong>230 planos/mês</strong> —
+            e, se estabilizar, ela vira o <strong>benchmark de ramp-up</strong> para Contagem, Porto Seguro e Parnamirim,
+            que estão hoje no mesmo ponto da curva em que ela estava em maio.`;
+        })()}
+      </div>
+    </div>
+
     <div style="grid-column:1 / -1;background:#1F3864;color:#fff;border-radius:8px;padding:16px 18px">
       <div style="font-size:12px;font-weight:800;margin-bottom:8px">🎯 A conclusão que vale levar para a diretoria</div>
       <div style="font-size:11.5px;line-height:1.8;opacity:.95">
@@ -2854,16 +2836,18 @@ function fillBcInsights(ver, deltas, tots){
 
 // ── Gráficos ──
 function createChartsBaseComp(){
-  const maduras = bcUn.filter(u=>u.n!==bcRampa);
   const mk = (id, k, money) => {
     const el = document.getElementById(id);
     if (!el || Chart.getChart(el)) return;
     charts[id] = new Chart(el, {
       type:'line',
-      data:{ labels:bcMeses, datasets: maduras.map(u=>{
-        const base = u[k][0];
-        return { label:u.ab, data:u[k].map(v=>v/base*100), borderColor:u.cor,
-                 backgroundColor:u.cor, borderWidth:2, tension:0.12,
+      data:{ labels:bcMeses, datasets: bcUn.map(u=>{
+        const b0 = bcBaseIdx(u), base = u[k][b0];
+        return { label:u.ab + (b0 ? ' *' : ''),
+                 data:u[k].map((v,i)=> i<b0 ? null : v/base*100),
+                 borderColor:u.cor, backgroundColor:u.cor,
+                 borderWidth:u.n===bcRampa?2.5:2, borderDash:u.n===bcRampa?[6,3]:[],
+                 tension:0.12, spanGaps:false,
                  pointRadius:c=>c.dataIndex===8?4.5:0, pointHoverRadius:5,
                  pointBackgroundColor:u.cor, pointBorderColor:'#fff', pointBorderWidth:1.5 };
       })},
@@ -2875,7 +2859,8 @@ function createChartsBaseComp(){
           tooltip:{callbacks:{
             title:c=>bcMeses[c[0].dataIndex]+'/26',
             label:c=>{
-              const u = maduras[c.datasetIndex];
+              const u = bcUn[c.datasetIndex];
+              if (c.raw === null) return null;
               return `${u.n}: índice ${c.raw.toFixed(0)} · ${bcN(u[k][c.dataIndex],money)}`;
             }}}
         },
@@ -2892,44 +2877,6 @@ function createChartsBaseComp(){
   mk('bcIdxFatPlano','fatPlano',true);
   mk('bcIdxFatClin','fatClin',true);
 
-  const u = bcUn.find(x=>x.n===bcRampa);
-  if (!u) return;
-  const elR = document.getElementById('bcSorocabaR');
-  if (elR && !Chart.getChart(elR)) {
-    charts.bcSorocabaR = new Chart(elR, {
-      type:'bar',
-      data:{ labels:bcMeses, datasets:[
-        { label:'Fat. Clínica', data:u.fatClin,  backgroundColor:'#E8630A', borderRadius:3, stack:'s' },
-        { label:'Fat. Plano',   data:u.fatPlano, backgroundColor:'#1F3864', borderRadius:3, stack:'s' }
-      ]},
-      options:{ responsive:true, maintainAspectRatio:false,
-        interaction:{mode:'index', intersect:false},
-        plugins:{ legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}},
-          datalabels:{display:false},
-          tooltip:{callbacks:{label:c=>c.dataset.label+': R$ '+Math.round(c.raw).toLocaleString('pt-BR')}} },
-        scales:{ y:{stacked:true,grid:{color:'#eee'},ticks:{font:{size:10},callback:v=>'R$'+Math.round(v/1000)+'k'}},
-                 x:{stacked:true,grid:{display:false},ticks:{font:{size:10}}} }
-      }
-    });
-  }
-  const elP = document.getElementById('bcSorocabaP');
-  if (elP && !Chart.getChart(elP)) {
-    charts.bcSorocabaP = new Chart(elP, {
-      type:'bar',
-      data:{ labels:bcMeses, datasets:[
-        { label:'Planos vendidos', data:u.planos,
-          backgroundColor:u.planos.map((v,i)=>i===u.planos.indexOf(Math.max(...u.planos))?'#4a3aa7':'rgba(74,58,167,0.45)'),
-          borderRadius:3 }
-      ]},
-      options:{ responsive:true, maintainAspectRatio:false,
-        plugins:{ legend:{display:false},
-          tooltip:{callbacks:{label:c=>c.raw+' planos'}},
-          datalabels:{anchor:'end',align:'top',formatter:v=>v,color:'#444',font:{size:10,weight:'bold'}} },
-        scales:{ y:{grid:{color:'#eee'},ticks:{font:{size:10}}}, x:{grid:{display:false},ticks:{font:{size:10}}} },
-        layout:{padding:{top:18}}
-      }
-    });
-  }
 }
 
 fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillUnidades(); fillVolumeReceita(); fillSemanal(); fillYoy(); createCharts(); createChartFatTotal(); createChartsUnidade(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); populateBanhosTable(); createChartsSemanal(); createChartsYoy(); fillPerformance(); fillMedia(); fillPreVenda(); fillEficiencia(); fillEficienciaLeitura(); fillBaseComp();
