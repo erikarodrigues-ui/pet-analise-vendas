@@ -739,17 +739,17 @@
         <div class="kpi-sub" id="bc-kpi-peso-sub">—</div>
       </div>
       <div class="kpi-card green">
-        <div class="kpi-label">Planos vendidos · Jul–Set vs Jan–Mar</div>
+        <div class="kpi-label">Planos · Jul–Set vs 1º semestre</div>
         <div class="kpi-value" id="bc-kpi-planos">—</div>
         <div class="kpi-sub" id="bc-kpi-planos-sub">—</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Fat. Plano · Jul–Set vs Jan–Mar</div>
+        <div class="kpi-label">Fat. Plano · Jul–Set vs 1º semestre</div>
         <div class="kpi-value" id="bc-kpi-fp">—</div>
         <div class="kpi-sub" id="bc-kpi-fp-sub">—</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Fat. Clínica · Jul–Set vs Jan–Mar</div>
+        <div class="kpi-label">Fat. Clínica · Jul–Set vs 1º semestre</div>
         <div class="kpi-value" id="bc-kpi-fc">—</div>
         <div class="kpi-sub" id="bc-kpi-fc-sub">—</div>
       </div>
@@ -788,12 +788,16 @@
 
     <!-- MATRIZ -->
     <div class="section">
-      <div class="section-header">🔥 Matriz de Evolução · média Jul–Set vs média Jan–Mar</div>
+      <div class="section-header">🔥 Matriz de Evolução · Jul–Set vs 1º semestre + consistência da tendência</div>
       <div class="section-body">
         <div style="font-size:11px;color:#555;line-height:1.7;margin-bottom:12px;background:#f7f7f7;border-radius:8px;padding:10px 14px">
-          Comparar setembro com janeiro mês a mês é frágil — um mês ruim distorce a leitura.
-          Aqui a comparação é de <strong>trimestre contra trimestre</strong>: a média de Jul–Set contra a média de Jan–Mar.
-          É a forma mais honesta de responder "evoluiu ou não".
+          Comparar setembro com janeiro é frágil: a venda de planos oscila <strong>26% de um mês para o outro</strong> nesta base,
+          então dois meses escolhidos a dedo não representam o ano.
+          <br><br>
+          A base aqui é a <strong>média de todo o 1º semestre (jan–jun)</strong>, comparada com a média do 3º trimestre fechado (jul–set).
+          <strong>Abril e junho entram com peso cheio</strong> — e isso importa porque foram meses de campanha forte
+          (junho é o 2º melhor mês do ano da base, abril o 3º). Com eles dentro, a régua sobe: cada unidade passa a ser medida
+          <strong>contra o próprio desempenho em mês de campanha</strong>, não contra o começo mais fraco do ano.
         </div>
         <div id="bc-matriz"></div>
       </div>
@@ -816,9 +820,10 @@
       <div class="section-header">🧭 Veredito por Unidade</div>
       <div class="section-body">
         <div class="legend-row" style="margin-bottom:12px">
-          <span class="legend-item"><span class="legend-box" style="background:#1E7B45"></span> Em evolução — cresceu e segue perto do topo</span>
-          <span class="legend-item"><span class="legend-box" style="background:#C09000"></span> Perdendo tração — cresceu no ano, mas recuou do pico</span>
-          <span class="legend-item"><span class="legend-box" style="background:#C00000"></span> Em retração — não cresceu e está abaixo do pico</span>
+          <span class="legend-item"><span class="legend-box" style="background:#1E7B45"></span> Em evolução — receita em alta e perto do topo</span>
+          <span class="legend-item"><span class="legend-box" style="background:#0F6E8C"></span> Cresce sem converter — volume sobe, receita não acompanha</span>
+          <span class="legend-item"><span class="legend-box" style="background:#C09000"></span> Perdendo tração — cresceu no semestre, mas recuou do pico</span>
+          <span class="legend-item"><span class="legend-box" style="background:#C00000"></span> Em retração — receita de plano e clínica em queda</span>
           <span class="legend-item"><span class="legend-box" style="background:#4a3aa7"></span> Em rampa — ainda maturando</span>
         </div>
         <table style="font-size:11px">
@@ -832,9 +837,9 @@
               <th rowspan="2" style="vertical-align:bottom">Veredito</th>
             </tr>
             <tr>
-              <th>Jan–Mar</th><th>Jul–Set</th><th>Δ</th>
-              <th>Jan–Mar</th><th>Jul–Set</th><th>Δ</th>
-              <th>Jan–Mar</th><th>Jul–Set</th><th>Δ</th>
+              <th>Jan–Jun</th><th>Jul–Set</th><th>Δ</th>
+              <th>Jan–Jun</th><th>Jul–Set</th><th>Δ</th>
+              <th>Jan–Jun</th><th>Jul–Set</th><th>Δ</th>
             </tr>
           </thead>
           <tbody id="bc-tbody"></tbody>
@@ -2512,11 +2517,26 @@ const BC_IND = [
 ];
 const bcAvg = a => a.reduce((x,y)=>x+y,0)/a.length;
 const bcBaseIdx = u => u.n === bcRampa ? 2 : 0;   // índice: 1º mês cheio de operação
-const bcT1  = v => bcAvg(v.slice(0,3));
-const bcT3  = v => bcAvg(v.slice(6,9));
+const bcT1  = v => bcAvg(v.slice(0,6));   // BASE = 1º semestre (jan–jun), inclui os meses de campanha
+const bcT3  = v => bcAvg(v.slice(6,9));   // LEITURA = 3º trimestre fechado (jul–set)
+
+// tendência sobre os 9 meses: inclinação por mês + consistência (R²)
+function bcReg(v){
+  const n=v.length, mx=(n-1)/2, my=bcAvg(v);
+  let sxy=0, sxx=0;
+  for(let i=0;i<n;i++){ sxy+=(i-mx)*(v[i]-my); sxx+=(i-mx)**2; }
+  const b=sxy/sxx, a=my-b*mx;
+  let ssr=0, sst=0;
+  for(let i=0;i<n;i++){ const f=a+b*i; ssr+=(v[i]-f)**2; sst+=(v[i]-my)**2; }
+  return { slope:b, r2: sst ? 1-ssr/sst : 0, pctMes: my ? b/my*100 : 0 };
+}
+const bcConsist = r2 => r2>=0.55 ? {lab:'tendência firme', pips:3, cor:'#1F3864'}
+                      : r2>=0.25 ? {lab:'tendência parcial', pips:2, cor:'#7a7a7a'}
+                                 : {lab:'oscila sem direção', pips:1, cor:'#aaa'};
 const bcN   = (v,m) => m ? 'R$ '+Math.round(v).toLocaleString('pt-BR') : Math.round(v).toLocaleString('pt-BR');
 const bcPct = v => (v>=0?'+':'−')+Math.abs(v*100).toFixed(1).replace('.',',')+'%';
 const bcArr = v => v>=0?'▲':'▼';
+const bcR2  = v => v.toFixed(2).replace('.',',');
 
 // métricas por unidade/indicador
 function bcStats(u,k){
@@ -2524,24 +2544,34 @@ function bcStats(u,k){
   const t1 = bcT1(v), t3 = bcT3(v);
   const d  = t1>0 ? t3/t1-1 : null;
   const pico = Math.max(...v), iPico = v.indexOf(pico);
-  return { v, t1, t3, d, pico, iPico, setPk: pico>0 ? v[8]/pico : 0 };
+  const r = bcReg(v);
+  return { v, t1, t3, d, pico, iPico, setPk: pico>0 ? v[8]/pico : 0,
+           slope:r.slope, r2:r.r2, pctMes:r.pctMes };
 }
 function bcVeredito(u){
   if (u.n === bcRampa) return { cls:'rampa', lab:'EM RAMPA', cor:'#4a3aa7',
     txt:'Inaugurada em fev/26 — ainda construindo patamar' };
-  const s = BC_IND.map(i=>bcStats(u,i.k));
-  const nPos = s.filter(x=>x.d!==null && x.d>0.03).length;
-  const nNeg = s.filter(x=>x.d!==null && x.d<-0.03).length;
-  const noTopo = bcAvg(s.map(x=>x.setPk));
-  if (nNeg >= 2 || (nNeg>=1 && noTopo<0.75))
+  const vol = bcStats(u,'planos');
+  const rec = [bcStats(u,'fatPlano'), bcStats(u,'fatClin')];
+  const recPos = rec.filter(x=>x.d >  0.03).length;
+  const recNeg = rec.filter(x=>x.d < -0.03).length;
+  const noTopo = bcAvg(BC_IND.map(i=>bcStats(u,i.k).setPk));
+
+  if (recNeg === 2)
     return { cls:'retracao', lab:'EM RETRAÇÃO', cor:'#C00000',
-      txt:`${nNeg} de 3 indicadores abaixo do início do ano` };
-  if (nPos >= 2 && noTopo >= 0.85)
+      txt:'Fat. Plano e Fat. Clínica abaixo do 1º semestre' };
+  if (recPos === 0 && vol.d > 0.10)
+    return { cls:'semconverter', lab:'CRESCE SEM CONVERTER', cor:'#0F6E8C',
+      txt:`Volume ${bcPct(vol.d)}, mas a receita não acompanhou` };
+  if (recPos === 2 && noTopo >= 0.85)
     return { cls:'evolucao', lab:'EM EVOLUÇÃO', cor:'#1E7B45',
-      txt:`${nPos} de 3 indicadores em alta e setembro perto do topo` };
-  if (nPos >= 1 && noTopo < 0.85)
+      txt:'Receita de plano e de clínica em alta, e setembro perto do topo' };
+  if (recPos >= 1 && noTopo < 0.85)
     return { cls:'tracao', lab:'PERDENDO TRAÇÃO', cor:'#C09000',
-      txt:`Cresceu no ano, mas setembro está a ${Math.round(noTopo*100)}% do melhor mês` };
+      txt:`Cresceu no semestre, mas setembro está a ${Math.round(noTopo*100)}% do melhor mês` };
+  if (recPos >= 1)
+    return { cls:'evolucao', lab:'EM EVOLUÇÃO', cor:'#1E7B45',
+      txt:'Receita em alta e setembro perto do topo' };
   return { cls:'estavel', lab:'ESTÁVEL', cor:'#4A5F86', txt:'Sem variação relevante no período' };
 }
 
@@ -2606,9 +2636,11 @@ function fillBcMatriz(){
         + `<th style="text-align:center">Setembro vs melhor mês</th></tr></thead><tbody>`;
   ord.forEach(u=>{
     const cells = BC_IND.map(i=>{
-      const s = bcStats(u,i.k), c = esc(s.d);
-      return `<td style="text-align:center;background:${c.bg};color:${c.fg};font-weight:800;padding:9px 6px">
-        ${s.d===null?'—':bcArr(s.d)+' '+bcPct(s.d)}</td>`;
+      const s = bcStats(u,i.k), c = esc(s.d), k = bcConsist(s.r2);
+      const pips = '●'.repeat(k.pips) + '○'.repeat(3-k.pips);
+      return `<td style="text-align:center;background:${c.bg};color:${c.fg};font-weight:800;padding:8px 6px">
+        <div>${s.d===null?'—':bcArr(s.d)+' '+bcPct(s.d)}</div>
+        <div style="font-size:9px;font-weight:600;opacity:.75;margin-top:2px" title="consistência da tendência nos 9 meses (R² ${bcR2(s.r2)})">${pips} ${k.lab}</div></td>`;
     }).join('');
     const topo = bcAvg(BC_IND.map(i=>bcStats(u,i.k).setPk));
     const tc = topo>=0.9 ? '#1E7B45' : topo>=0.78 ? '#C09000' : '#C00000';
@@ -2618,9 +2650,14 @@ function fillBcMatriz(){
   });
   h += `</tbody></table>
     <div style="margin-top:12px;font-size:11px;color:#666;background:#f5f5f5;border-radius:8px;padding:10px 14px;line-height:1.7">
+      <strong>A linha pequena dentro de cada célula</strong> mede outra coisa: quão <em>consistente</em> foi o movimento ao longo dos 9 meses
+      (regressão sobre jan–set). <strong>●●● tendência firme</strong> = subiu ou caiu mês após mês. <strong>●○○ oscila sem direção</strong> =
+      a variação existe, mas é sobe-e-desce, não trajetória. Isso separa duas coisas que o % sozinho mistura:
+      <strong>"cresceu" e "está crescendo"</strong>.
+      <br><br>
       A última coluna é o <strong>termômetro do momento</strong>: setembro como % do melhor mês do ano, média dos três indicadores.
-      Uma unidade pode ter crescido muito no ano <em>e</em> estar perdendo força agora — as duas colunas respondem perguntas diferentes,
-      e é no cruzamento delas que aparece o que exige ação.
+      Uma unidade pode ter crescido muito no ano <em>e</em> estar perdendo força agora — cada coluna responde uma pergunta diferente,
+      e é no cruzamento das três que aparece o que exige ação.
     </div>`;
   document.getElementById('bc-matriz').innerHTML = h;
 }
@@ -2674,7 +2711,7 @@ function bcSpark(v, max, cor, iPico){
 // ── Tabela veredito ──
 function fillBcTabela(ver){
   const tbody = document.getElementById('bc-tbody');
-  const ordem = {evolucao:0, rampa:1, estavel:2, tracao:3, retracao:4};
+  const ordem = {evolucao:0, rampa:1, semconverter:2, estavel:3, tracao:4, retracao:5};
   const ord = ver.slice().sort((a,b)=>ordem[a.v.cls]-ordem[b.v.cls]);
   ord.forEach(({u,v})=>{
     const cels = BC_IND.map(i=>{
@@ -2718,12 +2755,14 @@ function fillBcInsights(ver, deltas, tots){
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
 
     <div style="background:#FDECEA;border-left:4px solid #C00000;border-radius:8px;padding:14px">
-      <div style="font-size:11px;font-weight:800;color:#C00000;margin-bottom:8px">🔴 1. São Miguel é a unidade mais antiga e a única que encolhe</div>
+      <div style="font-size:11px;font-weight:800;color:#C00000;margin-bottom:8px">🔴 1. São Miguel vende e não converte — a única que encolhe em receita</div>
       <div style="font-size:11px;color:#333;line-height:1.75">
         Aberta em <strong>mai/2022</strong>, é a decana da rede — e a <strong>única das sete que recua ao mesmo tempo</strong> em
         Fat. Plano (<strong>${bcPct(smFP.d)}</strong>) e Fat. Clínica (<strong>${bcPct(smFC.d)}</strong>),
-        com planos praticamente parados (${bcPct(smP.d)}).
+        enquanto o volume de vendas oscila para cima (${bcPct(smP.d)} em planos, mas com consistência ${bcR2(smP.r2)} — sobe-e-desce, sem direção). <strong>Entra cliente e não vira receita</strong> — é a assinatura do problema.
         Setembro na clínica está a <strong>${Math.round(smFC.setPk*100)}% do melhor mês</strong>, que foi janeiro.
+        E não é um tropeço pontual: a queda tem <strong>consistência ${bcR2(smFC.r2)} em Fat. Clínica e ${bcR2(smFP.r2)} em Fat. Plano</strong>
+        — uma reta descendente de nove meses, não um mês ruim.
         <br><br>
         Isso não aparece isolado: a aba de banhos mostra <strong>−18,4%</strong> e a utilização da clínica caiu de
         <strong>35,9% para 26,3%</strong>. São quatro indicadores descendo juntos numa unidade com <strong>2.250 clientes aptos</strong> — a 3ª maior carteira da rede, e que <em>cresceu</em> de agosto para setembro.
@@ -2734,24 +2773,28 @@ function fillBcInsights(ver, deltas, tots){
     </div>
 
     <div style="background:#E6F5EC;border-left:4px solid #1E7B45;border-radius:8px;padding:14px">
-      <div style="font-size:11px;font-weight:800;color:#1E7B45;margin-bottom:8px">🟢 2. Barreiro é o melhor case da base madura</div>
+      <div style="font-size:11px;font-weight:800;color:#1E7B45;margin-bottom:8px">🟢 2. Barreiro cresce em volume — mas a receita não acompanhou</div>
       <div style="font-size:11px;color:#333;line-height:1.75">
-        <strong>${bcPct(baP.d)} em planos</strong> e, mais importante, é a <strong>única das sete cujo melhor mês de vendas no ano foi setembro</strong>
-        (271 planos). Enquanto as outras seis já tinham recuado do próprio pico, Barreiro ainda estava subindo.
+        <strong>${bcPct(baP.d)} em planos</strong> com <strong>tendência firme (${bcR2(baP.r2)})</strong>: +${Math.round(bcStats(ba,'planos').slope)} planos por mês,
+        mês após mês. É a <strong>única das sete cujo melhor mês de vendas no ano foi setembro</strong> (271 planos) —
+        enquanto as outras seis já tinham recuado do próprio pico, Barreiro ainda estava subindo.
         <br><br>
-        Aberta em nov/2022, é a segunda mais antiga — ou seja, <strong>maturidade não explica a queda de São Miguel</strong>.
-        As duas têm idade parecida e trajetórias opostas.
+        <strong>O contraponto que só aparece com o semestre na base:</strong> Fat. Plano <strong>${bcPct(bcStats(ba,'fatPlano').d)}</strong>
+        e Fat. Clínica <strong>${bcPct(bcStats(ba,'fatClin').d)}</strong>. A clínica dela está <strong>parada desde março</strong> —
+        janeiro e fevereiro foram os dois meses mais fracos do ano, e eram eles que faziam o crescimento parecer maior do que é.
+        Setembro (R$ 172,5 mil) foi o pior mês de clínica desde fevereiro.
         <br><br>
-        <strong>Ação:</strong> comparar a operação das duas é a investigação mais barata e mais provável de gerar resposta —
-        mesma faixa de maturidade, mesmo portfólio, resultado invertido.
+        <strong>Leitura:</strong> Barreiro é a melhor máquina de aquisição da base e, ao mesmo tempo,
+        <strong>a que menos converte volume novo em receita</strong>. Vale entender o que está sendo vendido —
+        mix de plano, ticket e conversão para serviço na clínica.
       </div>
     </div>
 
     <div style="background:#FFF9E6;border-left:4px solid #C09000;border-radius:8px;padding:14px">
       <div style="font-size:11px;font-weight:800;color:#856000;margin-bottom:8px">🟡 3. Ipatinga vende menos e fatura mais — e isso é bom</div>
       <div style="font-size:11px;color:#333;line-height:1.75">
-        Planos <strong>${bcPct(ipP.d)}</strong>, a maior queda de volume da base. Mas
-        <strong>Fat. Plano ${bcPct(ipFP.d)}</strong> e <strong>Fat. Clínica ${bcPct(ipFC.d)}</strong>.
+        Planos <strong>${bcPct(ipP.d)}</strong> — a única queda de volume da base. Mas
+        <strong>Fat. Plano ${bcPct(ipFP.d)}</strong> — e com a <strong>tendência mais consistente de toda a base (${bcR2(ipFP.r2)})</strong> — e <strong>Fat. Clínica ${bcPct(ipFC.d)}</strong>.
         <br><br>
         A explicação está na data: <strong>inaugurada em out/2025</strong>. Janeiro ainda era mês 3 de operação, com a
         explosão de vendas típica de abertura (265 planos). O que se vê agora não é queda — é
@@ -2765,15 +2808,16 @@ function fillBcInsights(ver, deltas, tots){
     <div style="background:#EEF2F9;border-left:4px solid #1F3864;border-radius:8px;padding:14px">
       <div style="font-size:11px;font-weight:800;color:#1F3864;margin-bottom:8px">🔵 4. Campina Grande monetiza sem crescer em volume</div>
       <div style="font-size:11px;color:#333;line-height:1.75">
-        Planos praticamente parados (<strong>${bcPct(cgP.d)}</strong>), mas <strong>Fat. Plano ${bcPct(cgFP.d)}</strong> e
-        <strong>Fat. Clínica ${bcPct(cgFC.d)}</strong> — o maior ganho de receita da base comparável sem nenhum ganho de aquisição.
+        O volume de planos <strong>oscila sem direção</strong> (${bcPct(cgP.d)}, consistência ${bcR2(cgP.r2)} — sobe-e-desce, não trajetória),
+        mas a receita sobe de forma firme: <strong>Fat. Plano ${bcPct(cgFP.d)}</strong> (consistência ${bcR2(cgFP.r2)}) e
+        <strong>Fat. Clínica ${bcPct(cgFC.d)}</strong> — o maior ganho de receita da base sem ganho real de aquisição.
         <br><br>
         É a prova de que <strong>receita e venda de plano são alavancas separadas</strong>: a carteira existente está pagando mais
         e consumindo mais clínica. Campina Grande é a maior unidade da rede em faturamento e chegou lá
         <strong>pela base, não pela porta de entrada</strong>.
         <br><br>
-        <strong>Ação:</strong> mapear o que Campina Grande faz de cross-sell e upgrade dentro da carteira — é o movimento que
-        São Miguel precisa e que Itaim está perdendo.
+        <strong>Ação:</strong> mapear o que Campina Grande faz de cross-sell e upgrade dentro da carteira — é exatamente o movimento que
+        São Miguel não está conseguindo fazer.
       </div>
     </div>
 
