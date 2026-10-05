@@ -125,7 +125,6 @@
   <button class="nav-btn" onclick="showTab('performance',this)">Performance por Unidade</button>
   <button class="nav-btn" onclick="showTab('basecomp',this)">Base Comparável</button>
   <button class="nav-btn" onclick="showTab('cohort',this)">Retenção por Safra</button>
-  <button class="nav-btn" onclick="showTab('semanal',this)">Semanal Ago × Jul</button>
   <button class="nav-btn" onclick="showTab('banhos',this)">Banhos por Unidade</button>
   <button class="nav-btn" onclick="showTab('yoy',this)">2025 × 2026</button>
 </div>
@@ -580,51 +579,6 @@
             <div style="font-size:11px;color:#333;line-height:1.7" id="acao-verde"></div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ SEMANAL ══ -->
-<div id="tab-semanal" class="tab-panel">
-  <div class="content">
-    <div class="tend-note">
-      📅 <strong>Venda de Planos por Semana · Agosto/26 vs Julho/26</strong><br>
-      Semanas equivalentes: S1 (01–09) · S2 (10–16) · S3 (17–23) · S4 (24–31).
-      <strong>Não inclui televendas</strong> — por isso o total semanal (1.545) é menor que o total do mês (1.765).<br>
-      <span style="opacity:.85">📌 Recorte mantido como <strong>referência histórica</strong>: o corte de semanas de setembro não é comparável a este, por isso esta aba não foi reprocessada no fechamento de set/26.</span>
-    </div>
-
-    <div class="chart-wrap" style="margin-bottom:16px">
-      <div class="chart-title">📊 Total da Rede por Semana · Ago/26 vs Jul/26</div>
-      <div class="chart-body" style="height:280px"><canvas id="chartSemanalTotal"></canvas></div>
-    </div>
-
-    <div class="chart-wrap" style="margin-bottom:16px">
-      <div class="chart-title">🏪 Venda de Planos por Unidade e Semana · Agosto/26</div>
-      <div class="chart-body" style="height:360px"><canvas id="chartSemanalUnidade"></canvas></div>
-    </div>
-
-    <div class="section">
-      <div class="section-header">📋 Detalhe Semanal por Unidade · Ago/26 × Jul/26</div>
-      <div class="section-body">
-        <table style="font-size:11px">
-          <thead>
-            <tr>
-              <th rowspan="2" style="vertical-align:bottom">Unidade</th>
-              <th colspan="4" style="text-align:center;background:#4A5F86">Julho/26</th>
-              <th colspan="4" style="text-align:center;background:#E8630A">Agosto/26</th>
-              <th rowspan="2" style="vertical-align:bottom">Δ Total</th>
-            </tr>
-            <tr>
-              <th>S1</th><th>S2</th><th>S3</th><th>S4</th>
-              <th>S1</th><th>S2</th><th>S3</th><th>S4</th>
-            </tr>
-          </thead>
-          <tbody id="semanal-tbody"></tbody>
-          <tfoot id="semanal-tfoot"></tfoot>
-        </table>
-        <div style="margin-top:12px;font-size:11px;color:#666;background:#f5f5f5;border-radius:8px;padding:10px 14px;line-height:1.7" id="semanal-insight"></div>
       </div>
     </div>
   </div>
@@ -1491,7 +1445,6 @@ function showTab(name,btn) {
       });
       createChartBanhosRanking();createChartBanhosTaxa();createChartBanhosCrescimento();populateBanhosTable();
     }
-    if(name==='semanal'){ fillSemanal(); createChartsSemanal(); }
     if(name==='yoy'){ fillYoy(); createChartsYoy(); }
     if(name==='performance'){ fillPerformance(); fillMedia(); fillPreVenda(); fillEficiencia(); fillEficienciaLeitura(); fillPerfSparks(); createChartsPerf(); createChartMedia(); createChartEficiencia(); }
     if(name==='basecomp'){ fillBaseComp(); createChartsBaseComp(); }
@@ -1748,106 +1701,6 @@ function createChartsUnidade() {
         scales:{y:{grid:{color:'#eee'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:9}}}},
         layout:{padding:{top:18}}
       }
-    });
-  }
-}
-
-// ── SEMANAL: VENDA DE PLANOS POR UNIDADE (Ago/26 vs Jul/26) ──
-// MANTIDO COMO REFERÊNCIA HISTÓRICA — não atualizado em setembro (recorte de semanas incompatível).
-// Índices alinhados ao array UN atual (12 unidades): Parnamirim entrou em set/26, por isso zerada aqui.
-const semLabels4 = ['S1','S2','S3','S4'];
-const julSem = [
-  [66,33,57,64],   // Barreiro
-  [85,61,55,81],   // Campina Grande
-  [76,59,54,65],   // Contagem
-  [19,20,39,48],   // Cosmópolis
-  [49,27,25,17],   // Dona Clara
-  [59,45,53,30],   // Ipatinga
-  [80,63,68,73],   // Itaim Paulista
-  [64,38,33,45],   // Paulista Pernambuco
-  [ 0, 0, 0, 0],   // Parnamirim (não operava)
-  [ 0, 0, 0, 0],   // Porto Seguro
-  [37,19,24,24],   // São Miguel Paulista
-  [65,57,61,55]    // Sorocaba
-];
-const agoSem = [
-  [59,38,49,55],   // Barreiro
-  [71,41,38,61],   // Campina Grande
-  [65,44,51,76],   // Contagem
-  [31, 8,14,35],   // Cosmópolis
-  [30,15,22,23],   // Dona Clara
-  [17,33,18,39],   // Ipatinga
-  [63,47,47,54],   // Itaim Paulista
-  [30,12,25,23],   // Paulista Pernambuco
-  [ 0, 0, 0, 0],   // Parnamirim (não operava)
-  [ 0, 0,22,21],   // Porto Seguro
-  [20,14,16,20],   // São Miguel Paulista
-  [52,47,54,45]    // Sorocaba
-];
-const julSemTot = semLabels4.map((_,s)=>julSem.reduce((a,u)=>a+u[s],0));
-const agoSemTot = semLabels4.map((_,s)=>agoSem.reduce((a,u)=>a+u[s],0));
-const semAtivas = UN.map((_,i)=>i).filter(i=>julSem[i].concat(agoSem[i]).some(v=>v>0));
-
-function fillSemanal() {
-  const tbody = document.getElementById('semanal-tbody');
-  if (!tbody || tbody.innerHTML.trim() !== '') return;
-  const soma = a => a.reduce((x,y)=>x+y,0);
-  const ord = semAtivas.slice().sort((a,b)=>soma(agoSem[b])-soma(agoSem[a]));
-  ord.forEach(i=>{
-    const tJ = soma(julSem[i]), tA = soma(agoSem[i]);
-    const d = tJ>0 ? (tA-tJ)/tJ : null;
-    const cells = s => s.map(v=>`<td style="text-align:center">${v||'<span style="color:#ccc">—</span>'}</td>`).join('');
-    tbody.innerHTML += `<tr>
-      <td>${UN[i]}</td>
-      ${cells(julSem[i])}
-      ${agoSem[i].map(v=>`<td style="text-align:center;background:#FFF7F0;font-weight:600">${v||'<span style="color:#ccc">—</span>'}</td>`).join('')}
-      ${d===null?'<td style="text-align:center;color:#aaa">novo</td>':`<td style="text-align:center;font-weight:700" class="${d>=0?'var-up':'var-down'}">${varArrow(d)} ${fmtPct(d)}</td>`}
-    </tr>`;
-  });
-  const tJ = soma(julSemTot), tA = soma(agoSemTot);
-  document.getElementById('semanal-tfoot').innerHTML = `<tr>
-    <td>TOTAL</td>
-    ${julSemTot.map(v=>`<td style="text-align:center">${v}</td>`).join('')}
-    ${agoSemTot.map(v=>`<td style="text-align:center">${v}</td>`).join('')}
-    <td style="text-align:center" class="var-down">▼ ${fmtPct((tA-tJ)/tJ)}</td>
-  </tr>`;
-  document.getElementById('semanal-insight').innerHTML =
-    `💡 <strong>Onde a venda caiu:</strong> a S2 de agosto (10–16/08) foi a semana mais fraca do bimestre — 299 vendas contra 422 na S2 de julho (−29,1%).
-     A recuperação vem na <strong>S4 (24–31/08): 452 vendas, quase o nível de julho (502)</strong> e a melhor semana do mês.
-     <strong>Contagem</strong> foi a única unidade a superar julho na S4 (65 → 76) e <strong>Porto Seguro</strong> entrou em operação a partir da S3.
-     <br><br>⚠️ Os números desta aba <strong>não incluem televendas</strong>: 1.545 vendas nas semanas vs 1.765 no fechamento do mês — a diferença (220) é canal televendas.`;
-}
-
-function createChartsSemanal() {
-  const el = document.getElementById('chartSemanalTotal');
-  if (el && !Chart.getChart(el)) {
-    charts.semTotal = new Chart(el, {
-      type:'bar',
-      data:{ labels:['S1 (01–09)','S2 (10–16)','S3 (17–23)','S4 (24–31)'],
-        datasets:[
-          {label:'Julho/26',data:julSemTot,backgroundColor:'rgba(31,56,100,0.4)',borderRadius:4},
-          {label:'Agosto/26',data:agoSemTot,backgroundColor:'#E8630A',borderRadius:4}
-        ]},
-      options:{responsive:true,maintainAspectRatio:false,
-        plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:14}},
-          tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw+' planos'}},
-          datalabels:{anchor:'end',align:'top',formatter:v=>v,color:'#333',font:{size:11,weight:'bold'}}},
-        scales:{y:{grid:{color:'#eee'}},x:{grid:{display:false}}},layout:{padding:{top:20}}}
-    });
-  }
-  const el2 = document.getElementById('chartSemanalUnidade');
-  if (el2 && !Chart.getChart(el2)) {
-    const soma = a => a.reduce((x,y)=>x+y,0);
-    const ord = semAtivas.slice().sort((a,b)=>soma(agoSem[b])-soma(agoSem[a]));
-    const cores = ['rgba(232,99,10,0.35)','rgba(232,99,10,0.55)','rgba(232,99,10,0.78)','#E8630A'];
-    charts.semUnidade = new Chart(el2, {
-      type:'bar',
-      data:{ labels:ord.map(i=>UN_AB[i]),
-        datasets: semLabels4.map((s,si)=>({label:s+' Ago',data:ord.map(i=>agoSem[i][si]),backgroundColor:cores[si],borderRadius:2,stack:'a'})) },
-      options:{responsive:true,maintainAspectRatio:false,
-        plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}},datalabels:{display:false},
-          tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw}}},
-        scales:{y:{stacked:true,grid:{color:'#eee'}},x:{stacked:true,grid:{display:false},ticks:{font:{size:9}}}}}
     });
   }
 }
@@ -3840,7 +3693,7 @@ function createChartsRelatorio(){
   });
 }
 
-fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillUnidades(); fillVolumeReceita(); fillSemanal(); fillYoy(); createCharts(); createChartFatTotal(); createChartsUnidade(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); populateBanhosTable(); createChartsSemanal(); createChartsYoy(); fillPerformance(); fillMedia(); fillPreVenda(); fillEficiencia(); fillEficienciaLeitura(); fillBaseComp(); fillCohort(); fillRelatorio(); createChartsRelatorio();
+fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillUnidades(); fillVolumeReceita(); fillYoy(); createCharts(); createChartFatTotal(); createChartsUnidade(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); populateBanhosTable(); createChartsYoy(); fillPerformance(); fillMedia(); fillPreVenda(); fillEficiencia(); fillEficienciaLeitura(); fillBaseComp(); fillCohort(); fillRelatorio(); createChartsRelatorio();
 
 </script>
 </body>
