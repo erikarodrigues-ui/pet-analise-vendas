@@ -165,13 +165,11 @@
           </div>
 
           <div style="background:#FDECEA;border-left:4px solid #C00000;border-radius:8px;padding:15px">
-            <div style="font-size:11px;font-weight:800;color:#C00000;letter-spacing:.4px;margin-bottom:7px">⚠️ ALERTA 1 · O volume novo não fica</div>
+            <div style="font-size:11px;font-weight:800;color:#C00000;letter-spacing:.4px;margin-bottom:7px">⚠️ ALERTA 1 · O cliente novo fica menos da metade do tempo</div>
             <div style="font-size:12.5px;color:#333;line-height:1.8">
-              As campanhas de <strong>junho, julho e agosto</strong> perderam <strong>15 clientes em cada 100</strong>
-              já na primeira renovação, contra <strong>5 em cada 100</strong> nas campanhas de janeiro a maio.
-              São <strong>466 clientes</strong> que teriam ficado se tivessem retido no padrão da casa.
-              A diferença se confirma também <strong>na comparação mês a mês, na mesma idade de contrato</strong>
-              (aba Retenção por Safra).
+              Quem entrou pelas campanhas de janeiro a maio fica na base <strong>12 a 15 meses</strong>.
+              Quem entrou pelas de junho a agosto, <strong>6 a 13 meses</strong>.
+              No curto prazo isso já custou <strong>466 clientes</strong> que teriam ficado se tivessem retido no padrão da casa.
             </div>
           </div>
 
@@ -185,11 +183,12 @@
           </div>
 
           <div style="background:#EEF2F9;border-left:4px solid #1F3864;border-radius:8px;padding:15px">
-            <div style="font-size:11px;font-weight:800;color:#1F3864;letter-spacing:.4px;margin-bottom:7px">💡 INSIGHT 2 · A solução já foi testada aqui dentro</div>
+            <div style="font-size:11px;font-weight:800;color:#1F3864;letter-spacing:.4px;margin-bottom:7px">💡 INSIGHT 2 · Não é o desconto — é o preço de entrada</div>
             <div style="font-size:12.5px;color:#333;line-height:1.8">
-              <strong>Abril (CashPet)</strong> foi a única campanha do ano em que o cliente pagou a mensalidade cheia —
-              o presente veio depois, em cashback de loja. Perdeu <strong>1 cliente em cada 100</strong>.
-              Mesma atratividade comercial, sem o custo de retenção.
+              Comparando só as três campanhas em que o cliente pagou valor cheio desde o 1º mês:
+              <strong>Abril perdeu 1, Janeiro perdeu 5 e Junho perdeu 17</strong> em cada 100.
+              <strong>Junho não deu desconto nenhum</strong> — vendeu um plano mais barato.
+              Logo, o que estraga a retenção é o preço de entrada do produto, não a promoção.
             </div>
           </div>
 
@@ -252,10 +251,11 @@
         <div style="font-size:12.5px;color:#555;line-height:1.8;margin-bottom:14px;background:#f7f7f7;border-radius:8px;padding:12px 15px">
           <strong>Objetivo de todas as campanhas de 2026:</strong> vender planos.
           Todas bateram a meta de volume — por isso a coluna que decide aqui não é quantos planos trouxe,
-          e sim <strong>quantos clientes continuaram pagando</strong>.
+          e sim <strong>por quanto tempo o cliente fica pagando</strong>.
           <br>
-          Comparação usada: cada safra contra as demais <strong>na mesma idade de contrato</strong> (1ª renovação),
-          que é a única comparação justa entre campanhas de meses diferentes.
+          O tempo de vida vem em faixa porque é projeção: o extremo de baixo assume que a safra mantém o ritmo
+          atual de cancelamento, o de cima assume que ela melhora até o padrão das safras de janeiro a março.
+          O método está detalhado na aba <strong>Retenção por Safra</strong>.
         </div>
         <div id="rel-campanhas"></div>
       </div>
@@ -3448,12 +3448,13 @@ const relSafras = [
   { m:'Março',    planos:1305, adim1:91.10, util1:39.14, camp:'Festival de Verão · 50% off nos planos',     mec:'desc',  cor:'#1c5cab' },
   { m:'Abril',    planos:1711, adim1:89.94, util1:31.30, camp:'CashPet · paga cheio e recebe cashback',     mec:'paga',  cor:'#1E7B45' },
   { m:'Maio',     planos:1252, adim1:93.07, util1:38.88, camp:'Vantagens Pet · 50% off nos planos',         mec:'desc',  cor:'#1c5cab' },
-  { m:'Junho',    planos:1862, adim1:82.27, util1:45.94, camp:'Torcida CãoPeã · plano mais barato + banho', mec:'zero',  cor:'#C00000' },
+  { m:'Junho',    planos:1862, adim1:82.27, util1:45.94, camp:'Torcida CãoPeã · plano mais barato + banho', mec:'preco', cor:'#C09000' },
   { m:'Julho',    planos:2254, adim1:84.15, util1:42.72, camp:'Sem Pegadinha · 1ª mensalidade grátis',      mec:'zero',  cor:'#C00000' },
   { m:'Agosto',   planos:1765, adim1:84.13, util1:45.71, camp:'Pai de Pet é 10 · R$ 10 × 2 mensalidades',   mec:'zero',  cor:'#C00000' },
   { m:'Setembro', planos:2133, adim1:null,  util1:null,  camp:'Aniversário · 1º mês zero + 2º com 50%',     mec:'zero',  cor:'#C00000' }
 ];
-const relMec = { paga:{lab:'Paga para entrar',cor:'#1E7B45'}, desc:{lab:'Desconto parcial',cor:'#1c5cab'}, zero:{lab:'Entra de graça',cor:'#C00000'} };
+const relMec = { paga:{lab:'Paga para entrar',cor:'#1E7B45'}, desc:{lab:'Desconto parcial',cor:'#1c5cab'},
+                 preco:{lab:'Plano mais barato',cor:'#C09000'}, zero:{lab:'Entra de graça',cor:'#C00000'} };
 const relN   = v => Math.round(v);
 const relBr  = v => v.toFixed(1).replace('.',',');
 // dos que continuam pagando, quantos usam a clínica
@@ -3464,45 +3465,53 @@ function fillRelatorio(){
   if (!box || box.innerHTML.trim() !== '') return;
 
   const com = relSafras.filter(s=>s.adim1!==null);
-  const zero = com.filter(s=>s.mec==='zero'), outras = com.filter(s=>s.mec!=='zero');
+  const zero = com.filter(s=>s.mec==='zero'||s.mec==='preco'), outras = com.filter(s=>s.mec==='paga'||s.mec==='desc');
   const mZero = zero.reduce((a,s)=>a+s.adim1,0)/zero.length;
   const mOut  = outras.reduce((a,s)=>a+s.adim1,0)/outras.length;
   const uZero = zero.reduce((a,s)=>a+relUsa(s),0)/zero.length;
   const uOut  = outras.reduce((a,s)=>a+relUsa(s),0)/outras.length;
 
   // ── 3. campanhas ──
+  // vida estimada por safra (faixa) — ver aba Retenção por Safra para o método
+  const relVida = { 'Janeiro':[16,17], 'Fevereiro':[14,16], 'Março':[13,15], 'Abril':[12,14],
+                    'Maio':[10,14], 'Junho':[8,13], 'Julho':[6,13], 'Agosto':[7,15], 'Setembro':null };
+  const relCheio = ['Janeiro','Abril','Junho'];     // pagaram valor cheio desde o 1º mês
   let h = `<table style="font-size:12px"><thead><tr>
     <th style="text-align:left">Mês</th><th style="text-align:left">Campanha</th>
-    <th style="text-align:left">Mecânica</th>
+    <th style="text-align:left">O cliente pagava para entrar</th>
     <th style="text-align:center">Planos<br>vendidos</th>
-    <th style="text-align:center">De cada 100, quantos<br>perdeu na 1ª renovação</th>
+    <th style="text-align:center">Quanto tempo<br>o cliente fica</th>
     <th style="text-align:center">Veredito</th></tr></thead><tbody>`;
   relSafras.forEach(s=>{
-    const perdeu = s.adim1!==null ? relN(98)-relN(s.adim1) : null;   // ~98 pagam o 1º mês
-    const g = relMec[s.mec];
+    const v = relVida[s.m], g = relMec[s.mec];
     let vd, vc;
-    if (perdeu===null)      { vd='AINDA SENDO MEDIDA'; vc='#777'; }
-    else if (perdeu<=6)     { vd='POSITIVA';           vc='#1E7B45'; }
-    else if (perdeu<=9)     { vd='NEUTRA';             vc='#C09000'; }
+    if (!v)                 { vd='AINDA SENDO MEDIDA'; vc='#777'; }
+    else if (v[0]>=12)      { vd='POSITIVA';           vc='#1E7B45'; }
+    else if (v[0]>=10)      { vd='NEUTRA';             vc='#C09000'; }
     else                    { vd='NEGATIVA';           vc='#C00000'; }
-    h += `<tr style="${perdeu!==null&&perdeu>=12?'background:#FDECEA':(perdeu!==null&&perdeu<=6?'background:#E6F5EC':'')}">
-      <td style="font-weight:800;white-space:nowrap">${s.m}</td>
+    const mark = relCheio.includes(s.m) ? ' <span title="pagou valor cheio desde o 1º mês — comparável direto" style="color:#1E7B45;font-size:10px;font-weight:800">✓</span>' : '';
+    h += `<tr style="${v&&v[0]<10?'background:#FDECEA':(v&&v[0]>=12?'background:#E6F5EC':'')}">
+      <td style="font-weight:800;white-space:nowrap">${s.m}${mark}</td>
       <td style="font-size:11px;line-height:1.45">${s.camp}</td>
       <td><span style="display:inline-block;background:${g.cor};color:#fff;font-size:10px;font-weight:800;padding:3px 8px;border-radius:4px;white-space:nowrap">${g.lab}</span></td>
       <td style="text-align:center;font-weight:700">${s.planos.toLocaleString('pt-BR')}</td>
-      <td style="text-align:center;font-size:17px;font-weight:800;color:${perdeu===null?'#aaa':vc}">${perdeu===null?'—':perdeu}</td>
+      <td style="text-align:center;font-size:14px;font-weight:800;color:${!v?'#aaa':vc}">${!v?'—':v[0]+' a '+v[1]+' meses'}</td>
       <td style="text-align:center"><span style="display:inline-block;background:${vc};color:#fff;font-size:9px;font-weight:800;padding:3px 7px;border-radius:4px;white-space:nowrap">${vd}</span></td>
     </tr>`;
   });
   h += `</tbody></table>
     <div style="margin-top:13px;font-size:12.5px;color:#333;background:#EEF2F9;border-left:4px solid #1F3864;border-radius:8px;padding:13px 16px;line-height:1.85">
-      <strong>Conclusão desta seção:</strong> todas as campanhas foram positivas em volume e
-      <strong>as três de entrada grátis foram negativas em qualidade</strong>.
-      As safras de junho a agosto somam <strong>5.881 planos — 40% de tudo que a rede vendeu no ano</strong> —
-      e são justamente as que menos seguraram cliente.
+      <strong>Conclusão desta seção:</strong> todas as campanhas bateram a meta de volume.
+      A diferença entre elas está no tempo que o cliente fica — e aí a ordem se inverte:
+      as safras de junho a agosto somam <strong>5.881 planos, 40% de tudo que a rede vendeu no ano</strong>,
+      e são as que seguram cliente por menos tempo.
       <br><br>
-      Setembro ainda não pode ser avaliada: a primeira renovação dela acontece em outubro.
-      <strong>Não há evidência suficiente para concluir sobre a campanha de aniversário neste momento.</strong>
+      <strong>O ✓ marca as três campanhas diretamente comparáveis</strong> — nelas o cliente pagou valor cheio
+      desde o primeiro mês, sem desconto temporário distorcendo a leitura. Nas demais, o primeiro pagamento
+      de verdade cai no 2º ou 3º mês (detalhe na aba Retenção por Safra).
+      <br><br>
+      <strong>Setembro não pode ser avaliada ainda</strong> — a primeira renovação acontece em outubro.
+      Não há evidência suficiente para concluir sobre a campanha de aniversário neste momento.
     </div>`;
   box.innerHTML = h;
 
@@ -3561,15 +3570,16 @@ function fillRelCruz(mZero, mOut, uZero, uOut){
     O gráfico mostra uma relação que contraria a intuição: <strong>as safras que mais usam a clínica são as que menos ficam</strong>.
     <br><br>
     Entre os clientes que continuam pagando no 2º mês:
-    <br>• safras de <strong>entrada grátis</strong> (jun, jul, ago): <strong>${relBr(uZero)}%</strong> usam a clínica, e só <strong>${relBr(mZero)}%</strong> seguem pagando
-    <br>• demais safras: <strong>${relBr(uOut)}%</strong> usam a clínica, e <strong>${relBr(mOut)}%</strong> seguem pagando
+    <br>• <strong>junho, julho e agosto</strong> (plano mais barato ou entrada grátis): <strong>${relBr(uZero)}%</strong> usam a clínica, e só <strong>${relBr(mZero)}%</strong> seguem pagando
+    <br>• <strong>janeiro a maio</strong> (pagam cheio ou com desconto parcial): <strong>${relBr(uOut)}%</strong> usam a clínica, e <strong>${relBr(mOut)}%</strong> seguem pagando
     <br><br>
     <strong>Por que isso importa:</strong> é o perfil de cliente economicamente mais caro que existe —
     entra sem pagar, consome serviço de alto custo e sai antes de pagar por ele.
     <br><br>
     <strong>É consistente com o desenho das próprias campanhas:</strong> junho vendeu plano com
     <em>1 banho incluso por mês</em> e agosto incluiu <em>vacina antirrábica no plano</em>.
-    Entrada grátis somada a um benefício clínico consumível logo no início cria exatamente esse incentivo.
+    Entrada barata somada a um benefício clínico consumível logo no início cria exatamente esse incentivo —
+    e junho mostra que <strong>nem precisa ser de graça</strong>: basta ser barato.
     <br><br>
     <span style="color:#666">Nota de método: a leitura acima divide a utilização pela adimplência para comparar safras de tamanhos diferentes.
     A conclusão se mantém também na leitura bruta — as safras de entrada grátis usam mais a clínica dos dois jeitos.
@@ -3622,13 +3632,17 @@ function relFunilLinha(txt, cor, pct){
 // ── 8. insights ──
 function fillRelInsights(){
   const ins = [
-    { t:'Desconto parcial funciona. Entrada grátis, não.',
-      a:'Fevereiro deu 70% de desconto na 1ª mensalidade e perdeu 7 clientes em cada 100. Julho deu 100% e perdeu 14. Não foi uma piora gradual — foi um salto.',
-      p:'Existe um limite entre "desconto grande" e "de graça" em que a campanha para de atrair cliente e passa a atrair quem só queria o grátis. A evidência de 2026 coloca esse limite em algum ponto entre 70% e 100%.',
+    { t:'O que estraga a retenção é o preço de entrada, não o desconto',
+      a:'Comparando só as três campanhas em que o cliente pagou valor cheio desde o 1º mês: Abril perdeu 1, Janeiro perdeu 5 e Junho perdeu 17 clientes em cada 100. Junho não deu desconto nenhum — vendeu um plano mais barato com banho incluso.',
+      p:'Essa comparação é imune ao problema de medição das campanhas com mensalidade grátis, porque as três enfrentaram a mesma cobrança desde o começo. Ela mostra que um ponto de entrada mais barato traz um cliente com menor disposição a pagar, mesmo sem promoção envolvida.',
+      f:'Tratar lançamento de plano de entrada mais barato com o mesmo rigor de uma campanha de isenção: medir retenção antes de incorporar ao portfólio.' },
+    { t:'Existe um limite entre desconto grande e de graça',
+      a:'Fevereiro deu 70% de desconto na 1ª mensalidade e perdeu 7 clientes em cada 100. Julho deu 100% e perdeu 14. Agosto cobrou R$ 10 e perdeu 14 — entre dois pagamentos de R$ 10, antes de ver o valor cheio.',
+      p:'Não foi uma piora gradual conforme o desconto aumenta: foi um salto. Em algum ponto entre 70% e 100% a campanha deixa de atrair cliente e passa a atrair quem só queria o grátis.',
       f:'Definir um valor mínimo de desembolso na entrada para toda campanha de aquisição. Até 70% de desconto o comportamento do cliente se mantém.' },
     { t:'Benefício clínico embutido em entrada grátis acelera a saída',
       a:'As safras de junho a agosto usam a clínica 13 pontos mais que as demais e retêm 8 pontos menos. Junho vendia plano com banho mensal incluso; agosto, com vacina antirrábica inclusa.',
-      p:'A combinação entrada grátis + benefício consumível logo no início cria o incentivo perfeito para entrar, consumir e sair. O cliente extrai o valor antes de pagar por ele.',
+      p:'A combinação entrada grátis + benefício consumível logo no início cria o incentivo perfeito para entrar, consumir e sair. O cliente extrai o valor antes de pagar por ele — e fica na base 6 a 13 meses, contra 12 a 15 de quem paga para entrar.',
       f:'Nunca combinar as duas coisas na mesma oferta. Se a entrada for muito descontada, o benefício clínico deve ser liberado a partir do 3º mês.' },
     { t:'Dar presente não é a mesma coisa que dar desconto',
       a:'O CashPet de abril cobrou a mensalidade cheia e devolveu o valor em cashback de loja. Foi a melhor retenção do ano: 1 cliente perdido em cada 100.',
@@ -3670,11 +3684,12 @@ function fillRelRecom(){
     { t:'TESTAR', cor:'#1c5cab', bg:'#EEF2F9', itens:[
       'Repetir o CashPet em escala, numa data forte, para confirmar se a retenção se mantém com volume maior.',
       'No plano de junho (mais barato, com banho): comparar a renovação de quem assinou esse plano com quem assinou o padrão. O filtro PLANO do BI responde isso.',
-      'Fidelidade de 3 meses nas campanhas de entrada muito descontada, medindo se o volume cai menos do que a retenção sobe.'
+      'Fidelidade de 3 meses nas campanhas de entrada muito descontada, medindo se o volume cai menos do que a retenção sobe.',
+      'Adotar "meses de vida do cliente" como métrica oficial de campanha, no lugar de planos vendidos. Ela já está calculada na aba Retenção por Safra.'
     ]},
     { t:'EVITAR', cor:'#C00000', bg:'#FDECEA', itens:[
       'Isenção total da 1ª mensalidade sem nenhuma contrapartida de permanência.',
-      'Lançar plano de entrada mais barato como mecânica de campanha — junho mostrou que isso traz cliente de menor permanência mesmo sem desconto.',
+      'Lançar plano de entrada mais barato como mecânica de campanha sem medir retenção antes — junho é a prova mais limpa do ano: sem desconto nenhum, perdeu 17 em cada 100 e é a safra com menor tempo de vida entre as comparáveis.',
       'Avaliar campanha apenas pelo volume de planos vendidos no mês.'
     ]}
   ];
@@ -3700,6 +3715,7 @@ function createChartsRelatorio(){
     data:{ datasets:[
       { label:'Paga para entrar',  data:com.filter(s=>s.mec==='paga').map(s=>({x:s.adim1,y:relUsa(s),m:s.m,c:s.camp})), backgroundColor:'#1E7B45', pointRadius:11, pointHoverRadius:14 },
       { label:'Desconto parcial',  data:com.filter(s=>s.mec==='desc').map(s=>({x:s.adim1,y:relUsa(s),m:s.m,c:s.camp})), backgroundColor:'#1c5cab', pointRadius:11, pointHoverRadius:14 },
+      { label:'Plano mais barato',  data:com.filter(s=>s.mec==='preco').map(s=>({x:s.adim1,y:relUsa(s),m:s.m,c:s.camp})), backgroundColor:'#C09000', pointRadius:11, pointHoverRadius:14 },
       { label:'Entra de graça',    data:com.filter(s=>s.mec==='zero').map(s=>({x:s.adim1,y:relUsa(s),m:s.m,c:s.camp})), backgroundColor:'#C00000', pointRadius:11, pointHoverRadius:14 }
     ]},
     options:{
