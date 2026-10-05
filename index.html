@@ -107,7 +107,7 @@
   <div class="header-logo">Pet<span>de</span><br>Todos</div>
   <div class="header-title">
     <h1>Análise de Vendas – 2026</h1>
-    <p>Janeiro a Setembro 2026 · Fonte: Power BI + Google Sheets · Atualizado em 01/10/2026</p>
+    <p>Janeiro a Setembro 2026 · Fonte: Power BI + Google Sheets · Atualizado em 05/10/2026</p>
   </div>
   <div class="header-badges">
     <div class="badge">🔒 9 meses fechados</div>
@@ -123,6 +123,7 @@
   <button class="nav-btn" onclick="showTab('unidades',this)">Por Unidade – Set/26</button>
   <button class="nav-btn" onclick="showTab('performance',this)">Performance por Unidade</button>
   <button class="nav-btn" onclick="showTab('basecomp',this)">Base Comparável</button>
+  <button class="nav-btn" onclick="showTab('cohort',this)">Retenção por Safra</button>
   <button class="nav-btn" onclick="showTab('semanal',this)">Semanal Ago × Jul</button>
   <button class="nav-btn" onclick="showTab('banhos',this)">Banhos por Unidade</button>
   <button class="nav-btn" onclick="showTab('yoy',this)">2025 × 2026</button>
@@ -1006,7 +1007,97 @@
   </div>
 </div>
 
-<div class="footer">Pet de Todos · Análise de Vendas 2026 · Atualizado em 01/10/2026 · Fonte: Power BI + Planilha consolidada "Venda e Fat. (Plano e Clínica)"</div>
+<!-- ══ RETENÇÃO POR SAFRA ══ -->
+<div id="tab-cohort" class="tab-panel">
+  <div class="content">
+    <div class="tend-note">
+      🧲 <strong>Retenção por Safra (cohort) · safras de Jan a Set/2026</strong><br>
+      Fonte: Power BI "Mapa de Adimplência" · dados de 05/10/26 · calendário oficial da aba "Campanhas 2026" da planilha.
+      <strong>Como ler:</strong> cada linha é o grupo de clientes que assinou naquele mês. M0 é o mês da venda, M1 é a primeira renovação,
+      M2 a segunda, e assim por diante. O número é <strong>quanto da safra ainda está pagando</strong>.
+      <br><br>
+      <strong>Por que esta aba existe:</strong> todo o resto do painel mede a venda no momento em que ela acontece.
+      Esta é a única que mede <strong>se a venda sobreviveu</strong> — e é a que diz se uma campanha gerou cliente ou só gerou volume.
+    </div>
+
+    <div class="kpi-row" style="grid-template-columns:repeat(4,1fr)">
+      <div class="kpi-card">
+        <div class="kpi-label">Retenção na 1ª renovação · safras Jan–Mai</div>
+        <div class="kpi-value" id="ck-antes">—</div>
+        <div class="kpi-sub" id="ck-antes-sub">—</div>
+      </div>
+      <div class="kpi-card" style="border-left-color:#C00000">
+        <div class="kpi-label">Retenção na 1ª renovação · safras Jun–Ago</div>
+        <div class="kpi-value" id="ck-depois">—</div>
+        <div class="kpi-sub" id="ck-depois-sub">—</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">Melhor safra do ano</div>
+        <div class="kpi-value" style="font-size:18px" id="ck-melhor">—</div>
+        <div class="kpi-sub" id="ck-melhor-sub">—</div>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-label">Mensalidades pagas por 100 vendas (até o M3)</div>
+        <div class="kpi-value" id="ck-mens">—</div>
+        <div class="kpi-sub" id="ck-mens-sub">—</div>
+      </div>
+    </div>
+
+    <div class="tend-note" style="background:#EEF2F9;border-color:#B0C2E8" id="ck-lead"></div>
+
+    <!-- CURVAS -->
+    <div class="section">
+      <div class="section-header">📉 Curva de Sobrevivência das Safras</div>
+      <div class="section-body">
+        <div style="font-size:11px;color:#555;line-height:1.7;margin-bottom:14px;background:#f7f7f7;border-radius:8px;padding:10px 14px">
+          Todas as safras começam em ~98% no M0 e vão caindo. <strong>O que importa é a inclinação</strong>, não o ponto de partida.
+          As safras de <strong style="color:#1c5cab">janeiro a maio</strong> descem devagar e ficam agrupadas.
+          As de <strong style="color:#C00000">junho a agosto</strong> descolam para baixo logo na primeira renovação.
+          Os meses parciais (ainda dentro do ciclo de cobrança) ficam fora do gráfico.
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-title">Quanto de cada safra ainda está pagando, mês a mês após a venda</div>
+          <div class="chart-body" style="height:380px"><canvas id="ckCurvas"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MATRIZ -->
+    <div class="section">
+      <div class="section-header">🔢 Matriz Cohort · safra × meses desde a venda</div>
+      <div class="section-body">
+        <div id="ck-matriz"></div>
+      </div>
+    </div>
+
+    <!-- SAFRA x CAMPANHA -->
+    <div class="section">
+      <div class="section-header">🎯 Cada safra e a campanha que a trouxe</div>
+      <div class="section-body">
+        <div style="font-size:11px;color:#555;line-height:1.7;margin-bottom:14px;background:#f7f7f7;border-radius:8px;padding:10px 14px">
+          A coluna que decide é a <strong>perda na 1ª renovação</strong> (M0 → M1): é o momento em que o cliente paga
+          o primeiro valor cheio e decide se fica. Campanhas agrupadas pelo que o cliente <strong>desembolsa para entrar</strong>.
+        </div>
+        <div id="ck-campanhas"></div>
+      </div>
+    </div>
+
+    <!-- ALERTA -->
+    <div class="section">
+      <div class="section-header">⏳ O que ainda não foi medido</div>
+      <div class="section-body" id="ck-pendente"></div>
+    </div>
+
+    <!-- INSIGHTS -->
+    <div class="section">
+      <div class="section-header">💡 O que a retenção diz sobre as campanhas</div>
+      <div class="section-body" id="ck-insights"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">Pet de Todos · Análise de Vendas 2026 · Atualizado em 05/10/2026 · Fonte: Power BI + Planilha consolidada "Venda e Fat. (Plano e Clínica)"</div>
 
 <script>
 // ── DADOS MENSAIS ──
@@ -1199,6 +1290,7 @@ function showTab(name,btn) {
     if(name==='yoy'){ fillYoy(); createChartsYoy(); }
     if(name==='performance'){ fillPerformance(); fillMedia(); fillPreVenda(); fillEficiencia(); fillEficienciaLeitura(); fillPerfSparks(); createChartsPerf(); createChartMedia(); createChartEficiencia(); }
     if(name==='basecomp'){ fillBaseComp(); createChartsBaseComp(); }
+    if(name==='cohort'){ fillCohort(); createChartsCohort(); }
   },50);
 }
 
@@ -2923,7 +3015,330 @@ function createChartsBaseComp(){
 
 }
 
-fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillUnidades(); fillVolumeReceita(); fillSemanal(); fillYoy(); createCharts(); createChartFatTotal(); createChartsUnidade(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); populateBanhosTable(); createChartsSemanal(); createChartsYoy(); fillPerformance(); fillMedia(); fillPreVenda(); fillEficiencia(); fillEficienciaLeitura(); fillBaseComp();
+// ══ RETENÇÃO POR SAFRA (cohort) ══
+// Fonte: Power BI "Mapa de Adimplência" · aba Cohort · dados de 05/10/2026
+// Campanhas: aba "Campanhas 2026." da planilha consolidada
+// Cada array vai do M0 até o último mês FECHADO. Meses ainda dentro do ciclo de cobrança foram removidos.
+const ckSafras = [
+  { s:'Jan/26', r:[98.11,92.71,86.36,81.73,77.96,74.61,72.73,68.10],
+    camp:'— (só campanha de clínica)',                                        mec:'sem oferta de entrada',      grp:'integral' },
+  { s:'Fev/26', r:[98.13,90.57,84.34,81.94,76.96,74.11,70.20,64.23],
+    camp:'Festival de Verão · 70% off na 1ª mensalidade',                     mec:'desconto parcial',           grp:'parcial' },
+  { s:'Mar/26', r:[98.54,91.10,86.42,81.12,77.59,73.45,66.62],
+    camp:'Festival de Verão · 50% off nos planos',                            mec:'desconto parcial',           grp:'parcial' },
+  { s:'Abr/26', r:[91.34,89.94,84.49,72.91,68.11,62.61],
+    camp:'CashPet · paga a 1ª mensalidade e recebe o valor em cashback',      mec:'paga integral',              grp:'integral' },
+  { s:'Mai/26', r:[97.21,93.07,85.26,77.53,67.89],
+    camp:'Vantagens Pet · 50% off nos planos',                                mec:'desconto parcial',           grp:'parcial' },
+  { s:'Jun/26', r:[98.71,82.27,75.55,63.84],
+    camp:'Torcida CãoPeã · plano individual com 1 banho incluso por mês',     mec:'produto novo mais barato',   grp:'preco' },
+  { s:'Jul/26', r:[98.49,84.15,68.56],
+    camp:'Sem Pegadinha · 1ª mensalidade GRÁTIS + adesão R$ 9,90',            mec:'entrada quase zero',         grp:'zero' },
+  { s:'Ago/26', r:[98.27,84.13],
+    camp:'Pai de Pet é 10 · R$ 10 nas 2 primeiras mensalidades + adesão R$ 10', mec:'entrada quase zero',       grp:'zero' },
+  { s:'Set/26', r:[97.75],
+    camp:'Mês de Aniversário · 1º mês zero + 2º mês com 50% off',             mec:'entrada zero',               grp:'zero' }
+];
+const ckGrupos = {
+  integral: { lab:'Cliente paga integral na entrada', cor:'#1E7B45' },
+  parcial:  { lab:'Desconto parcial na 1ª mensalidade', cor:'#1c5cab' },
+  preco:    { lab:'Produto novo mais barato',          cor:'#C09000' },
+  zero:     { lab:'Entrada zero ou quase zero',        cor:'#C00000' }
+};
+// safras jan–mai em tons de azul; jun–set em tons de vermelho — o agrupamento É o achado
+const ckCores = ['#86b6ef','#5598e7','#2a78d6','#1c5cab','#0d366b','#e58a8a','#d03b3b','#a32020','#7a1515'];
+
+const ckPct = v => v.toFixed(1).replace('.',',')+'%';
+const ckPts = v => (v>=0?'+':'−')+Math.abs(v).toFixed(1).replace('.',',');
+
+// perda na 1ª renovação
+const ckM1 = u => u.r.length>1 ? u.r[1]-u.r[0] : null;
+
+function fillCohort(){
+  const el = document.getElementById('ck-antes');
+  if (!el || el.textContent !== '—') return;
+
+  const antes  = ckSafras.slice(0,5);
+  const depois = ckSafras.slice(5,8);           // jun, jul, ago (set ainda não tem M1)
+  const mAntes  = antes.reduce((a,u)=>a+u.r[1],0)/antes.length;
+  const mDepois = depois.reduce((a,u)=>a+u.r[1],0)/depois.length;
+  const pAntes  = antes.reduce((a,u)=>a+ckM1(u),0)/antes.length;
+  const pDepois = depois.reduce((a,u)=>a+ckM1(u),0)/depois.length;
+
+  el.innerHTML = `<span style="color:#1E7B45">${ckPct(mAntes)}</span>`;
+  document.getElementById('ck-antes-sub').innerHTML =
+    `Perde em média <strong>${ckPts(pAntes)} pontos</strong> do M0 para o M1`;
+  document.getElementById('ck-depois').innerHTML = `<span style="color:#C00000">${ckPct(mDepois)}</span>`;
+  document.getElementById('ck-depois-sub').innerHTML =
+    `Perde <strong>${ckPts(pDepois)} pontos</strong> — <strong>${(pDepois/pAntes).toFixed(1).replace('.',',')}× mais</strong>`;
+
+  const melhor = ckSafras.filter(u=>u.r.length>1).reduce((a,b)=>ckM1(a)>ckM1(b)?a:b);
+  document.getElementById('ck-melhor').textContent = melhor.s;
+  document.getElementById('ck-melhor-sub').innerHTML =
+    `Só <strong>${ckPts(ckM1(melhor))} ponto</strong> na 1ª renovação · ${melhor.mec}`;
+
+  // mensalidades pagas por 100 vendas até o M3
+  const ate3 = u => u.r.length>=4 ? u.r.slice(0,4).reduce((a,b)=>a+b,0) : null;
+  const base = ckSafras.slice(0,5).map(ate3).filter(x=>x!==null);
+  const mBase = base.reduce((a,b)=>a+b,0)/base.length;
+  const jun = ate3(ckSafras[5]);
+  document.getElementById('ck-mens').innerHTML =
+    `${Math.round(mBase)} <span style="font-size:14px;color:#888">→</span> <span style="color:#C00000">${Math.round(jun)}</span>`;
+  document.getElementById('ck-mens-sub').innerHTML =
+    `Jan–Mai → Jun · <strong>${((jun/mBase-1)*100).toFixed(1).replace('.',',')}%</strong>, antes de contar o ticket menor`;
+
+  document.getElementById('ck-lead').innerHTML =
+    `🎯 <strong>A resposta: a quebra tem mês e tem nome.</strong> Até maio a rede perdia de 1 a 8 pontos da safra na primeira renovação.
+     De junho em diante passou a perder <strong>${ckPts(pDepois)}</strong> — três meses seguidos, sem exceção.
+     <br><br>
+     E repare no que elimina a hipótese preguiçosa: <strong>o M0 de junho é 98,71%, o mais alto do ano</strong>.
+     A cobrança funciona, o cartão passa, o cadastro está certo. <strong>A perda é inteiramente na renovação</strong> —
+     não é problema de operação, é o cliente que a oferta trouxe.`;
+
+  fillCkMatriz();
+  fillCkCampanhas();
+  fillCkPendente();
+  fillCkInsights(pAntes, pDepois, mBase, jun);
+}
+
+// ── Matriz ──
+function fillCkMatriz(){
+  const maxM = Math.max(...ckSafras.map(u=>u.r.length));
+  const cor = v => {
+    if (v===null) return {bg:'#fafafa', fg:'#ccc'};
+    const t = Math.max(0, Math.min(1, (v-55)/45));     // 55% → 100%
+    return t>0.62 ? {bg:`rgba(30,123,69,${0.12+(t-0.62)*1.6})`, fg:'#14532d'}
+                  : {bg:`rgba(192,0,0,${0.10+(0.62-t)*1.1})`,  fg: t<0.25?'#fff':'#7f1d1d'};
+  };
+  let h = `<table style="font-size:11px"><thead><tr>
+    <th style="text-align:left">Safra</th><th style="text-align:left">Campanha de vendas do mês</th>`
+    + Array.from({length:maxM},(_,i)=>`<th style="text-align:center">M${i}</th>`).join('')
+    + `</tr></thead><tbody>`;
+  ckSafras.forEach((u,ui)=>{
+    const cels = Array.from({length:maxM},(_,i)=>{
+      const v = i<u.r.length ? u.r[i] : null;
+      const c = cor(v);
+      return `<td style="text-align:center;background:${c.bg};color:${c.fg};font-weight:${v===null?400:700};padding:7px 4px">${v===null?'':ckPct(v)}</td>`;
+    }).join('');
+    const g = ckGrupos[u.grp];
+    h += `<tr>
+      <td style="font-weight:800;white-space:nowrap"><span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${ckCores[ui]};margin-right:5px"></span>${u.s}</td>
+      <td style="font-size:10px;color:#444;line-height:1.4">${u.camp}
+        <div style="font-size:9px;font-weight:800;color:${g.cor};margin-top:2px">${u.mec.toUpperCase()}</div></td>
+      ${cels}</tr>`;
+  });
+  h += `</tbody></table>
+    <div style="margin-top:12px;font-size:11px;color:#666;background:#f5f5f5;border-radius:8px;padding:10px 14px;line-height:1.7">
+      As células vazias à direita são meses que <strong>ainda não aconteceram</strong> para aquela safra.
+      Os meses que estavam dentro do ciclo de cobrança no momento da extração foram retirados —
+      no print original do BI eles apareciam como 4%, 6%, 9%, que não são retenção, são cobrança em andamento.
+      <strong>Comparar safras só faz sentido na mesma coluna</strong> (mesma idade), nunca na diagonal.
+    </div>`;
+  document.getElementById('ck-matriz').innerHTML = h;
+}
+
+// ── Safra × campanha ──
+function fillCkCampanhas(){
+  const com = ckSafras.filter(u=>u.r.length>1);
+  const ord = com.slice().sort((a,b)=>ckM1(b)-ckM1(a));
+  let h = `<table style="font-size:11px"><thead><tr>
+    <th style="text-align:left">Safra</th><th style="text-align:left">Campanha</th>
+    <th style="text-align:left">O que o cliente desembolsa para entrar</th>
+    <th style="text-align:center">M0</th><th style="text-align:center">M1</th>
+    <th style="text-align:center">Perda na 1ª renovação</th></tr></thead><tbody>`;
+  ord.forEach(u=>{
+    const d = ckM1(u), g = ckGrupos[u.grp];
+    const ruim = d <= -12;
+    h += `<tr style="${ruim?'background:#FDECEA':(d>=-5?'background:#E6F5EC':'')}">
+      <td style="font-weight:800">${u.s}</td>
+      <td style="font-size:10px;line-height:1.4">${u.camp}</td>
+      <td><span style="display:inline-block;background:${g.cor};color:#fff;font-size:9px;font-weight:800;padding:3px 7px;border-radius:4px;white-space:nowrap">${g.lab}</span></td>
+      <td style="text-align:center">${ckPct(u.r[0])}</td>
+      <td style="text-align:center;font-weight:700">${ckPct(u.r[1])}</td>
+      <td style="text-align:center;font-weight:800;font-size:13px;color:${ruim?'#C00000':(d>=-5?'#1E7B45':'#856000')}">${ckPts(d)} pts</td>
+    </tr>`;
+  });
+  h += `</tbody></table>
+    <div style="margin-top:12px;font-size:11px;color:#333;background:#E6F5EC;border-left:4px solid #1E7B45;border-radius:8px;padding:11px 14px;line-height:1.75">
+      🔑 <strong>O padrão fica óbvio quando a tabela é ordenada pela perda:</strong> as cinco primeiras linhas são campanhas
+      em que o cliente <strong>paga alguma coisa de verdade</strong> para entrar — e as três últimas são aquelas em que ele
+      <strong>entra de graça ou quase</strong>. Não há uma única exceção nos dois sentidos.
+      <br><br>
+      <strong>Abril é o caso mais eloquente.</strong> O CashPet foi a única campanha do ano em que o cliente
+      <em>pagou a mensalidade cheia</em> — o benefício veio depois, em cashback para gastar na loja.
+      É a safra que melhor reteve em todo o ano: perdeu <strong>1,4 ponto</strong> na primeira renovação,
+      contra 16,4 de junho. <strong>Dar valor não é o mesmo que dar desconto</strong>, e abril é a prova disso dentro de casa.
+    </div>`;
+  document.getElementById('ck-campanhas').innerHTML = h;
+}
+
+// ── O que ainda não foi medido ──
+function fillCkPendente(){
+  document.getElementById('ck-pendente').innerHTML = `
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+    <div style="background:#FFF9E6;border-left:4px solid #C09000;border-radius:8px;padding:14px">
+      <div style="font-size:11px;font-weight:800;color:#856000;margin-bottom:8px">⏳ As duas campanhas mais agressivas do ano vencem agora</div>
+      <div style="font-size:11px;color:#333;line-height:1.75">
+        <strong>Agosto</strong> ("Pai de Pet é 10") está só no <strong>M1</strong>. O cliente pagou R$ 10 nas duas primeiras
+        mensalidades — o teste real é o <strong>M2, que fecha em outubro</strong>: é a primeira vez que ele paga o valor cheio.
+        <br><br>
+        <strong>Setembro</strong> ("Aniversário", 1º mês zero) está no <strong>M0</strong>. A primeira renovação
+        <strong>é agora, em outubro</strong>.
+        <br><br>
+        Ou seja: <strong>a conta das duas maiores campanhas de volume de 2026 vence neste mês</strong>.
+        Vale reservar a leitura desta aba para a primeira semana de novembro.
+      </div>
+    </div>
+    <div style="background:#FDECEA;border-left:4px solid #C00000;border-radius:8px;padding:14px">
+      <div style="font-size:11px;font-weight:800;color:#C00000;margin-bottom:8px">🚨 Novembro ainda está em planejamento — e repete a mecânica que não reteve</div>
+      <div style="font-size:11px;color:#333;line-height:1.75">
+        O calendário traz, com status <strong>"Em planejamento"</strong>:
+        <br><strong>Pet Friday — "Assine agora e comece a pagar em 2027"</strong> (1ª e 2ª mensalidades grátis, adesão R$ 9,90, de 23 a 27/11).
+        <br><br>
+        É a <strong>mecânica mais agressiva do ano</strong> — mais que julho, mais que setembro. E é exatamente o perfil
+        que produziu as três piores safras: entrada zero.
+        <br><br>
+        <strong>Ainda dá tempo de mudar.</strong> A sugestão não é cancelar: é trocar o eixo do benefício.
+        <strong>O modelo de abril (CashPet) entregou valor equivalente sem zerar a entrada</strong> — e reteve <strong>11× melhor</strong> que junho na primeira renovação.
+        Uma Pet Friday com adesão zerada + cashback/benefício de loja preserva o apelo da data
+        sem construir uma safra que evapora em janeiro.
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── Insights ──
+function fillCkInsights(pAntes, pDepois, mBase, jun){
+  document.getElementById('ck-insights').innerHTML = `
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+
+    <div style="background:#FDECEA;border-left:4px solid #C00000;border-radius:8px;padding:14px">
+      <div style="font-size:11px;font-weight:800;color:#C00000;margin-bottom:8px">🔴 1. O volume que a rede comemorou desde junho é mais frágil</div>
+      <div style="font-size:11px;color:#333;line-height:1.75">
+        Somando as mensalidades efetivamente pagas até o M3 — mesma régua para todas as safras —
+        jan–mai entregam <strong>${Math.round(mBase)} mensalidades por 100 vendas</strong> e junho entrega <strong>${Math.round(jun)}</strong>.
+        <strong>${((jun/mBase-1)*100).toFixed(1).replace('.',',')}%</strong>, ou ${Math.round(mBase-jun)} mensalidades a menos a cada 100 contratos.
+        <br><br>
+        E isso <strong>antes</strong> de considerar que o plano da Torcida CãoPeã é mais barato.
+        Menos meses pagos × ticket menor: o estrago na receita é bem maior que o percentual acima.
+        <br><br>
+        <strong>É o elo que faltava.</strong> O painel já mostrava volume subindo e receita não acompanhando —
+        esta aba mostra o mecanismo.
+      </div>
+    </div>
+
+    <div style="background:#E6F5EC;border-left:4px solid #1E7B45;border-radius:8px;padding:14px">
+      <div style="font-size:11px;font-weight:800;color:#1E7B45;margin-bottom:8px">🟢 2. Desconto parcial não quebra a retenção. Entrada zero quebra.</div>
+      <div style="font-size:11px;color:#333;line-height:1.75">
+        Fevereiro deu <strong>70% de desconto</strong> na 1ª mensalidade e perdeu 7,6 pontos.
+        Março e maio deram <strong>50%</strong> e perderam 7,4 e 4,1. São números normais.
+        <br><br>
+        Julho deu <strong>100%</strong> e perdeu <strong>14,3</strong>. Não é uma reta: é um degrau.
+        <strong>Existe um ponto entre 70% e 100% em que a campanha deixa de atrair cliente e passa a atrair oportunidade.</strong>
+        <br><br>
+        <strong>Ação:</strong> estabelecer um piso de desembolso na entrada. A evidência de 2026 sugere que
+        <strong>até 70% de desconto o cliente continua se comportando como cliente</strong> — abaixo disso, não.
+      </div>
+    </div>
+
+    <div style="background:#FFF9E6;border-left:4px solid #C09000;border-radius:8px;padding:14px">
+      <div style="font-size:11px;font-weight:800;color:#856000;margin-bottom:8px">🟡 3. Junho não teve desconto — e mesmo assim quebrou</div>
+      <div style="font-size:11px;color:#333;line-height:1.75">
+        A Torcida CãoPeã não zerou nada: lançou um <strong>plano individual mais barato com 1 banho incluso</strong>.
+        Ainda assim é a pior safra do ano na 1ª renovação (<strong>−16,4 pontos</strong>).
+        <br><br>
+        Isso importa porque mostra que <strong>o problema não é só o desconto — é o preço de entrada do produto</strong>.
+        Um plano mais barato traz um cliente com menor disposição a pagar, e ele sai no primeiro boleto cheio.
+        <br><br>
+        <strong>Investigar:</strong> a safra de junho que assinou o plano com banho renova diferente da que assinou
+        o plano padrão? O filtro PLANO do BI responde isso em dois cliques, e a resposta define se o produto fica no portfólio.
+      </div>
+    </div>
+
+    <div style="background:#EEF2F9;border-left:4px solid #1F3864;border-radius:8px;padding:14px">
+      <div style="font-size:11px;font-weight:800;color:#1F3864;margin-bottom:8px">🔵 4. O que medir a partir de agora</div>
+      <div style="font-size:11px;color:#333;line-height:1.75">
+        Toda campanha de vendas passa a ter <strong>duas notas</strong>, não uma:
+        quantos planos trouxe <em>e</em> quanto da safra sobreviveu ao M3.
+        <br><br>
+        Sugestão de meta simples e verificável: <strong>nenhuma safra perde mais de 8 pontos na 1ª renovação</strong>.
+        É o pior resultado das safras de jan–mai, então é um patamar que a rede já provou conseguir entregar.
+        <br><br>
+        <strong>Métrica única para comparar campanhas:</strong> mensalidades pagas por 100 vendas até o M3.
+        Ela junta volume e sobrevivência num número só e permite ranquear campanhas com mecânicas diferentes
+        na mesma régua — que é o que a diretoria precisa para decidir o calendário de 2027.
+      </div>
+    </div>
+
+    <div style="grid-column:1 / -1;background:#1F3864;color:#fff;border-radius:8px;padding:16px 18px">
+      <div style="font-size:12px;font-weight:800;margin-bottom:8px">🎯 A conclusão que vale levar para a diretoria</div>
+      <div style="font-size:11.5px;line-height:1.8;opacity:.95">
+        <strong>As campanhas de 2026 cumpriram a meta de volume e falharam na de valor — e dá para datar quando isso começou.</strong>
+        Até maio, a rede perdia em média ${ckPts(pAntes)} pontos da safra na primeira renovação.
+        De junho em diante, ${ckPts(pDepois)} — ${(pDepois/pAntes).toFixed(1).replace('.',',')}× mais, em três meses seguidos,
+        exatamente quando o calendário trocou desconto parcial por entrada zero.
+        <br><br>
+        <strong>A boa notícia é que a resposta já existe dentro de casa.</strong> Abril fez a melhor retenção do ano
+        com uma campanha que não deu desconto nenhum na entrada — deu cashback depois.
+        Mesma atratividade comercial, cliente que paga, safra que fica.
+        <br><br>
+        <strong>A decisão concreta e com prazo:</strong> a Pet Friday de novembro, ainda em planejamento, repete a mecânica
+        de entrada zero na forma mais extrema do ano (duas mensalidades grátis). Redesenhá-la no modelo CashPet
+        é a decisão de maior impacto disponível hoje — e a janela para tomá-la fecha nas próximas semanas.
+      </div>
+    </div>
+
+  </div>`;
+}
+
+// ── Gráfico de curvas ──
+function createChartsCohort(){
+  const el = document.getElementById('ckCurvas');
+  if (!el || Chart.getChart(el)) return;
+  const maxM = Math.max(...ckSafras.map(u=>u.r.length));
+  charts.ckCurvas = new Chart(el, {
+    type:'line',
+    data:{
+      labels: Array.from({length:maxM},(_,i)=>'M'+i),
+      datasets: ckSafras.map((u,i)=>({
+        label: u.s,
+        data: u.r,
+        borderColor: ckCores[i],
+        backgroundColor: ckCores[i],
+        borderWidth: u.grp==='zero' || u.grp==='preco' ? 2.6 : 2,
+        tension: 0.15,
+        pointRadius: 3,
+        pointHoverRadius: 6,
+        pointBackgroundColor: ckCores[i],
+        pointBorderColor:'#fff',
+        pointBorderWidth: 1.2
+      }))
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      interaction:{mode:'index', intersect:false},
+      plugins:{
+        legend:{position:'bottom',labels:{font:{size:10},boxWidth:16,boxHeight:3}},
+        datalabels:{display:false},
+        tooltip:{callbacks:{
+          title:c=>'Mês '+c[0].label+' após a venda',
+          label:c=>{
+            const u = ckSafras[c.datasetIndex];
+            return `${u.s}: ${ckPct(c.raw)} ainda pagando  ·  ${u.mec}`;
+          }
+        }}
+      },
+      scales:{
+        y:{ min:55, max:100, grid:{color:'#eee'},
+            ticks:{font:{size:10}, callback:v=>v+'%'},
+            title:{display:true,text:'% da safra ainda pagando',font:{size:10}} },
+        x:{ grid:{display:false}, ticks:{font:{size:11}} }
+      }
+    }
+  });
+}
+
+fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillUnidades(); fillVolumeReceita(); fillSemanal(); fillYoy(); createCharts(); createChartFatTotal(); createChartsUnidade(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); populateBanhosTable(); createChartsSemanal(); createChartsYoy(); fillPerformance(); fillMedia(); fillPreVenda(); fillEficiencia(); fillEficienciaLeitura(); fillBaseComp(); fillCohort();
 
 </script>
 </body>
