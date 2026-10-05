@@ -170,6 +170,8 @@
               As campanhas de <strong>junho, julho e agosto</strong> perderam <strong>15 clientes em cada 100</strong>
               já na primeira renovação, contra <strong>5 em cada 100</strong> nas campanhas de janeiro a maio.
               São <strong>466 clientes</strong> que teriam ficado se tivessem retido no padrão da casa.
+              A diferença se confirma também <strong>na comparação mês a mês, na mesma idade de contrato</strong>
+              (aba Retenção por Safra).
             </div>
           </div>
 
@@ -1126,6 +1128,44 @@
       <div class="section-header">🔢 Tabela completa · de cada 100 que assinaram, quantos seguem pagando</div>
       <div class="section-body">
         <div id="ck-matriz"></div>
+      </div>
+    </div>
+
+    <!-- RESSALVA METODOLÓGICA -->
+    <div class="section">
+      <div class="section-header">⚠️ Ressalva importante · a 1ª renovação não é o mesmo evento em todas as safras</div>
+      <div class="section-body">
+        <div style="font-size:12.5px;color:#333;line-height:1.85;background:#FFF9E6;border-left:4px solid #C09000;border-radius:8px;padding:14px 16px;margin-bottom:14px">
+          Nas campanhas de mensalidade grátis ou de R$ 10, o sistema registra o 1º mês como <strong>pago</strong>
+          mesmo sem dinheiro entrando. Por isso o salto do 1º para o 2º mês <strong>não mede a mesma coisa</strong>
+          em todas as safras: em algumas é a primeira cobrança de verdade, em outras o cliente ainda está no desconto.
+          <br><br>
+          A tabela abaixo mostra em que mês cai o <strong>primeiro pagamento de valor cheio</strong> de cada campanha.
+          Os blocos seguintes trazem a comparação que não sofre com isso.
+        </div>
+        <div id="ck-metodo"></div>
+      </div>
+    </div>
+
+    <!-- SOBREVIVÊNCIA NA MESMA IDADE -->
+    <div class="section">
+      <div class="section-header">🔬 A comparação que resiste · de cada 100 que estavam pagando, quantos continuaram no mês seguinte</div>
+      <div class="section-body">
+        <div style="font-size:12.5px;color:#555;line-height:1.85;margin-bottom:14px;background:#f7f7f7;border-radius:8px;padding:12px 15px">
+          Aqui não se compara "a safra inteira desde o começo" — compara-se <strong>mês a mês, na mesma idade de contrato</strong>.
+          De quem estava pagando no 2º mês, quantos pagaram o 3º? E assim por diante.
+          <br>
+          É a forma de responder a objeção óbvia: <em>"não é só que as campanhas novas perdem mais no começo, como toda campanha?"</em>
+        </div>
+        <div id="ck-idade"></div>
+      </div>
+    </div>
+
+    <!-- TEMPO DE VIDA -->
+    <div class="section">
+      <div class="section-header">⏱️ Quanto tempo o cliente fica na base, por tipo de campanha</div>
+      <div class="section-body">
+        <div id="ck-vida"></div>
       </div>
     </div>
 
@@ -2997,6 +3037,9 @@ function fillCohort(){
 
   fillCkCampanhas();
   fillCkMatriz();
+  fillCkMetodo();
+  fillCkIdade();
+  fillCkVida();
   fillCkPendente();
   fillCkInsights(mAntes, mDepois);
 }
@@ -3199,6 +3242,151 @@ function fillCkInsights(mAntes, mDepois){
     </div>
 
   </div>`;
+}
+
+
+// ── quando cai o 1º pagamento integral de cada safra ──
+const ckIntegral = {
+  'Janeiro':  {m:0,  nota:'Sem campanha de vendas — paga cheio desde o 1º mês'},
+  'Fevereiro':{m:1,  nota:'1º mês com 70% de desconto'},
+  'Março':    {m:'?',nota:'Mecânica do "50% nos planos" a confirmar com o comercial'},
+  'Abril':    {m:0,  nota:'CashPet — paga cheio e recebe cashback depois'},
+  'Maio':     {m:'?',nota:'Mecânica do "50% nos planos" a confirmar com o comercial'},
+  'Junho':    {m:0,  nota:'Plano mais barato, sem desconto temporário — paga cheio desde o 1º mês'},
+  'Julho':    {m:1,  nota:'1º mês grátis'},
+  'Agosto':   {m:2,  nota:'1º e 2º meses a R$ 10'},
+  'Setembro': {m:2,  nota:'1º mês zero, 2º com 50%'}
+};
+const ckMesNome = m => m===0 ? '1º mês' : m===1 ? '2º mês' : m===2 ? '3º mês' : '—';
+
+function fillCkMetodo(){
+  const box=document.getElementById('ck-metodo'); if(!box||box.innerHTML.trim()!=='') return;
+  let h=`<table style="font-size:12px"><thead><tr>
+    <th style="text-align:left">Safra</th><th style="text-align:left">Campanha</th>
+    <th style="text-align:center">1º pagamento<br>de valor cheio</th>
+    <th style="text-align:left">O que a queda do 1º para o 2º mês mede</th></tr></thead><tbody>`;
+  ckSafras.forEach(u=>{
+    const g=ckIntegral[u.s];
+    const ok = g.m===0;
+    const amb = g.m==='?';
+    const lab = ok ? {t:'comparável direto',c:'#1E7B45'}
+              : amb ? {t:'a confirmar',c:'#C09000'}
+              : g.m===1 ? {t:'grátis → 1º pagamento',c:'#1c5cab'}
+                        : {t:'desconto → desconto',c:'#C00000'};
+    h+=`<tr style="${ok?'background:#E6F5EC':''}">
+      <td style="font-weight:800">${u.s}</td>
+      <td style="font-size:11px;line-height:1.4">${g.nota}</td>
+      <td style="text-align:center;font-weight:800;font-size:13px">${ckMesNome(g.m)}</td>
+      <td><span style="display:inline-block;background:${lab.c};color:#fff;font-size:10px;font-weight:800;padding:3px 8px;border-radius:4px">${lab.t}</span></td>
+    </tr>`;
+  });
+  h+=`</tbody></table>
+  <div style="margin-top:13px;font-size:12.5px;color:#333;background:#E6F5EC;border-left:4px solid #1E7B45;border-radius:8px;padding:13px 16px;line-height:1.85">
+    <strong>Três safras são 100% comparáveis entre si</strong> porque todas pagaram valor cheio desde o primeiro mês:
+    <strong>Janeiro perdeu 5, Abril perdeu 1 e Junho perdeu 17</strong> clientes em cada 100.
+    <br><br>
+    <strong>E Junho é o caso mais forte da análise inteira</strong>, justamente porque não teve desconto nenhum.
+    A campanha dela foi um <em>plano mais barato</em> — o cliente pagou o valor integral desde o começo e mesmo assim saiu.
+    Isso mostra que <strong>o problema não é o desconto temporário: é o preço de entrada do produto</strong>.
+    <br><br>
+    <strong>Agosto merece uma leitura à parte:</strong> perdeu 14 em cada 100 <em>entre dois pagamentos de R$ 10</em>,
+    ou seja, desistiu antes mesmo de ver o valor cheio.
+  </div>`;
+  box.innerHTML=h;
+}
+
+// ── sobrevivência mensal por idade de contrato ──
+function ckSobrev(u){ return u.r.slice(0,-1).map((v,i)=>u.r[i+1]/v*100); }
+function fillCkIdade(){
+  const box=document.getElementById('ck-idade'); if(!box||box.innerHTML.trim()!=='') return;
+  const com=ckSafras.filter(u=>u.r.length>1);
+  const maduras=['Janeiro','Fevereiro','Março'];
+  const maxT=Math.max(...com.map(u=>u.r.length-1));
+  const medias=[];
+  for(let t=0;t<maxT;t++){
+    const v=com.filter(u=>maduras.includes(u.s)&&u.r.length>t+1).map(u=>ckSobrev(u)[t]);
+    medias.push(v.length?v.reduce((a,b)=>a+b,0)/v.length:null);
+  }
+  const lab=['1º→2º','2º→3º','3º→4º','4º→5º','5º→6º','6º→7º','7º→8º'];
+  let h=`<table style="font-size:12px"><thead><tr>
+    <th style="text-align:left">Safra</th><th style="text-align:left">Tipo de campanha</th>`
+    +lab.slice(0,maxT).map(l=>`<th style="text-align:center;font-size:10px">${l}<br>mês</th>`).join('')
+    +`</tr></thead><tbody>`;
+  com.forEach(u=>{
+    const sv=ckSobrev(u), g=ckGrupos[u.grp];
+    const cels=Array.from({length:maxT},(_,t)=>{
+      if(t>=sv.length) return '<td style="background:#fafafa"></td>';
+      const d = medias[t]!==null ? sv[t]-medias[t] : 0;
+      const bg = d<=-5 ? 'rgba(192,0,0,.55)' : d<=-2 ? 'rgba(192,0,0,.22)' : d>=2 ? 'rgba(30,123,69,.22)' : '#f5f5f5';
+      const fg = d<=-5 ? '#fff' : '#333';
+      return `<td style="text-align:center;background:${bg};color:${fg};font-weight:800;padding:8px 4px">${Math.round(sv[t])}</td>`;
+    }).join('');
+    h+=`<tr><td style="font-weight:800;white-space:nowrap">${u.s}</td>
+      <td><span style="display:inline-block;background:${g.cor};color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:4px">${g.lab}</span></td>
+      ${cels}</tr>`;
+  });
+  h+=`<tr style="border-top:2px solid #1F3864"><td colspan="2" style="font-weight:800;color:#1F3864">MÉDIA DAS SAFRAS DE JAN A MAR</td>`
+    +medias.map(m=>`<td style="text-align:center;font-weight:800;color:#1F3864">${m===null?'':Math.round(m)}</td>`).join('')+`</tr>`;
+  h+=`</tbody></table>
+  <div style="margin-top:13px;font-size:12.5px;color:#333;background:#FDECEA;border-left:4px solid #C00000;border-radius:8px;padding:13px 16px;line-height:1.85">
+    <strong>A objeção não se sustenta.</strong> Se fosse só "churn normal de começo de contrato",
+    as safras de junho e julho alcançariam as outras depois do primeiro tranco. Não alcançam:
+    <br>
+    • do 2º para o 3º mês — maduras <strong>94</strong>, Julho <strong>82</strong>
+    <br>
+    • do 3º para o 4º mês — maduras <strong>95</strong>, Junho <strong>85</strong>
+    <br><br>
+    Elas perdem mais <strong>em todas as idades medidas</strong>, não só na entrada. É diferença de qualidade do cliente,
+    não de fase do contrato.
+  </div>`;
+  box.innerHTML=h;
+}
+
+// ── tempo médio de vida ──
+function fillCkVida(){
+  const box=document.getElementById('ck-vida'); if(!box||box.innerHTML.trim()!=='') return;
+  const P_MADURA=0.948;
+  const proj=(r,p,h=36)=>{ let o=r.reduce((a,b)=>a+b/100,0), n=r[r.length-1]/100, c=0;
+    for(let i=0;i<h-r.length;i++){ n*=p; c+=n; } return o+c; };
+  const linhas=[
+    {t:'Paga o valor cheio para entrar', s:['Janeiro','Abril'],             cor:'#1E7B45'},
+    {t:'Desconto parcial na entrada',    s:['Fevereiro','Março','Maio'],    cor:'#1c5cab'},
+    {t:'Plano mais barato',              s:['Junho'],                       cor:'#C09000'},
+    {t:'Entrada grátis ou quase',        s:['Julho','Agosto'],              cor:'#C00000'}
+  ];
+  let h=`<table style="font-size:12px"><thead><tr>
+    <th style="text-align:left">Tipo de campanha</th><th style="text-align:left">Safras</th>
+    <th style="text-align:center">Meses já pagos<br><span style="font-weight:400;font-size:9px">observado, é fato</span></th>
+    <th style="text-align:center">Vida total estimada<br><span style="font-weight:400;font-size:9px">faixa, é projeção</span></th>
+  </tr></thead><tbody>`;
+  linhas.forEach(L=>{
+    const us=ckSafras.filter(u=>L.s.includes(u.s));
+    const obs=us.reduce((a,u)=>a+u.r.reduce((x,y)=>x+y/100,0),0)/us.length;
+    const ot=us.reduce((a,u)=>a+proj(u.r,P_MADURA),0)/us.length;
+    const pe=us.reduce((a,u)=>{ const sv=ckSobrev(u).slice(-2); return a+proj(u.r, Math.min(sv.reduce((x,y)=>x+y,0)/sv.length/100,0.995)); },0)/us.length;
+    const lo=Math.min(ot,pe), hi=Math.max(ot,pe);
+    h+=`<tr><td style="font-weight:800;color:${L.cor}">${L.t}</td>
+      <td style="font-size:11px;color:#666">${L.s.join(', ')}</td>
+      <td style="text-align:center;font-weight:700">${obs.toFixed(1).replace('.',',')}</td>
+      <td style="text-align:center;font-size:15px;font-weight:800;color:${L.cor}">${lo.toFixed(0)} a ${hi.toFixed(0)} meses</td></tr>`;
+  });
+  h+=`</tbody></table>
+  <div style="margin-top:13px;font-size:12.5px;color:#333;background:#EEF2F9;border-left:4px solid #1F3864;border-radius:8px;padding:13px 16px;line-height:1.85">
+    <strong>Como ler, e onde está o limite do dado:</strong> a coluna "meses já pagos" é fato — é o que cada safra
+    efetivamente pagou até hoje. Ela é menor nas campanhas recentes simplesmente porque elas são mais novas.
+    <br><br>
+    A coluna da direita é <strong>projeção</strong>, por isso vem em faixa: o extremo otimista assume que a safra
+    vai se comportar como as de janeiro a março daqui para frente; o pessimista assume que mantém o próprio ritmo atual.
+    <strong>A comparação na mesma idade (bloco acima) sugere que a realidade fica mais perto do extremo pessimista.</strong>
+    <br><br>
+    ⚠️ <strong>Julho e Agosto têm só 2 e 3 meses de histórico.</strong> A faixa larga delas é honestidade, não precisão:
+    <strong>não há dado suficiente para cravar a vida média dessas safras</strong>. O número confiável chega em fevereiro de 2027.
+    <br><br>
+    <strong>O que já dá para afirmar:</strong> no cenário pessimista — o mais compatível com a comparação na mesma idade —
+    o cliente que paga para entrar fica na base <strong>mais que o dobro do tempo</strong> de quem entra de graça
+    (14 contra 6 meses). Mesmo no cenário otimista, nenhuma campanha de entrada grátis supera as que cobram.
+  </div>`;
+  box.innerHTML=h;
 }
 
 // ── Gráfico ──
