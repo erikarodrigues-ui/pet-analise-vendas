@@ -116,7 +116,8 @@
 </div>
 
 <div class="nav">
-  <button class="nav-btn active" onclick="showTab('resumo',this)">Resumo Executivo</button>
+  <button class="nav-btn active" onclick="showTab('relatorio',this)">📄 RELATÓRIO</button>
+  <button class="nav-btn" onclick="showTab('resumo',this)">Resumo Executivo</button>
   <button class="nav-btn" onclick="showTab('clinica',this)">Fat. Clínica</button>
   <button class="nav-btn" onclick="showTab('plano',this)">Fat. Plano</button>
   <button class="nav-btn" onclick="showTab('vendas',this)">Venda de Planos</button>
@@ -129,8 +130,183 @@
   <button class="nav-btn" onclick="showTab('yoy',this)">2025 × 2026</button>
 </div>
 
+<!-- ══ RELATÓRIO EXECUTIVO ══ -->
+<div id="tab-relatorio" class="tab-panel active">
+  <div class="content">
+
+    <div class="tend-note">
+      📄 <strong>Relatório de Vendas, Campanhas e Retenção · Janeiro a Setembro de 2026</strong><br>
+      Fontes: BI de Vendas · BI Mapa de Adimplência (05/10) · BI Uso Clínica (29/09) · planilha consolidada.
+      As abas seguintes deste painel são o detalhamento — <strong>este relatório é a leitura</strong>.
+    </div>
+
+    <!-- 1. RESUMO EXECUTIVO -->
+    <div class="section">
+      <div class="section-header">1 · Resumo Executivo</div>
+      <div class="section-body">
+
+        <div style="background:#1F3864;color:#fff;border-radius:10px;padding:18px 20px;margin-bottom:14px">
+          <div style="font-size:11px;font-weight:800;letter-spacing:.5px;opacity:.75;margin-bottom:6px">RESULTADO</div>
+          <div style="font-size:14px;line-height:1.75;font-weight:600">
+            A rede cresceu em tudo: no 3º trimestre vende <strong>46% mais planos</strong> e fatura
+            <strong>20% mais em plano</strong> e <strong>31% mais na clínica</strong> que no 1º semestre.
+            Acumulado de Jan a Set: <strong>14.560 planos</strong> e <strong>R$ 14,43 milhões</strong>.
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px">
+
+          <div style="background:#E6F5EC;border-left:4px solid #1E7B45;border-radius:8px;padding:15px">
+            <div style="font-size:11px;font-weight:800;color:#1E7B45;letter-spacing:.4px;margin-bottom:7px">✅ INSIGHT 1 · O crescimento é real, não é só abrir loja</div>
+            <div style="font-size:12.5px;color:#333;line-height:1.8">
+              Isolando as <strong>7 unidades que já operavam no começo do ano</strong>, elas sozinhas cresceram
+              <strong>+27% em planos</strong>, <strong>+10% em Fat. Plano</strong> e <strong>+11% em Fat. Clínica</strong>.
+              A operação que já existia melhorou por mérito próprio — esse é o número que sustenta a tese de franquia.
+            </div>
+          </div>
+
+          <div style="background:#FDECEA;border-left:4px solid #C00000;border-radius:8px;padding:15px">
+            <div style="font-size:11px;font-weight:800;color:#C00000;letter-spacing:.4px;margin-bottom:7px">⚠️ ALERTA 1 · O volume novo não fica</div>
+            <div style="font-size:12.5px;color:#333;line-height:1.8">
+              As campanhas de <strong>junho, julho e agosto</strong> perderam <strong>15 clientes em cada 100</strong>
+              já na primeira renovação, contra <strong>5 em cada 100</strong> nas campanhas de janeiro a maio.
+              São <strong>466 clientes</strong> que teriam ficado se tivessem retido no padrão da casa.
+            </div>
+          </div>
+
+          <div style="background:#FDECEA;border-left:4px solid #C00000;border-radius:8px;padding:15px">
+            <div style="font-size:11px;font-weight:800;color:#C00000;letter-spacing:.4px;margin-bottom:7px">🚨 ALERTA 2 · E ainda usam mais a clínica antes de sair</div>
+            <div style="font-size:12.5px;color:#333;line-height:1.8">
+              Entre os que continuam pagando no 2º mês, <strong>54% das safras de entrada zero usam a clínica</strong>,
+              contra <strong>41% das demais</strong>. É o perfil economicamente mais caro possível:
+              <strong>consome muito e paga por pouco tempo</strong>.
+            </div>
+          </div>
+
+          <div style="background:#EEF2F9;border-left:4px solid #1F3864;border-radius:8px;padding:15px">
+            <div style="font-size:11px;font-weight:800;color:#1F3864;letter-spacing:.4px;margin-bottom:7px">💡 INSIGHT 2 · A solução já foi testada aqui dentro</div>
+            <div style="font-size:12.5px;color:#333;line-height:1.8">
+              <strong>Abril (CashPet)</strong> foi a única campanha do ano em que o cliente pagou a mensalidade cheia —
+              o presente veio depois, em cashback de loja. Perdeu <strong>1 cliente em cada 100</strong>.
+              Mesma atratividade comercial, sem o custo de retenção.
+            </div>
+          </div>
+
+        </div>
+
+        <div style="background:#C00000;color:#fff;border-radius:10px;padding:18px 20px;margin-top:14px">
+          <div style="font-size:11px;font-weight:800;letter-spacing:.5px;opacity:.85;margin-bottom:6px">RECOMENDAÇÃO · COM PRAZO</div>
+          <div style="font-size:14px;line-height:1.75;font-weight:600">
+            Redesenhar a <strong>Pet Friday de novembro</strong> antes que ela rode. Hoje ela está planejada como
+            "1ª e 2ª mensalidades grátis" — a oferta de entrada mais generosa do ano, exatamente o formato que
+            produziu as três piores safras. <strong>Trocar para adesão zerada + cashback</strong> mantém o apelo da data
+            e preserva a receita recorrente.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 2. PERFORMANCE DA REDE -->
+    <div class="section">
+      <div class="section-header">2 · Performance da Rede</div>
+      <div class="section-body">
+        <div class="kpi-row" style="grid-template-columns:repeat(4,1fr)">
+          <div class="kpi-card green">
+            <div class="kpi-label">Planos vendidos · Jul–Set vs 1º semestre</div>
+            <div class="kpi-value">+46,3%</div>
+            <div class="kpi-sub">1.401 → 2.051 por mês</div>
+          </div>
+          <div class="kpi-card blue">
+            <div class="kpi-label">Fat. Clínica · Jul–Set vs 1º semestre</div>
+            <div class="kpi-value">+31,4%</div>
+            <div class="kpi-sub">R$ 993 mil → R$ 1,30 mi por mês</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Fat. Plano · Jul–Set vs 1º semestre</div>
+            <div class="kpi-value">+19,8%</div>
+            <div class="kpi-sub">R$ 476 mil → R$ 570 mil por mês</div>
+          </div>
+          <div class="kpi-card" style="border-left-color:#C00000">
+            <div class="kpi-label">Receita de plano por venda nova</div>
+            <div class="kpi-value">R$ 376 → R$ 269</div>
+            <div class="kpi-sub">Jan → Set · o indicador que merece atenção</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;font-size:12.5px;color:#333;background:#f7f7f7;border-radius:8px;padding:13px 16px;line-height:1.85">
+          <strong>A rede cresceu, e cresceu em todas as linhas.</strong> O indicador que mais contribuiu foi o
+          <strong>volume de planos (+46%)</strong>, puxado pelas campanhas do 2º semestre e pela entrada de unidades novas.
+          <br><br>
+          <strong>O indicador que merece atenção é a receita de plano por venda nova:</strong> caiu de R$ 376 em janeiro
+          para R$ 269 em setembro. Vender mais deixou de significar faturar proporcionalmente mais —
+          e é esse descolamento que as seções 5 a 7 explicam.
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. PERFORMANCE DAS CAMPANHAS -->
+    <div class="section">
+      <div class="section-header">3 · Performance das Campanhas · aquisição × retenção</div>
+      <div class="section-body">
+        <div style="font-size:12.5px;color:#555;line-height:1.8;margin-bottom:14px;background:#f7f7f7;border-radius:8px;padding:12px 15px">
+          <strong>Objetivo de todas as campanhas de 2026:</strong> vender planos.
+          Todas bateram a meta de volume — por isso a coluna que decide aqui não é quantos planos trouxe,
+          e sim <strong>quantos clientes continuaram pagando</strong>.
+          <br>
+          Comparação usada: cada safra contra as demais <strong>na mesma idade de contrato</strong> (1ª renovação),
+          que é a única comparação justa entre campanhas de meses diferentes.
+        </div>
+        <div id="rel-campanhas"></div>
+      </div>
+    </div>
+
+    <!-- 4. UNIDADES -->
+    <div class="section">
+      <div class="section-header">4 · Performance por Unidade · só o que merece destaque</div>
+      <div class="section-body">
+        <div style="font-size:12.5px;color:#555;line-height:1.8;margin-bottom:14px;background:#f7f7f7;border-radius:8px;padding:12px 15px">
+          Base: as <strong>7 unidades em operação o ano inteiro</strong>, comparadas com a própria média do 1º semestre.
+          Unidades novas ficam de fora porque qualquer comparação com o próprio mês de abertura distorce o resultado.
+        </div>
+        <div id="rel-unidades"></div>
+      </div>
+    </div>
+
+    <!-- 5 e 6. COHORTS -->
+    <div class="section">
+      <div class="section-header">5 e 6 · Retenção e Utilização por Safra</div>
+      <div class="section-body">
+        <div class="chart-wrap" style="margin-bottom:14px">
+          <div class="chart-title">O cruzamento que explica o ano · cada ponto é um mês de vendas</div>
+          <div class="chart-body" style="height:400px"><canvas id="relCruz"></canvas></div>
+        </div>
+        <div id="rel-cruz-txt"></div>
+      </div>
+    </div>
+
+    <!-- 7. CRUZAMENTO -->
+    <div class="section">
+      <div class="section-header">7 · Estamos adquirindo clientes ou construindo base?</div>
+      <div class="section-body" id="rel-funil"></div>
+    </div>
+
+    <!-- 8. INSIGHTS -->
+    <div class="section">
+      <div class="section-header">8 · Insights de Marketing</div>
+      <div class="section-body" id="rel-insights"></div>
+    </div>
+
+    <!-- 9. RECOMENDAÇÕES -->
+    <div class="section">
+      <div class="section-header">9 · Recomendações</div>
+      <div class="section-body" id="rel-recom"></div>
+    </div>
+
+  </div>
+</div>
+
 <!-- ══ RESUMO ══ -->
-<div id="tab-resumo" class="tab-panel active">
+<div id="tab-resumo" class="tab-panel">
   <div class="content">
 
     <div class="lead-box">
@@ -1320,6 +1496,7 @@ function showTab(name,btn) {
     if(name==='performance'){ fillPerformance(); fillMedia(); fillPreVenda(); fillEficiencia(); fillEficienciaLeitura(); fillPerfSparks(); createChartsPerf(); createChartMedia(); createChartEficiencia(); }
     if(name==='basecomp'){ fillBaseComp(); createChartsBaseComp(); }
     if(name==='cohort'){ fillCohort(); createChartsCohort(); }
+    if(name==='relatorio'){ fillRelatorio(); createChartsRelatorio(); }
   },50);
 }
 
@@ -3375,7 +3552,295 @@ function createChartsCohort(){
   });
 }
 
-fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillUnidades(); fillVolumeReceita(); fillSemanal(); fillYoy(); createCharts(); createChartFatTotal(); createChartsUnidade(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); populateBanhosTable(); createChartsSemanal(); createChartsYoy(); fillPerformance(); fillMedia(); fillPreVenda(); fillEficiencia(); fillEficienciaLeitura(); fillBaseComp(); fillCohort();
+// ══ RELATÓRIO EXECUTIVO ══
+// Aquisição (planilha 2026) × adimplência (BI Adimplência 05/10) × utilização (BI Uso Clínica 29/09)
+const relSafras = [
+  { m:'Janeiro',  planos:1162, adim1:92.71, util1:37.65, camp:'— não houve campanha de vendas',            mec:'paga',  cor:'#1E7B45' },
+  { m:'Fevereiro',planos:1116, adim1:90.57, util1:39.41, camp:'Festival de Verão · 70% off 1ª mensalidade', mec:'desc',  cor:'#1c5cab' },
+  { m:'Março',    planos:1305, adim1:91.10, util1:39.14, camp:'Festival de Verão · 50% off nos planos',     mec:'desc',  cor:'#1c5cab' },
+  { m:'Abril',    planos:1711, adim1:89.94, util1:31.30, camp:'CashPet · paga cheio e recebe cashback',     mec:'paga',  cor:'#1E7B45' },
+  { m:'Maio',     planos:1252, adim1:93.07, util1:38.88, camp:'Vantagens Pet · 50% off nos planos',         mec:'desc',  cor:'#1c5cab' },
+  { m:'Junho',    planos:1862, adim1:82.27, util1:45.94, camp:'Torcida CãoPeã · plano mais barato + banho', mec:'zero',  cor:'#C00000' },
+  { m:'Julho',    planos:2254, adim1:84.15, util1:42.72, camp:'Sem Pegadinha · 1ª mensalidade grátis',      mec:'zero',  cor:'#C00000' },
+  { m:'Agosto',   planos:1765, adim1:84.13, util1:45.71, camp:'Pai de Pet é 10 · R$ 10 × 2 mensalidades',   mec:'zero',  cor:'#C00000' },
+  { m:'Setembro', planos:2133, adim1:null,  util1:null,  camp:'Aniversário · 1º mês zero + 2º com 50%',     mec:'zero',  cor:'#C00000' }
+];
+const relMec = { paga:{lab:'Paga para entrar',cor:'#1E7B45'}, desc:{lab:'Desconto parcial',cor:'#1c5cab'}, zero:{lab:'Entra de graça',cor:'#C00000'} };
+const relN   = v => Math.round(v);
+const relBr  = v => v.toFixed(1).replace('.',',');
+// dos que continuam pagando, quantos usam a clínica
+const relUsa = s => s.adim1 ? s.util1/s.adim1*100 : null;
+
+function fillRelatorio(){
+  const box = document.getElementById('rel-campanhas');
+  if (!box || box.innerHTML.trim() !== '') return;
+
+  const com = relSafras.filter(s=>s.adim1!==null);
+  const zero = com.filter(s=>s.mec==='zero'), outras = com.filter(s=>s.mec!=='zero');
+  const mZero = zero.reduce((a,s)=>a+s.adim1,0)/zero.length;
+  const mOut  = outras.reduce((a,s)=>a+s.adim1,0)/outras.length;
+  const uZero = zero.reduce((a,s)=>a+relUsa(s),0)/zero.length;
+  const uOut  = outras.reduce((a,s)=>a+relUsa(s),0)/outras.length;
+
+  // ── 3. campanhas ──
+  let h = `<table style="font-size:12px"><thead><tr>
+    <th style="text-align:left">Mês</th><th style="text-align:left">Campanha</th>
+    <th style="text-align:left">Mecânica</th>
+    <th style="text-align:center">Planos<br>vendidos</th>
+    <th style="text-align:center">De cada 100, quantos<br>perdeu na 1ª renovação</th>
+    <th style="text-align:center">Veredito</th></tr></thead><tbody>`;
+  relSafras.forEach(s=>{
+    const perdeu = s.adim1!==null ? relN(98)-relN(s.adim1) : null;   // ~98 pagam o 1º mês
+    const g = relMec[s.mec];
+    let vd, vc;
+    if (perdeu===null)      { vd='AINDA SENDO MEDIDA'; vc='#777'; }
+    else if (perdeu<=6)     { vd='POSITIVA';           vc='#1E7B45'; }
+    else if (perdeu<=9)     { vd='NEUTRA';             vc='#C09000'; }
+    else                    { vd='NEGATIVA';           vc='#C00000'; }
+    h += `<tr style="${perdeu!==null&&perdeu>=12?'background:#FDECEA':(perdeu!==null&&perdeu<=6?'background:#E6F5EC':'')}">
+      <td style="font-weight:800;white-space:nowrap">${s.m}</td>
+      <td style="font-size:11px;line-height:1.45">${s.camp}</td>
+      <td><span style="display:inline-block;background:${g.cor};color:#fff;font-size:10px;font-weight:800;padding:3px 8px;border-radius:4px;white-space:nowrap">${g.lab}</span></td>
+      <td style="text-align:center;font-weight:700">${s.planos.toLocaleString('pt-BR')}</td>
+      <td style="text-align:center;font-size:17px;font-weight:800;color:${perdeu===null?'#aaa':vc}">${perdeu===null?'—':perdeu}</td>
+      <td style="text-align:center"><span style="display:inline-block;background:${vc};color:#fff;font-size:9px;font-weight:800;padding:3px 7px;border-radius:4px;white-space:nowrap">${vd}</span></td>
+    </tr>`;
+  });
+  h += `</tbody></table>
+    <div style="margin-top:13px;font-size:12.5px;color:#333;background:#EEF2F9;border-left:4px solid #1F3864;border-radius:8px;padding:13px 16px;line-height:1.85">
+      <strong>Conclusão desta seção:</strong> todas as campanhas foram positivas em volume e
+      <strong>as três de entrada grátis foram negativas em qualidade</strong>.
+      As safras de junho a agosto somam <strong>5.881 planos — 40% de tudo que a rede vendeu no ano</strong> —
+      e são justamente as que menos seguraram cliente.
+      <br><br>
+      Setembro ainda não pode ser avaliada: a primeira renovação dela acontece em outubro.
+      <strong>Não há evidência suficiente para concluir sobre a campanha de aniversário neste momento.</strong>
+    </div>`;
+  box.innerHTML = h;
+
+  fillRelUnidades();
+  fillRelCruz(mZero, mOut, uZero, uOut);
+  fillRelFunil();
+  fillRelInsights();
+  fillRelRecom();
+}
+
+// ── 4. unidades ──
+function fillRelUnidades(){
+  const un = [
+    { n:'Barreiro',           cls:'amarelo', tit:'Vende muito e converte pouco',
+      txt:'Melhor aquisição da base (<strong>+38% em planos</strong>, subindo mês após mês), mas Fat. Plano +2% e Fat. Clínica +2% — a clínica está parada desde março. É a unidade que menos transforma venda nova em receita.' },
+    { n:'Campina Grande',     cls:'verde',   tit:'Cresce pela carteira, não pela porta',
+      txt:'Volume de planos oscila sem direção, mas <strong>Fat. Plano +18% e Fat. Clínica +23%</strong>, de forma consistente. Maior unidade da rede em faturamento, e chegou lá vendendo mais para quem já é cliente.' },
+    { n:'Ipatinga',           cls:'verde',   tit:'Falso negativo — é calendário, não queda',
+      txt:'Planos −18% assusta, mas ela inaugurou em out/2025 e janeiro ainda era pico de abertura. <strong>Fat. Plano +25%, a subida mais consistente da base.</strong> Não é problema.' },
+    { n:'Sorocaba',           cls:'amarelo', tit:'Rampa que ainda não virou patamar',
+      txt:'Maior crescimento do ano (<strong>+150% em planos</strong>) e já faz R$ 87 mil/mês em 8 meses. Mas o pico foi em julho (310 planos) e setembro fechou em 223 — <strong>três meses seguidos de queda</strong>. O 4º trimestre decide.' },
+    { n:'São Miguel Paulista',cls:'vermelho',tit:'Única em retração, e em quatro indicadores ao mesmo tempo',
+      txt:'<strong>Fat. Plano −9% e Fat. Clínica −14%</strong>, com queda consistente ao longo dos 9 meses (não é um mês ruim). Banhos <strong>−18%</strong> e utilização da clínica caiu de 36% para 26%. A carteira dela <em>cresceu</em> — ou seja, tem cliente e não está conseguindo trazê-lo de volta.' },
+    { n:'Itaim Paulista',     cls:'vermelho',tit:'Perdeu tração forte no último mês',
+      txt:'Cresceu no ano (+43% em planos), mas setembro está a 81% do melhor mês e os <strong>banhos caíram 36% em um mês</strong> (990 → 630), com utilização da clínica de 38% para 26%. Junto com São Miguel, explica toda a queda de banhos da rede.' }
+  ];
+  const est = { verde:{cor:'#1E7B45',ico:'🟢',lab:'DESTAQUE'}, amarelo:{cor:'#C09000',ico:'🟡',lab:'ATENÇÃO'}, vermelho:{cor:'#C00000',ico:'🔴',lab:'CRÍTICO'} };
+  const ord = ['vermelho','amarelo','verde'];
+  let h = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:13px">';
+  un.sort((a,b)=>ord.indexOf(a.cls)-ord.indexOf(b.cls)).forEach(u=>{
+    const e = est[u.cls];
+    h += `<div style="background:${u.cls==='verde'?'#E6F5EC':u.cls==='amarelo'?'#FFF9E6':'#FDECEA'};border-left:4px solid ${e.cor};border-radius:8px;padding:14px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">
+        <span style="font-size:13px">${e.ico}</span>
+        <span style="font-size:13px;font-weight:800;color:${e.cor}">${u.n}</span>
+        <span style="margin-left:auto;font-size:9px;font-weight:800;background:${e.cor};color:#fff;padding:2px 7px;border-radius:4px">${e.lab}</span>
+      </div>
+      <div style="font-size:11.5px;font-weight:700;color:#333;margin-bottom:5px">${u.tit}</div>
+      <div style="font-size:12px;color:#444;line-height:1.75">${u.txt}</div>
+    </div>`;
+  });
+  h += `</div>
+    <div style="margin-top:13px;font-size:12.5px;color:#333;background:#f7f7f7;border-radius:8px;padding:13px 16px;line-height:1.85">
+      <strong>Dona Clara e as unidades novas ficaram fora deste bloco de propósito:</strong> Dona Clara não apresentou
+      variação relevante em nenhum indicador, e as unidades abertas em 2026 ainda não têm histórico suficiente
+      para uma comparação justa. <strong>Não há evidência suficiente para classificá-las.</strong>
+    </div>`;
+  document.getElementById('rel-unidades').innerHTML = h;
+}
+
+// ── 5/6. texto do cruzamento ──
+function fillRelCruz(mZero, mOut, uZero, uOut){
+  document.getElementById('rel-cruz-txt').innerHTML = `
+  <div style="background:#FDECEA;border-left:4px solid #C00000;border-radius:8px;padding:15px 17px;line-height:1.9;font-size:12.5px;color:#333">
+    <div style="font-size:13px;font-weight:800;color:#C00000;margin-bottom:9px">O achado mais importante do ano</div>
+    O gráfico mostra uma relação que contraria a intuição: <strong>as safras que mais usam a clínica são as que menos ficam</strong>.
+    <br><br>
+    Entre os clientes que continuam pagando no 2º mês:
+    <br>• safras de <strong>entrada grátis</strong> (jun, jul, ago): <strong>${relBr(uZero)}%</strong> usam a clínica, e só <strong>${relBr(mZero)}%</strong> seguem pagando
+    <br>• demais safras: <strong>${relBr(uOut)}%</strong> usam a clínica, e <strong>${relBr(mOut)}%</strong> seguem pagando
+    <br><br>
+    <strong>Por que isso importa:</strong> é o perfil de cliente economicamente mais caro que existe —
+    entra sem pagar, consome serviço de alto custo e sai antes de pagar por ele.
+    <br><br>
+    <strong>É consistente com o desenho das próprias campanhas:</strong> junho vendeu plano com
+    <em>1 banho incluso por mês</em> e agosto incluiu <em>vacina antirrábica no plano</em>.
+    Entrada grátis somada a um benefício clínico consumível logo no início cria exatamente esse incentivo.
+    <br><br>
+    <span style="color:#666">Nota de método: a leitura acima divide a utilização pela adimplência para comparar safras de tamanhos diferentes.
+    A conclusão se mantém também na leitura bruta — as safras de entrada grátis usam mais a clínica dos dois jeitos.
+    <strong>Não é possível atribuir causalidade apenas com estes dados</strong>, mas a coincidência de mecânica, período e comportamento é consistente.</span>
+  </div>`;
+}
+
+// ── 7. funil ──
+function fillRelFunil(){
+  document.getElementById('rel-funil').innerHTML = `
+  <div style="font-size:13px;color:#333;line-height:1.9;background:#f7f7f7;border-radius:8px;padding:15px 17px;margin-bottom:14px">
+    <strong>Resposta direta: nos primeiros cinco meses a rede estava construindo base. De junho em diante, passou a comprar volume.</strong>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+    <div style="border:2px solid #1E7B45;border-radius:10px;padding:16px">
+      <div style="font-size:12px;font-weight:800;color:#1E7B45;margin-bottom:12px">CAMPANHAS DE JANEIRO A MAIO</div>
+      ${relFunilLinha('100 pessoas assinam','#1E7B45',100)}
+      ${relFunilLinha('91 ainda pagam no 2º mês','#1E7B45',91)}
+      ${relFunilLinha('37 usam a clínica','#4A5F86',37)}
+      <div style="margin-top:12px;font-size:12px;color:#333;line-height:1.75">
+        Paga primeiro, usa depois. <strong>Base recorrente.</strong>
+      </div>
+    </div>
+    <div style="border:2px solid #C00000;border-radius:10px;padding:16px">
+      <div style="font-size:12px;font-weight:800;color:#C00000;margin-bottom:12px">CAMPANHAS DE JUNHO A AGOSTO</div>
+      ${relFunilLinha('100 pessoas assinam','#C00000',100)}
+      ${relFunilLinha('83 ainda pagam no 2º mês','#C00000',83)}
+      ${relFunilLinha('45 usam a clínica','#E8630A',45)}
+      <div style="margin-top:12px;font-size:12px;color:#333;line-height:1.75">
+        Usa mais e paga menos tempo. <strong>Volume comprado.</strong>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:14px;background:#1F3864;color:#fff;border-radius:8px;padding:16px 18px;font-size:12.5px;line-height:1.85">
+    <strong>O custo disso, em clientes:</strong> se as safras de junho a agosto tivessem retido no padrão de janeiro a maio,
+    <strong>466 clientes a mais estariam pagando hoje</strong> — equivalente a quase um mês inteiro de vendas de uma unidade grande.
+    <br><br>
+    <strong>E em proporção:</strong> as campanhas de entrada grátis responderam por <strong>40% de tudo que a rede vendeu em 2026</strong>.
+    Não é um caso isolado — é a maior parte do volume do ano.
+  </div>`;
+}
+function relFunilLinha(txt, cor, pct){
+  return `<div style="margin-bottom:9px">
+    <div style="font-size:12px;color:#333;margin-bottom:3px;font-weight:600">${txt}</div>
+    <div style="background:#eee;border-radius:4px;height:20px;overflow:hidden">
+      <div style="width:${pct}%;height:100%;background:${cor};border-radius:4px"></div>
+    </div></div>`;
+}
+
+// ── 8. insights ──
+function fillRelInsights(){
+  const ins = [
+    { t:'Desconto parcial funciona. Entrada grátis, não.',
+      a:'Fevereiro deu 70% de desconto na 1ª mensalidade e perdeu 7 clientes em cada 100. Julho deu 100% e perdeu 14. Não foi uma piora gradual — foi um salto.',
+      p:'Existe um limite entre "desconto grande" e "de graça" em que a campanha para de atrair cliente e passa a atrair quem só queria o grátis. A evidência de 2026 coloca esse limite em algum ponto entre 70% e 100%.',
+      f:'Definir um valor mínimo de desembolso na entrada para toda campanha de aquisição. Até 70% de desconto o comportamento do cliente se mantém.' },
+    { t:'Benefício clínico embutido em entrada grátis acelera a saída',
+      a:'As safras de junho a agosto usam a clínica 13 pontos mais que as demais e retêm 8 pontos menos. Junho vendia plano com banho mensal incluso; agosto, com vacina antirrábica inclusa.',
+      p:'A combinação entrada grátis + benefício consumível logo no início cria o incentivo perfeito para entrar, consumir e sair. O cliente extrai o valor antes de pagar por ele.',
+      f:'Nunca combinar as duas coisas na mesma oferta. Se a entrada for muito descontada, o benefício clínico deve ser liberado a partir do 3º mês.' },
+    { t:'Dar presente não é a mesma coisa que dar desconto',
+      a:'O CashPet de abril cobrou a mensalidade cheia e devolveu o valor em cashback de loja. Foi a melhor retenção do ano: 1 cliente perdido em cada 100.',
+      p:'O cliente percebeu o mesmo valor, mas passou pela barreira do primeiro pagamento — que é o filtro que separa quem quer o serviço de quem quer o grátis. E o cashback ainda voltou como venda de loja.',
+      f:'Usar o CashPet como modelo padrão de campanha de aquisição em 2027, no lugar das mecânicas de isenção.' },
+    { t:'A queda de clínica da rede está concentrada em duas unidades',
+      a:'Itaim Paulista perdeu 36% dos banhos em um mês e São Miguel 18%. Juntas somam 568 banhos a menos, contra uma queda de 488 na rede inteira — sem elas, a rede teria crescido.',
+      p:'Nas duas, a carteira de clientes aptos cresceu e a utilização caiu. Não é falta de demanda, é capacidade de atender: agenda, equipe ou estrutura.',
+      f:'Diagnóstico operacional nas duas unidades, não ação de marketing. Comparar com Barreiro, que tem idade parecida com São Miguel e trajetória oposta.' }
+  ];
+  let h = '';
+  ins.forEach((o,i)=>{
+    h += `<div style="border:1px solid #e0e0e0;border-left:4px solid #1F3864;border-radius:8px;padding:15px 17px;margin-bottom:12px">
+      <div style="font-size:13px;font-weight:800;color:#1F3864;margin-bottom:10px">${i+1}. ${o.t}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;font-size:12px;line-height:1.75">
+        <div><div style="font-size:10px;font-weight:800;color:#888;letter-spacing:.4px;margin-bottom:4px">O QUE ACONTECEU</div><div style="color:#333">${o.a}</div></div>
+        <div><div style="font-size:10px;font-weight:800;color:#888;letter-spacing:.4px;margin-bottom:4px">POR QUE IMPORTA</div><div style="color:#333">${o.p}</div></div>
+        <div><div style="font-size:10px;font-weight:800;color:#1E7B45;letter-spacing:.4px;margin-bottom:4px">O QUE FAZER</div><div style="color:#333;font-weight:600">${o.f}</div></div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('rel-insights').innerHTML = h;
+}
+
+// ── 9. recomendações ──
+function fillRelRecom(){
+  const blocos = [
+    { t:'MANTER', cor:'#1E7B45', bg:'#E6F5EC', itens:[
+      'Campanhas de clínica para a base ativa (fev, mar, mai, jun) — não afetam retenção e sustentam o Fat. Clínica.',
+      'O ritmo de abertura de unidades: a base madura cresceu por mérito próprio, então as novas não estão canibalizando.',
+      'A mecânica de desconto parcial de até 70% na 1ª mensalidade, que não deteriora a retenção.'
+    ]},
+    { t:'AJUSTAR', cor:'#C09000', bg:'#FFF9E6', itens:[
+      'A Pet Friday de novembro: trocar "1ª e 2ª mensalidades grátis" por adesão zerada + cashback.',
+      'Separar benefício clínico de oferta de entrada — liberar banho/vacina inclusos só a partir do 3º mês.',
+      'A meta de marketing: passar a cobrar duas notas por campanha, volume e retenção no 3º mês.'
+    ]},
+    { t:'TESTAR', cor:'#1c5cab', bg:'#EEF2F9', itens:[
+      'Repetir o CashPet em escala, numa data forte, para confirmar se a retenção se mantém com volume maior.',
+      'No plano de junho (mais barato, com banho): comparar a renovação de quem assinou esse plano com quem assinou o padrão. O filtro PLANO do BI responde isso.',
+      'Fidelidade de 3 meses nas campanhas de entrada muito descontada, medindo se o volume cai menos do que a retenção sobe.'
+    ]},
+    { t:'EVITAR', cor:'#C00000', bg:'#FDECEA', itens:[
+      'Isenção total da 1ª mensalidade sem nenhuma contrapartida de permanência.',
+      'Lançar plano de entrada mais barato como mecânica de campanha — junho mostrou que isso traz cliente de menor permanência mesmo sem desconto.',
+      'Avaliar campanha apenas pelo volume de planos vendidos no mês.'
+    ]}
+  ];
+  let h = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">';
+  blocos.forEach(b=>{
+    h += `<div style="background:${b.bg};border-left:4px solid ${b.cor};border-radius:8px;padding:15px">
+      <div style="font-size:12px;font-weight:800;color:${b.cor};letter-spacing:.6px;margin-bottom:10px">${b.t}</div>
+      <ul style="margin:0;padding-left:17px;font-size:12px;color:#333;line-height:1.8">
+        ${b.itens.map(i=>`<li style="margin-bottom:7px">${i}</li>`).join('')}
+      </ul></div>`;
+  });
+  h += '</div>';
+  document.getElementById('rel-recom').innerHTML = h;
+}
+
+// ── gráfico do cruzamento ──
+function createChartsRelatorio(){
+  const el = document.getElementById('relCruz');
+  if (!el || Chart.getChart(el)) return;
+  const com = relSafras.filter(s=>s.adim1!==null);
+  charts.relCruz = new Chart(el, {
+    type:'scatter',
+    data:{ datasets:[
+      { label:'Paga para entrar',  data:com.filter(s=>s.mec==='paga').map(s=>({x:s.adim1,y:relUsa(s),m:s.m,c:s.camp})), backgroundColor:'#1E7B45', pointRadius:11, pointHoverRadius:14 },
+      { label:'Desconto parcial',  data:com.filter(s=>s.mec==='desc').map(s=>({x:s.adim1,y:relUsa(s),m:s.m,c:s.camp})), backgroundColor:'#1c5cab', pointRadius:11, pointHoverRadius:14 },
+      { label:'Entra de graça',    data:com.filter(s=>s.mec==='zero').map(s=>({x:s.adim1,y:relUsa(s),m:s.m,c:s.camp})), backgroundColor:'#C00000', pointRadius:11, pointHoverRadius:14 }
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'bottom',labels:{font:{size:11},boxWidth:12,usePointStyle:true}},
+        datalabels:{ display:true, color:'#333', font:{size:10,weight:'bold'},
+          align:c=>c.dataset.data[c.dataIndex].y<52?'bottom':'top', offset:10,
+          formatter:(v)=>v.m },
+        tooltip:{callbacks:{
+          title:c=>c[0].raw.m,
+          label:c=>[`${relBr(c.raw.x)}% ainda pagando no 2º mês`,
+                    `${relBr(c.raw.y)}% destes usam a clínica`,
+                    c.raw.c]
+        }}
+      },
+      scales:{
+        x:{ min:80, max:95, grid:{color:'#eee'},
+            title:{display:true,text:'← pior retenção        de cada 100, quantos ainda pagam no 2º mês        melhor retenção →',font:{size:11}},
+            ticks:{font:{size:10},callback:v=>v+'%'} },
+        y:{ min:30, max:60, grid:{color:'#eee'},
+            title:{display:true,text:'dos que pagam, quantos usam a clínica',font:{size:11}},
+            ticks:{font:{size:10},callback:v=>v+'%'} }
+      },
+      layout:{padding:{top:24,right:20}}
+    }
+  });
+}
+
+fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillUnidades(); fillVolumeReceita(); fillSemanal(); fillYoy(); createCharts(); createChartFatTotal(); createChartsUnidade(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); populateBanhosTable(); createChartsSemanal(); createChartsYoy(); fillPerformance(); fillMedia(); fillPreVenda(); fillEficiencia(); fillEficienciaLeitura(); fillBaseComp(); fillCohort(); fillRelatorio(); createChartsRelatorio();
 
 </script>
 </body>
