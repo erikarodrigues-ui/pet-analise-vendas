@@ -562,26 +562,7 @@
       </div>
     </div>
 
-    <div class="section">
-      <div class="section-header">🎯 Prioridades de Setembro → Outubro</div>
-      <div class="section-body">
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
-          <div style="background:#FDECEA;border-radius:8px;padding:14px;border-left:4px solid #C00000">
-            <div style="font-size:11px;font-weight:800;color:#C00000;margin-bottom:8px">🔴 REAGIR — queda de vendas acima de 25%</div>
-            <div style="font-size:11px;color:#333;line-height:1.7" id="acao-vermelho"></div>
-          </div>
-          <div style="background:#FFF9E6;border-radius:8px;padding:14px;border-left:4px solid #C09000">
-            <div style="font-size:11px;font-weight:800;color:#856000;margin-bottom:8px">🟡 MONITORAR — queda até 25%</div>
-            <div style="font-size:11px;color:#333;line-height:1.7" id="acao-amarelo"></div>
-          </div>
-          <div style="background:#E6F5EC;border-radius:8px;padding:14px;border-left:4px solid #1E7B45">
-            <div style="font-size:11px;font-weight:800;color:#1E7B45;margin-bottom:8px">🟢 REPLICAR — receita em alta</div>
-            <div style="font-size:11px;color:#333;line-height:1.7" id="acao-verde"></div>
-          </div>
-        </div>
       </div>
-    </div>
-  </div>
 </div>
 
 <!-- ══ PERFORMANCE POR UNIDADE 2026 ══ -->
@@ -704,25 +685,6 @@
 
     <!-- Semáforo -->
     <div class="section">
-      <div class="section-header">🚦 Situação atual da rede — tendência de faturamento (Set vs Jul/26)</div>
-      <div class="section-body">
-        <div id="perf-semaforo" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px"></div>
-      </div>
-    </div>
-
-    <!-- Small multiples -->
-    <div class="section">
-      <div class="section-header">📉 Evolução do faturamento total por unidade · Jan–Set/26</div>
-      <div class="section-body">
-        <div style="font-size:11px;color:#666;margin-bottom:12px">
-          Faturamento total = Fat. Plano + Fat. Clínica · Jan–Set/26. Cada mini-gráfico usa a própria escala da unidade — a leitura é a <strong>forma da curva</strong>, não a altura comparada entre elas.
-        </div>
-        <div id="perf-sparks" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px"></div>
-      </div>
-    </div>
-
-    <!-- Eficiência por unidade -->
-    <div class="section">
       <div class="section-header">🎯 Eficiência por unidade — vender plano está virando faturamento de clínica?</div>
       <div class="section-body">
         <div class="tend-note" style="margin-bottom:14px">
@@ -771,64 +733,6 @@
     </div>
 
     <!-- Tabelas -->
-    <div class="section">
-      <div class="section-header">📋 Planos vendidos por unidade · 2026</div>
-      <div class="section-body">
-        <div id="perf-legenda"></div>
-        <div style="overflow-x:auto"><table style="font-size:11px" id="tbl-perf-planos"></table></div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-header">📋 Faturamento de Planos por unidade · 2026 (R$)</div>
-      <div class="section-body">
-        <div style="overflow-x:auto"><table style="font-size:11px" id="tbl-perf-fp"></table></div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-header">📋 Faturamento de Clínica por unidade · 2026 (R$)</div>
-      <div class="section-body">
-        <div style="overflow-x:auto"><table style="font-size:11px" id="tbl-perf-fc"></table></div>
-      </div>
-    </div>
-
-    <!-- Divergência volume x receita -->
-    <div class="section">
-      <div class="section-header">🔍 O que as três tabelas revelam juntas — volume x receita por unidade</div>
-      <div class="section-body">
-        <div class="tend-note" style="margin-bottom:12px">
-          💡 Comparando as tabelas de <strong>planos vendidos</strong> e <strong>faturamento de planos</strong> nas 6 unidades maduras,
-          aparece um padrão que nenhuma delas mostra sozinha: <strong>4 de 6 vendem menos planos em agosto do que em janeiro, mas 5 de 6 faturam mais.</strong>
-        </div>
-        <table>
-          <thead><tr><th>Unidade madura</th><th>Planos vendidos<br>Jan → Ago</th><th>Fat. Plano<br>Jan → Ago</th><th style="text-align:left">Leitura</th></tr></thead>
-          <tbody>
-            <tr><td>Ipatinga</td><td class="var-down">▼ −53,6%</td><td class="var-up">▲ +59,9%</td><td style="text-align:left;font-size:11px;color:#555">Caso extremo: metade do volume, receita 60% maior. Cresce só pela base instalada.</td></tr>
-            <tr><td>Campina Grande</td><td class="var-down">▼ −10,2%</td><td class="var-up">▲ +44,3%</td><td style="text-align:left;font-size:11px;color:#555">Maior faturamento da rede com volume em queda — mesma dinâmica.</td></tr>
-            <tr><td>Barreiro</td><td class="var-up">▲ +33,3%</td><td class="var-up">▲ +5,4%</td><td style="text-align:left;font-size:11px;color:#555">Vende muito mais e fatura pouco mais: ticket da venda nova caindo.</td></tr>
-            <tr><td>Itaim Paulista</td><td class="var-up">▲ +114,5%</td><td class="var-up">▲ +26,0%</td><td style="text-align:left;font-size:11px;color:#555">Única unidade madura com crescimento real de aquisição.</td></tr>
-            <tr><td>Dona Clara</td><td class="var-down">▼ −6,8%</td><td class="var-up">▲ +4,7%</td><td style="text-align:left;font-size:11px;color:#555">Praticamente parada nas duas frentes.</td></tr>
-            <tr class="parcial-row" style="background:#FDECEA !important;color:#C00000;font-style:normal"><td>São Miguel Paulista</td><td class="var-down">▼ −26,1%</td><td class="var-down">▼ −11,7%</td><td style="text-align:left;font-size:11px;color:#C00000"><strong>Única em queda nas duas.</strong> Perde volume e perde receita — prioridade da rede.</td></tr>
-          </tbody>
-        </table>
-        <div style="margin-top:14px;font-size:11.5px;color:#333;background:#f5f5f5;border-radius:8px;padding:12px 14px;line-height:1.8">
-          <strong>Consequência prática:</strong> o crescimento de receita de 2026 está vindo da <strong>base já conquistada</strong> — reajuste, mix e retenção —
-          e não da venda nova. Isso sustenta o resultado no curto prazo, mas é um motor que desacelera sozinho:
-          sem reposição de volume, a base para de crescer e o faturamento estabiliza. <strong>Ipatinga e Campina Grande</strong> são as que mais dependem desse efeito hoje.
-        </div>
-      </div>
-    </div>
-
-    <!-- Rankings -->
-    <div class="section">
-      <div class="section-header">🥇 Rankings do ano · Jan–Set/26</div>
-      <div class="section-body">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" id="perf-rankings"></div>
-      </div>
-    </div>
-
-    <!-- Qualidade de dado -->
     <div class="section">
       <div class="section-header">⚠️ Ressalvas de base — ler antes de apresentar</div>
       <div class="section-body">
@@ -1024,11 +928,6 @@
     </div>
 
     <div class="chart-wrap" style="margin-bottom:16px">
-      <div class="chart-title">🏆 Ranking de Banhos por Unidade · Set/26</div>
-      <div class="chart-body" style="height:340px"><canvas id="chartBanhosRanking"></canvas></div>
-    </div>
-
-    <div class="chart-wrap" style="margin-bottom:16px">
       <div class="chart-title">📊 Evolução por Unidade · Jun × Jul × Ago × Set 2026 (meses fechados)</div>
       <div class="chart-body" style="height:340px"><canvas id="chartBanhosTaxa"></canvas></div>
     </div>
@@ -1101,17 +1000,6 @@
     <div class="chart-wrap" style="margin-bottom:16px">
       <div class="chart-title">📊 Planos Vendidos por Mês · 2025 × 2026</div>
       <div class="chart-body" style="height:300px"><canvas id="chartYoyPlanos"></canvas></div>
-    </div>
-
-    <div class="chart-grid">
-      <div class="chart-wrap">
-        <div class="chart-title">💙 Fat. Plano · 2025 × 2026</div>
-        <div class="chart-body" style="height:260px"><canvas id="chartYoyFatPlano"></canvas></div>
-      </div>
-      <div class="chart-wrap">
-        <div class="chart-title">🧡 Fat. Clínica · 2025 × 2026</div>
-        <div class="chart-body" style="height:260px"><canvas id="chartYoyFatClinica"></canvas></div>
-      </div>
     </div>
 
     <div class="section">
@@ -1439,11 +1327,11 @@ function showTab(name,btn) {
   setTimeout(()=>{
     Object.values(charts).forEach(c=>{try{c.resize();}catch(e){}});
     if(name==='banhos'){
-      ['chartBanhosRanking','chartBanhosTaxa','chartBanhosCrescimento'].forEach(id=>{
+      ['chartBanhosTaxa','chartBanhosCrescimento'].forEach(id=>{
         const canvas=document.getElementById(id);
         if(canvas){const ex=Chart.getChart(canvas);if(ex)ex.destroy();}
       });
-      createChartBanhosRanking();createChartBanhosTaxa();createChartBanhosCrescimento();populateBanhosTable();
+      createChartBanhosTaxa();createChartBanhosCrescimento();populateBanhosTable();
     }
     if(name==='yoy'){ fillYoy(); createChartsYoy(); }
     if(name==='performance'){ fillPerformance(); fillMedia(); fillPreVenda(); fillEficiencia(); fillEficienciaLeitura(); fillPerfSparks(); createChartsPerf(); createChartMedia(); createChartEficiencia(); }
@@ -1507,23 +1395,6 @@ function fillUnidades() {
       <td>R$ ${fmt(REDE_SET)}</td>
       <td style="text-align:center">100%</td></tr>`;
 
-  // Blocos de ação
-  const vermelho=[], amarelo=[], verde=[];
-  UN.forEach((n,i)=>{
-    const dp = pctVar(planosSet[i], planosAgoU[i]);
-    const dt = pctVar(fatTotalSet[i], fatTotalAgoU[i]);
-    if (dp===null) return;
-    if (dp <= -0.25) vermelho.push(`<strong>${n}</strong> ${fmtPct(dp)} (${planosAgoU[i]}→${planosSet[i]})`);
-    else if (dp < 0) amarelo.push(`<strong>${n}</strong> ${fmtPct(dp)}`);
-    if (dt !== null && dt > 0.05) verde.push(`<strong>${n}</strong> receita ${fmtPct(dt)}`);
-  });
-  const li = arr => arr.length ? '• ' + arr.join('<br>• ') : '—';
-  document.getElementById('acao-vermelho').innerHTML = li(vermelho) +
-    '<br><br><em>Ação: revisar oferta local e agenda comercial. Estas unidades concentram a queda de volume da rede em agosto.</em>';
-  document.getElementById('acao-amarelo').innerHTML = li(amarelo) +
-    '<br><br><em>Ação: acompanhar semanalmente. Queda dentro do esperado pós-campanha de julho.</em>';
-  document.getElementById('acao-verde').innerHTML = li(verde) +
-    '<br><br><em>Ação: mapear o que sustentou a receita mesmo com menos vendas novas e replicar nas unidades em vermelho.</em>';
 }
 
 // ── DADOS BANHOS POR UNIDADE (meses fechados · aba "Venda de Banhos") ──
@@ -1540,26 +1411,6 @@ const banhosVarAgo = banhosSetArr.map((v,i)=>+((v/banhosAgoArr[i]-1)*100).toFixe
 const banhosVarJun = banhosSetArr.map((v,i)=>+((v/banhosJunArr[i]-1)*100).toFixed(1));
 const banhosRankOrder = banhosSetArr.map((v,i)=>({v,i})).sort((a,b)=>b.v-a.v).map(x=>x.i);
 const banhosRankLabel = banhosRankOrder.map(i=>banhosUnidades[i]);
-const banhosRankSet   = banhosRankOrder.map(i=>banhosSetArr[i]);
-
-function createChartBanhosRanking() {
-  if (!document.getElementById('chartBanhosRanking')) return;
-  const colors = banhosRankSet.map((_,i) => i===0?'#E8630A':i<4?'#F49D5A':'rgba(232,99,10,0.4)');
-  charts.banhosRanking = new Chart(document.getElementById('chartBanhosRanking'), {
-    type:'bar',
-    data:{ labels:banhosRankLabel, datasets:[{label:'Banhos Set/26',data:banhosRankSet,backgroundColor:colors,borderRadius:4}] },
-    options:{
-      indexAxis:'y', responsive:true, maintainAspectRatio:false,
-      plugins:{
-        legend:{display:false},
-        tooltip:{callbacks:{label:ctx=>`${ctx.raw} banhos (${(ctx.raw/banhosTotSet*100).toFixed(1)}% da rede)`}},
-        datalabels:{anchor:'end',align:'end',formatter:v=>v,color:'#333',font:{size:11,weight:'bold'}}
-      },
-      scales:{x:{grid:{color:'#eee'},ticks:{font:{size:10}}},y:{grid:{display:false},ticks:{font:{size:11}}}},
-      layout:{padding:{right:44}}
-    }
-  });
-}
 
 function createChartBanhosTaxa() {
   if (!document.getElementById('chartBanhosTaxa')) return;
@@ -1752,8 +1603,6 @@ function createChartsYoy() {
     });
   };
   mk('chartYoyPlanos',    yPlanos25, yPlanos26, 'rgba(150,150,150,0.45)', '#1E7B45', false);
-  mk('chartYoyFatPlano',  yFatPl25,  yFatPl26,  'rgba(31,56,100,0.30)',   '#1F3864', true);
-  mk('chartYoyFatClinica',yFatCl25,  yFatCl26,  'rgba(232,99,10,0.30)',   '#E8630A', true);
 }
 
 // ── VOLUME × RECEITA (Resumo) ──
@@ -2064,9 +1913,6 @@ function fillPerfRankings(){
 
 function fillPerformance(){
   fillPerfSemaforo(); fillPerfLegenda(); fillPerfRankings();
-  perfTabela('tbl-perf-planos', perfPlanos, v=>Math.round(v).toLocaleString('pt-BR'), true);
-  perfTabela('tbl-perf-fp',     perfFP,     v=>Math.round(v).toLocaleString('pt-BR'), true);
-  perfTabela('tbl-perf-fc',     perfFC,     v=>Math.round(v).toLocaleString('pt-BR'), true);
 }
 // ── MÉDIA MENSAL DE PLANOS VENDIDOS POR UNIDADE (Jan/25 – Set/26) ──
 const medMESES = ["Jan/25", "Fev/25", "Mar/25", "Abr/25", "Mai/25", "Jun/25", "Jul/25", "Ago/25", "Set/25", "Out/25", "Nov/25", "Dez/25", "Jan/26", "Fev/26", "Mar/26", "Abr/26", "Mai/26", "Jun/26", "Jul/26", "Ago/26", "Set/26"];
@@ -3253,18 +3099,18 @@ function fillCkPendente(){
       </div>
     </div>
     <div style="background:#FDECEA;border-left:4px solid #C00000;border-radius:8px;padding:15px">
-      <div style="font-size:12px;font-weight:800;color:#C00000;margin-bottom:9px">🚨 Novembro ainda dá tempo de mudar</div>
+      <div style="font-size:12px;font-weight:800;color:#C00000;margin-bottom:9px">📌 Novembro está confirmado — o que dá para fazer</div>
       <div style="font-size:12px;color:#333;line-height:1.85">
-        A planilha mostra, com status <strong>"Em planejamento"</strong>:
-        <br><strong>Pet Friday — "Assine agora e comece a pagar em 2027"</strong> (1ª e 2ª mensalidades grátis, adesão R$ 9,90).
+        <strong>Pet Friday — "Assine agora e comece a pagar em 2027"</strong> (1ª e 2ª mensalidades grátis, adesão R$ 9,90),
+        de 23 a 27/11. A oferta está decidida e não muda.
         <br><br>
-        É <strong>a oferta de entrada mais generosa do ano</strong> — mais que julho e mais que setembro.
-        E é exatamente o formato que produziu as três piores safras.
+        <strong>O que esperar, para ninguém ser pego de surpresa:</strong> as safras com esse formato perderam
+        <strong>14 a 17 clientes em cada 100</strong> na primeira renovação. A de novembro só paga valor cheio em
+        <strong>fevereiro de 2027</strong> — é lá que o resultado aparece, não em dezembro.
         <br><br>
-        <strong>A sugestão não é cancelar.</strong> É trocar o presente de lugar:
-        <strong>adesão zerada + cashback para gastar na loja</strong>, no modelo de abril.
-        O cliente ganha o mesmo, a Black Friday continua atraente, e ele começa pagando —
-        que é o que faz ele ficar.
+        <strong>As duas alavancas que sobram:</strong> segurar banho e vacina inclusos
+        <strong>até o 3º mês</strong>, para o benefício não ser consumido antes do primeiro pagamento;
+        e programar <strong>contato com essa safra em janeiro</strong>, antes da cobrança cheia.
       </div>
     </div>
   </div>`;
@@ -3345,9 +3191,10 @@ function fillCkInsights(mAntes, mDepois){
         <strong>A solução já foi testada aqui dentro.</strong> Abril fez a melhor retenção do ano com uma campanha
         que não deu desconto nenhum na entrada — deu cashback depois. Mesma atratividade, cliente que paga, cliente que fica.
         <br><br>
-        <strong>A decisão com prazo:</strong> a Pet Friday de novembro ainda está em planejamento e repete o formato
-        de entrada grátis na versão mais forte do ano. Redesenhá-la no modelo do CashPet é a decisão
-        de maior impacto disponível agora — e a janela fecha nas próximas semanas.
+        <strong>O que fica combinado:</strong> a Pet Friday de novembro vai rodar com duas mensalidades grátis.
+        A leitura desta aba passa então a valer como <strong>previsão registrada</strong>: se a safra de novembro
+        repetir o padrão de julho e agosto, o calendário de 2027 passa a ser decidido com dado da própria rede,
+        e não com opinião.
       </div>
     </div>
 
@@ -3627,7 +3474,8 @@ function fillRelRecom(){
       'A mecânica de desconto parcial de até 70% na 1ª mensalidade, que não deteriora a retenção.'
     ]},
     { t:'AJUSTAR', cor:'#C09000', bg:'#FFF9E6', itens:[
-      'A Pet Friday de novembro: trocar "1ª e 2ª mensalidades grátis" por adesão zerada + cashback.',
+      'Pet Friday (confirmada): liberar banho e vacina inclusos só a partir do 3º mês, para não entregar o benefício antes do primeiro pagamento.',
+      'Programar contato com a safra de novembro antes da 1ª cobrança cheia, que cai em fevereiro de 2027.',
       'Separar benefício clínico de oferta de entrada — liberar banho/vacina inclusos só a partir do 3º mês.',
       'A meta de marketing: passar a cobrar duas notas por campanha, volume e retenção no 3º mês.'
     ]},
@@ -3693,7 +3541,7 @@ function createChartsRelatorio(){
   });
 }
 
-fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillUnidades(); fillVolumeReceita(); fillYoy(); createCharts(); createChartFatTotal(); createChartsUnidade(); createChartBanhosRanking(); createChartBanhosTaxa(); createChartBanhosCrescimento(); populateBanhosTable(); createChartsYoy(); fillPerformance(); fillMedia(); fillPreVenda(); fillEficiencia(); fillEficienciaLeitura(); fillBaseComp(); fillCohort(); fillRelatorio(); createChartsRelatorio();
+fillResumo(); fillClinica(); fillPlano(); fillVendas(); fillUnidades(); fillVolumeReceita(); fillYoy(); createCharts(); createChartFatTotal(); createChartsUnidade();  createChartBanhosTaxa(); createChartBanhosCrescimento(); populateBanhosTable(); createChartsYoy(); fillPerformance(); fillMedia(); fillPreVenda(); fillEficiencia(); fillEficienciaLeitura(); fillBaseComp(); fillCohort(); fillRelatorio(); createChartsRelatorio();
 
 </script>
 </body>
