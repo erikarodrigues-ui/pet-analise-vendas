@@ -142,12 +142,12 @@ footer a{color:var(--clin)}
     <div class="card"><h3>% Utilização da Clínica por unidade</h3><div class="sub" id="utcSub"></div><div class="ch tall"><canvas id="cUtC"></canvas></div></div>
     <div class="card"><h3>% Utilização do Plano Banho por unidade</h3><div class="sub" id="utbSub"></div><div class="ch tall"><canvas id="cUtB"></canvas></div></div>
   </div>
-  <div class="card"><h3>Evolução da utilização · rede</h3><div class="sub">Safras a partir de Jun/26 (início da série do Plano Banho no BI)</div>
+  <div class="card"><h3>Evolução da utilização · rede</h3><div class="sub">A partir de Jun/26 (início da série do Plano Banho no BI) · Clínica: usaram no mês ÷ pagaram no mês anterior · Banho: safra do mês, M0</div>
     <div class="legend"><span><i style="background:var(--clin)"></i>Clínica</span><span><i style="background:var(--plano)"></i>Plano Banho</span></div>
     <div class="ch sm"><canvas id="cUtEvo"></canvas></div></div>
   <div class="card"><h3>Detalhe por unidade</h3><div class="sub" id="utTSub"></div>
     <div class="tw"><table id="tUt"></table></div>
-    <div class="note"><b>Como ler:</b> a utilização considera a <b>safra do mês</b> — clientes que contrataram o plano no mês — e mede quantos usaram o serviço <b>no próprio mês da contratação (M0)</b>, conforme o BI "Uso Clínica". “Sem uso registrado” indica unidade sem atendimento lançado no BI (ex.: clínica ou banho ainda não operando); essas unidades não entram no ranking, mas a base delas compõe o total da rede, como no BI.</div></div>
+    <div class="note"><b>Como ler:</b> <b>% Utilização da Clínica</b> = CPFs que usaram a clínica no mês ÷ CPFs que pagaram o mês anterior (os aptos), conforme o BI PetDeTodosTático. Entram só as unidades com clínica em operação; unidades sem atendimento lançado (ex.: Porto Seguro, Parnamirim) ficam fora da base da rede. <b>% Utilização do Plano Banho</b> considera a <b>safra do mês</b> — clientes que contrataram o plano no mês — e mede quantos usaram o banho <b>no próprio mês da contratação (M0)</b>, conforme o BI "Uso Clínica"; “sem uso registrado” indica banho ainda não operando, e a base dessas unidades compõe o total da rede, como no BI.</div></div>
 </section>
 
 <!-- ═════════ 2025 × 2026 ═════════ -->
@@ -178,7 +178,9 @@ footer a{color:var(--clin)}
    2. REDE: acrescentar fatClinica, fatPlano, vendaPlanos (BI / planilha).
    3. UNIDADES: acrescentar 1 valor no fim de planos, fatClin e fatPlano de CADA unidade
       (unidade nova → criar objeto com zeros nos meses anteriores).
-   4. UTIL: criar a chave do mês com clin e banho {unidade:[base, usos]} (BI Uso Clínica, M0).
+   4. UTIL: criar a chave do mês com clin e banho {unidade:[base, usos]}.
+      clin = CPFs que usaram a clínica no mês ÷ CPFs que pagaram no mês anterior (PetDeTodosTático).
+      banho = BI Uso Clínica, safra do mês, M0.
    5. CAMPANHAS: incluir a(s) campanha(s) do mês.
    6. ANO_2025: preencher o mês correspondente de 2025 se ainda estiver null.
    Nunca apagar meses anteriores. Dado ausente = null (nunca estimar).
@@ -210,15 +212,18 @@ const UNIDADES = [
  {n:'São Miguel Paulista', inaug:'2022-05', planos:[138,129,88,101,80,136,144,102,120], fatPlano:[96247.46,92110.37,94317.15,89833.27,90649.29,86393.48,82001.07,84999.38,83144.42], fatClin:[166337.92,140862.07,143125.63,142844.03,118628.11,124549.44,134357.43,126308.99,98867.77]},
  {n:'Sorocaba',            inaug:'2026-02', planos:[83,69,94,112,71,213,310,271,223], fatPlano:[1156.02,4867.85,10454.15,12809.15,14568.3,15435.9,20970.67,34485.86,31459.22], fatClin:[0,10648.37,24784.22,34545.36,37022.12,43964.38,62953.87,66812.83,55324.09]}
 ];
-// Utilização (BI "Uso Clínica" · safra do mês · M0) — [base da safra, clientes que utilizaram]; usos null = sem uso registrado
+// Utilização — [base, usos]; usos null = sem uso registrado
+//   clin  = PetDeTodosTático: [CPFs que pagaram no mês anterior (Receb. Clientes Únicos), CPFs que usaram a clínica no mês (Vetus)].
+//           Só entram unidades com clínica em operação (uso registrado no BI).
+//   banho = BI "Uso Clínica" · safra do mês · M0 · [planos com banho da safra, clientes que utilizaram].
 const UTIL = {
- 'Jun/26':{ clin:{'Paulista Pernambuco':[166,99],'Ipatinga':[189,122],'São Miguel Paulista':[136,89],'Campina Grande':[252,138],'Contagem':[235,116],'Barreiro':[197,101],'Itaim Paulista':[247,111],'Sorocaba':[213,55],'Dona Clara':[155,76],'Cosmópolis':[71,null]},
+ 'Jun/26':{ clin:{'Paulista Pernambuco':[317,216],'Contagem':[590,284],'Sorocaba':[363,172],'Ipatinga':[1410,612],'Itaim Paulista':[1934,715],'Campina Grande':[2151,777],'Dona Clara':[1674,558],'São Miguel Paulista':[2309,765],'Barreiro':[2820,774]},
             banho:{'Barreiro':[161,29],'Campina Grande':[168,37],'Contagem':[195,42],'Cosmópolis':[9,null],'Dona Clara':[122,27],'Ipatinga':[157,52],'Itaim Paulista':[180,33],'Paulista Pernambuco':[99,37],'São Miguel Paulista':[92,26],'Sorocaba':[200,4]} },
- 'Jul/26':{ clin:{'São Miguel Paulista':[144,91],'Campina Grande':[284,174],'Paulista Pernambuco':[180,121],'Barreiro':[243,154],'Ipatinga':[210,135],'Contagem':[291,162],'Dona Clara':[146,85],'Sorocaba':[310,109],'Itaim Paulista':[319,134],'Cosmópolis':[124,null]},
+ 'Jul/26':{ clin:{'Paulista Pernambuco':[467,335],'Contagem':[747,394],'Sorocaba':[531,232],'Ipatinga':[1546,668],'Campina Grande':[2239,956],'Itaim Paulista':[2033,818],'Dona Clara':[1677,622],'São Miguel Paulista':[2318,812],'Barreiro':[2815,851]},
             banho:{'Barreiro':[158,43],'Campina Grande':[209,49],'Contagem':[211,69],'Cosmópolis':[19,null],'Dona Clara':[100,32],'Ipatinga':[167,53],'Itaim Paulista':[200,47],'Paulista Pernambuco':[69,28],'São Miguel Paulista':[82,33],'Sorocaba':[244,35]} },
- 'Ago/26':{ clin:{'Campina Grande':[215,144],'São Miguel Paulista':[106,77],'Paulista Pernambuco':[94,62],'Dona Clara':[112,70],'Contagem':[266,151],'Ipatinga':[126,71],'Barreiro':[217,131],'Sorocaba':[263,108],'Itaim Paulista':[241,138],'Cosmópolis':[92,null],'Porto Seguro':[64,null]},
+ 'Ago/26':{ clin:{'Paulista Pernambuco':[612,339],'Contagem':[935,428],'Sorocaba':[762,339],'Campina Grande':[2418,945],'Itaim Paulista':[2217,854],'Ipatinga':[1695,612],'Dona Clara':[1689,607],'São Miguel Paulista':[2293,822],'Barreiro':[2945,896]},
             banho:{'Barreiro':[189,56],'Campina Grande':[131,24],'Contagem':[207,75],'Cosmópolis':[32,null],'Dona Clara':[93,24],'Ipatinga':[93,26],'Itaim Paulista':[184,55],'Paulista Pernambuco':[22,9],'Porto Seguro':[42,null],'São Miguel Paulista':[72,25],'Sorocaba':[232,54]} },
- 'Set/26':{ clin:{'Campina Grande':[222,153],'São Miguel Paulista':[120,70],'Contagem':[212,125],'Ipatinga':[172,102],'Paulista Pernambuco':[113,59],'Barreiro':[271,137],'Itaim Paulista':[213,91],'Dona Clara':[128,47],'Cosmópolis':[163,1],'Sorocaba':[202,62],'Parnamirim':[37,null],'Porto Seguro':[255,null]},
+ 'Set/26':{ clin:{'Paulista Pernambuco':[645,348],'Contagem':[1122,466],'Campina Grande':[2460,993],'Sorocaba':[965,389],'Ipatinga':[1689,655],'Dona Clara':[1720,583],'São Miguel Paulista':[2250,701],'Itaim Paulista':[2253,658],'Barreiro':[3014,862],'Cosmópolis':[145,7]},
             banho:{'Barreiro':[207,37],'Campina Grande':[144,52],'Contagem':[171,40],'Cosmópolis':[87,null],'Parnamirim':[18,null],'Dona Clara':[103,21],'Ipatinga':[139,35],'Itaim Paulista':[139,8],'Paulista Pernambuco':[31,6],'Porto Seguro':[176,null],'São Miguel Paulista':[81,24],'Sorocaba':[169,28]} }
 };
 // Banhos realizados (planilha, aba "Venda de Banhos") — contexto da tabela de utilização
@@ -239,8 +244,8 @@ const CAMPANHAS = {
  'Ago/26':[{t:'Plano',n:'Pai de Pet é 10'},{t:'Plano',n:'Mês do Pet Tranquilo'}],
  'Set/26':[{t:'Plano',n:'Aniversário Pet de Todos'}]
 };
-const FONTES = 'Fontes: planilha "Venda e Fat. (Plano e Clínica)" · BI Quantidade de planos por unidade · BI Faturamento por unidade (Clínica e Plano) · BI Uso Clínica (utilização Clínica e Plano Banho).';
-const OBS_DADOS = {'Jun/26':'Em Jun/26 a soma das unidades no Fat. Clínica (R$ 1.178.193) fica R$ 3.724 abaixo do total da rede informado no BI (R$ 1.181.917).'};
+const FONTES = 'Fontes: planilha "Venda e Fat. (Plano e Clínica)" · BI Quantidade de planos por unidade · BI Faturamento por unidade (Clínica e Plano) · BI PetDeTodosTático (utilização Clínica) · BI Uso Clínica (utilização Plano Banho).';
+const OBS_DADOS = {'Set/26':'% Utilização da Clínica recalculada em 30/10/2026 em toda a série: CPFs que usaram a clínica no mês ÷ CPFs que pagaram no mês anterior. Cosmópolis entra a partir de Set/26 (início dos atendimentos na clínica).','Jun/26':'Em Jun/26 a soma das unidades no Fat. Clínica (R$ 1.178.193) fica R$ 3.724 abaixo do total da rede informado no BI (R$ 1.181.917).'};
 
 /* ═══════════════════════ helpers ═══════════════════════ */
 const N=MESES.length;
@@ -275,7 +280,7 @@ function renderGeral(){
   h+=kpiCard('Fat. Clínica',C.clin,brlK(REDE.fatClinica[i]),[l('vs '+(mp||'—'),p!=null?vr(REDE.fatClinica[i],REDE.fatClinica[p]):null),l('vs 2025',vr(REDE.fatClinica[i],ANO_2025.fatClin[i]))]);
   h+=kpiCard('Fat. Plano',C.pl,brlK(REDE.fatPlano[i]),[l('vs '+(mp||'—'),p!=null?vr(REDE.fatPlano[i],REDE.fatPlano[p]):null),l('vs 2025',vr(REDE.fatPlano[i],ANO_2025.fatPlano[i]))]);
   h+=kpiCard('Planos vendidos',null,int(REDE.vendaPlanos[i]),[l('vs '+(mp||'—'),p!=null?vr(REDE.vendaPlanos[i],REDE.vendaPlanos[p]):null),l('vs 2025',vr(REDE.vendaPlanos[i],ANO_2025.planos[i]))]);
-  h+=kpiCard('Utilização Clínica',C.clin,uc===undefined?'<span class="na">não medido</span>':pct(uc),[uc!==undefined&&ucp!==undefined?l('vs '+mp,uc-ucp,true):'<span class="na">safra do mês · uso no M0</span>']);
+  h+=kpiCard('Utilização Clínica',C.clin,uc===undefined?'<span class="na">não medido</span>':pct(uc),[uc!==undefined&&ucp!==undefined?l('vs '+mp,uc-ucp,true):'<span class="na">usaram no mês ÷ pagaram no mês anterior</span>']);
   h+=kpiCard('Utilização Plano Banho',C.pl,ub===undefined?'<span class="na">não medido</span>':pct(ub),[ub!==undefined&&ubp!==undefined?l('vs '+mp,ub-ubp,true):'<span class="na">safra do mês · uso no M0</span>']);
   document.getElementById('kpis').innerHTML=h;
   // campanhas + destaques automáticos
@@ -349,7 +354,7 @@ function renderQuadro(){
   const rc=util(m,'clin'),rb=util(m,'banho');
   h+=`<tr class="tot"><td>Rede</td><td>${int(REDE.vendaPlanos[i])}</td><td>${brl(REDE.fatClinica[i])}</td><td>${brl(REDE.fatPlano[i])}</td><td>${brl(tot)}</td><td>100%</td><td>${rc===undefined?'—':pct(rc)}</td><td>${rb===undefined?'—':pct(rb)}</td></tr></tbody>`;
   document.getElementById('quadro').innerHTML=h;
-  document.getElementById('qNote').innerHTML='Variações exibidas quando a base do mês anterior é relevante (acima de R$ 1 mil). Utilização: safra do mês, uso no próprio mês (M0), BI Uso Clínica.'+(OBS_DADOS[m]?'<br>⚠ '+OBS_DADOS[m]:'');
+  document.getElementById('qNote').innerHTML='Variações exibidas quando a base do mês anterior é relevante (acima de R$ 1 mil). Utilização Clínica: CPFs que usaram a clínica no mês ÷ CPFs que pagaram no mês anterior. Plano Banho: safra do mês, uso no M0.'+(OBS_DADOS[m]?'<br>⚠ '+OBS_DADOS[m]:'');
 }
 function renderFicha(){
   const u=UNIDADES.find(x=>x.n===document.getElementById('unSel').value)||UNIDADES[0]; const i=M,p=i>0?i-1:null,m=MESES[i];
@@ -400,17 +405,17 @@ function renderUtil(){
   const aviso=k!==M?' (último mês com utilização disponível)':'';
   const rc=util(m,'clin'), rb=util(m,'banho');
   const base=t=>sum(Object.values(UTIL[m][t]).map(x=>x[0])), usos=t=>sum(Object.values(UTIL[m][t]).map(x=>x[1]||0));
-  let h=kpiCard('Utilização Clínica · '+m,C.clin,pct(rc),[pm?`<span>${dl(rc-util(pm,'clin'),true)} vs ${pm}</span>`:'',`<span class="na">${int(usos('clin'))} de ${int(base('clin'))} clientes da safra</span>`]);
+  let h=kpiCard('Utilização Clínica · '+m,C.clin,pct(rc),[pm?`<span>${dl(rc-util(pm,'clin'),true)} vs ${pm}</span>`:'',`<span class="na">${int(usos('clin'))} de ${int(base('clin'))} CPFs aptos (pagaram no mês anterior)</span>`]);
   h+=kpiCard('Utilização Plano Banho · '+m,C.pl,pct(rb),[pm?`<span>${dl(rb-util(pm,'banho'),true)} vs ${pm}</span>`:'',`<span class="na">${int(usos('banho'))} de ${int(base('banho'))} planos com banho</span>`]);
   const cl=Object.entries(UTIL[m].clin).filter(x=>x[1][1]!=null).length, bn=Object.entries(UTIL[m].banho).filter(x=>x[1][1]!=null).length;
-  h+=kpiCard('Unidades com uso registrado',null,'Clínica '+cl+' · Banho '+bn,['<span class="na">de '+Object.keys(UTIL[m].clin).length+' unidades com base na safra</span>']);
+  h+=kpiCard('Unidades com uso registrado',null,'Clínica '+cl+' · Banho '+bn,['<span class="na">de '+Object.keys(UTIL[m].clin).length+' unidades com clínica em operação</span>']);
   document.getElementById('utKpis').innerHTML=h;
   const bar=(id,tipo,cor,subId)=>{ const rows=Object.entries(UTIL[m][tipo]).filter(([u,x])=>x[1]!=null).map(([u,x])=>({u,v:x[1]/x[0],b:x[0],us:x[1],vp:pm&&UTIL[pm][tipo][u]&&UTIL[pm][tipo][u][1]!=null?UTIL[pm][tipo][u][1]/UTIL[pm][tipo][u][0]:null})).sort((a,b)=>b.v-a.v);
     const red=util(m,tipo);
     document.getElementById(subId).innerHTML=m+aviso+' · linha tracejada = média da rede ('+pct(red)+')'+(pm?' · barra clara = '+pm:'');
     const ds=[{label:m,data:rows.map(r=>r.v),backgroundColor:cor,...BAR}]; if(pm) ds.push({label:pm,data:rows.map(r=>r.vp),backgroundColor:cor+'4D',...BAR});
     mk(id,{type:'bar',data:{labels:rows.map(r=>r.u),datasets:ds},plugins:[{id:'avg',afterDatasetsDraw(c){const x=c.scales.x.getPixelForValue(red),a=c.chartArea,ctx=c.ctx;ctx.save();ctx.strokeStyle='#1D2433';ctx.setLineDash([4,4]);ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(x,a.top);ctx.lineTo(x,a.bottom);ctx.stroke();ctx.restore();}}],
-      options:{indexAxis:'y',maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+pct(c.raw),footer:it=>{const r=rows[it[0].dataIndex];return r.us+' de '+r.b+' clientes'+(r.vp!=null?' · '+((r.v-r.vp)*100).toFixed(1).replace('.',',')+' p.p. vs '+pm:'');}}}},
+      options:{indexAxis:'y',maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+pct(c.raw),footer:it=>{const r=rows[it[0].dataIndex];return r.us+' de '+r.b+(tipo==='clin'?' CPFs aptos':' clientes')+(r.vp!=null?' · '+((r.v-r.vp)*100).toFixed(1).replace('.',',')+' p.p. vs '+pm:'');}}}},
       scales:{x:{grid:GRID,border:{display:false},beginAtZero:true,ticks:{callback:v=>Math.round(v*100)+'%'}},y:{grid:{display:false}}}}}); };
   bar('cUtC','clin',C.clin,'utcSub'); bar('cUtB','banho',C.pl,'utbSub');
   const um=MESES.filter(x=>UTIL[x]);
@@ -420,7 +425,7 @@ function renderUtil(){
   const us=[...new Set([...Object.keys(UTIL[m].clin),...Object.keys(UTIL[m].banho)])].sort((a,b)=>(util(m,'clin',b)??-1)-(util(m,'clin',a)??-1));
   const cell=(t,u)=>{const x=UTIL[m][t][u]; if(!x) return '<td class="na">—</td><td class="na">—</td><td class="na">—</td>'; return `<td>${int(x[0])}</td><td>${x[1]==null?'<span class="na">0</span>':int(x[1])}</td><td><b>${x[1]==null?'<span class="na">sem uso</span>':pct(x[1]/x[0])}</b></td>`;};
   const br=BANHOS_REALIZADOS[m]||{};
-  let t=`<thead><tr><th>Unidade</th><th>Base safra · Clínica</th><th>Utilizaram</th><th>% Clínica</th><th>Base safra · Banho</th><th>Utilizaram</th><th>% Plano Banho</th><th>Banhos realizados</th></tr></thead><tbody>`;
+  let t=`<thead><tr><th>Unidade</th><th>Aptos · Clínica</th><th>Utilizaram</th><th>% Clínica</th><th>Base safra · Banho</th><th>Utilizaram</th><th>% Plano Banho</th><th>Banhos realizados</th></tr></thead><tbody>`;
   us.forEach(u=>t+=`<tr><td class="u">${u}</td>${cell('clin',u)}${cell('banho',u)}<td>${br[u]!=null?int(br[u]):'<span class="na">—</span>'}</td></tr>`);
   t+=`<tr class="tot"><td>Rede</td><td>${int(base('clin'))}</td><td>${int(usos('clin'))}</td><td>${pct(rc)}</td><td>${int(base('banho'))}</td><td>${int(usos('banho'))}</td><td>${pct(rb)}</td><td>${Object.keys(br).length?int(sum(Object.values(br))):'—'}</td></tr></tbody>`;
   document.getElementById('tUt').innerHTML=t;
