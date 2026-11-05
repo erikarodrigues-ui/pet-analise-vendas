@@ -185,12 +185,12 @@ footer a{color:var(--clin)}
    6. ANO_2025: preencher o mês correspondente de 2025 se ainda estiver null.
    Nunca apagar meses anteriores. Dado ausente = null (nunca estimar).
    ════════════════════════════════════════════════════════════════════ */
-const ATUALIZADO_EM = '04/11/2026';
+const ATUALIZADO_EM = '05/11/2026';
 const MESES      = ['Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26','Ago/26','Set/26','Out/26'];
 const DIAS_UTEIS = [27,24,26,26,26,26,27,26,25,26];
 const REDE = {
   fatClinica:  [879312.72,848652.47,1013310.18,1004936.04,1026980.34,1181917.44,1327208.53,1392078.14,1194074.47,1342348.61],
-  fatPlano:    [437073.57,423338.56,480962.19,477913.16,518574.29,516238.31,534722.13,600207.01,574219.29,649612.82],
+  fatPlano:    [437073.57,423338.56,480962.19,477913.16,518574.29,516238.31,534722.13,600207.01,574219.29,649572.92],
   vendaPlanos: [1162,1116,1305,1711,1252,1862,2254,1765,2133,1898]
 };
 const ANO_2025 = {  // mesmos meses de 2025 (aba YoY da planilha) · Nov–Dez a preencher
@@ -199,11 +199,10 @@ const ANO_2025 = {  // mesmos meses de 2025 (aba YoY da planilha) · Nov–Dez a
   fatClin: [654432,623604,620829,592541,684530,581020,578155,669286,707000,781457,null,null]
 };
 const UNIDADES = [
- {n:'Artur Nogueira',      inaug:'2026-10', planos:[0,0,0,0,0,0,0,0,0,54], fatPlano:[0,0,0,0,0,0,0,0,0,0], fatClin:[0,0,0,0,0,0,0,0,0,0]},
  {n:'Barreiro',            inaug:'2022-11', planos:[159,159,161,201,176,197,243,212,271,186], fatPlano:[109252.52,102674.09,106864.19,108185.91,113360.48,106714.25,107547.73,115141.94,108221.63,119068.04], fatClin:[162016.03,154269.16,205525.8,195764.41,189228.05,201803.76,196594.66,194975.72,172527.35,200217.62]},
  {n:'Campina Grande',      inaug:'2025-09', planos:[236,219,262,220,164,252,284,212,222,202], fatPlano:[63310.7,64114.24,76719.2,78298.56,82664.98,79118.54,83836.42,91328.59,87107.38,91675.11], fatClin:[221462.6,201816.68,264329.41,251270.32,268071.1,227935.2,287717.96,322357.97,271013.14,292547.09]},
  {n:'Contagem',            inaug:'2026-05', planos:[0,0,114,289,227,235,291,260,212,145], fatPlano:[0,0,66.23,218.84,2860.11,20487.6,27259,39697.7,38206.4,47052.58], fatClin:[0,0,0,0,36816.13,108606.2,103766.01,136711.69,100479.52,85651.42]},
- {n:'Cosmópolis',          inaug:'2026-09', planos:[0,0,0,138,37,71,126,86,165,160], fatPlano:[0,0,0,0.11,0,0,0,39.96,129.38,13192.98], fatClin:[0,0,0,0,0,0,0,0,391.32,51999.6]},
+ {n:'Cosmópolis',          inaug:'2026-09', planos:[0,0,0,138,37,71,126,86,165,160], fatPlano:[0,0,0,0.11,0,0,0,39.96,129.38,13153.08], fatClin:[0,0,0,0,0,0,0,0,391.32,51999.6]},
  {n:'Dona Clara',          inaug:'2023-05', planos:[117,135,109,135,64,155,146,109,128,94], fatPlano:[61377.44,58608.35,65434.3,61676.23,67906.93,61626.15,59307.72,64254.95,59100.19,64148.06], fatClin:[111579.66,113384.85,128842.02,123920.69,137308.71,130796.25,145870.11,144131.5,115914.79,100092.89]},
  {n:'Ipatinga',            inaug:'2025-10', planos:[265,241,217,176,148,189,210,123,172,137], fatPlano:[39578.64,41890.62,49350.7,48534.38,54493.34,56310.09,57906.34,63285.61,60623.55,65474.9], fatClin:[108197.52,117438.2,131352.6,132434.87,121453.17,126297.74,136446.43,126842.34,134827.33,133132.38]},
  {n:'Itaim Paulista',      inaug:'2023-09', planos:[110,91,211,232,187,248,320,236,215,152], fatPlano:[66145.07,59065.12,76494.27,71520.69,79288.46,75544.8,77112.63,83326.65,82345.94,88061.35], fatClin:[109718.99,110233.14,115350.5,124156.36,118452.95,129274.45,128419.09,145995.81,110827.5,147024.08]},
@@ -211,7 +210,8 @@ const UNIDADES = [
  {n:'Parnamirim',          inaug:'2026-11', planos:[0,0,0,0,0,0,0,0,37,132], fatPlano:[0,0,0,0,0,0,0,0,25,0], fatClin:[0,0,0,0,0,0,0,0,0,0]},
  {n:'Porto Seguro',        inaug:'2026-10', planos:[0,0,0,0,0,0,0,63,255,300], fatPlano:[0,0,0,0,0,0,0,84.85,164.2,2039.9], fatClin:[0,0,0,0,0,0,0,0,0,25169.22]},
  {n:'São Miguel Paulista', inaug:'2022-05', planos:[138,129,88,101,80,136,144,102,120,149], fatPlano:[96247.46,92110.37,94317.15,89833.27,90649.29,86393.48,82001.07,84999.38,83144.42,90336.32], fatClin:[166337.92,140862.07,143125.63,142844.03,118628.11,124549.44,134357.43,126308.99,98867.77,114596.43]},
- {n:'Sorocaba',            inaug:'2026-02', planos:[83,69,94,112,71,213,310,271,223,103], fatPlano:[1156.02,4867.85,10454.15,12809.15,14568.3,15435.9,20970.67,34485.86,31459.22,39442.79], fatClin:[0,10648.37,24784.22,34545.36,37022.12,43964.38,62953.87,66812.83,55324.09,53850.08]}
+ {n:'Sorocaba',            inaug:'2026-02', planos:[83,69,94,112,71,213,310,271,223,103], fatPlano:[1156.02,4867.85,10454.15,12809.15,14568.3,15435.9,20970.67,34485.86,31459.22,39442.79], fatClin:[0,10648.37,24784.22,34545.36,37022.12,43964.38,62953.87,66812.83,55324.09,53850.08]},
+ {n:'Artur Nogueira',      inaug:'2026-10', planos:[0,0,0,0,0,0,0,0,0,54], fatPlano:[0,0,0,0,0,0,0,0,0,0], fatClin:[0,0,0,0,0,0,0,0,0,0]}
 ];
 // Utilização — [base, usos]; usos null = sem uso registrado
 //   clin  = PetDeTodosTático: [CPFs Ativos do mês, CPFs que usaram a clínica no mês (Vetus)].
@@ -249,7 +249,7 @@ const CAMPANHAS = {
  'Out/26':[{t:'Plano',n:'Pet Rasgou, preço baixou'}]
 };
 const FONTES = 'Fontes: planilha "Venda e Fat. (Plano e Clínica)" · BI Quantidade de planos por unidade · BI Faturamento por unidade (Clínica e Plano) · BI PetDeTodosTático (utilização Clínica) · BI Uso Clínica (utilização Plano Banho).';
-const OBS_DADOS = {'Out/26':'Utilização da Clínica: a base de CPFs ativos caiu de setembro para outubro em Barreiro, Dona Clara, Itaim Paulista e São Miguel Paulista, o que eleva o % dessas unidades e da rede; compare setembro e outubro com cautela. A rede soma as unidades: no filtro Todos o BI mostra 4.895 usos em Out/26, contra 6.246 na soma das unidades. Plano Banho parcial — BI Uso Clínica atualizado só até 22/10/2026 (safra com 694 planos). Fechamento pelos BIs, sem conferência com a planilha, que ainda não tem outubro; banhos realizados de outubro pendentes. Parnamirim e Artur Nogueira sem uso registrado na clínica, fora do indicador. Os BIs revisaram Set/26 após a publicação (Fat. Clínica R$ 1.217.790 vs R$ 1.194.074; planos 2.116 vs 2.133); a série publicada de Set/26 não foi alterada.','Set/26':'% Utilização da Clínica recalculada em 04/11/2026 em toda a série (Jun–Out/26): CPFs que usaram a clínica no mês ÷ CPFs ativos do mês. Cosmópolis entra a partir de Set/26 (início dos atendimentos na clínica).','Jun/26':'Em Jun/26 a soma das unidades no Fat. Clínica (R$ 1.178.193) fica R$ 3.724 abaixo do total da rede informado no BI (R$ 1.181.917).'};
+const OBS_DADOS = {'Out/26':'Utilização da Clínica: a base de CPFs ativos caiu de setembro para outubro em Barreiro, Dona Clara, Itaim Paulista e São Miguel Paulista, o que eleva o % dessas unidades e da rede; compare setembro e outubro com cautela. A rede soma as unidades: no filtro Todos o BI mostra 4.895 usos em Out/26, contra 6.246 na soma das unidades. Plano Banho parcial — BI Uso Clínica atualizado só até 22/10/2026 (safra com 694 planos). Faturamento e planos conferidos com a planilha em 05/11/2026; banhos realizados de outubro pendentes. Parnamirim e Artur Nogueira sem uso registrado na clínica, fora do indicador.','Set/26':'% Utilização da Clínica recalculada em 04/11/2026 em toda a série (Jun–Out/26): CPFs que usaram a clínica no mês ÷ CPFs ativos do mês. Cosmópolis entra a partir de Set/26 (início dos atendimentos na clínica).','Jun/26':'Em Jun/26 a soma das unidades no Fat. Clínica (R$ 1.178.193) fica R$ 3.724 abaixo do total da rede informado no BI (R$ 1.181.917).'};
 
 /* ═══════════════════════ helpers ═══════════════════════ */
 const N=MESES.length;
