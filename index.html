@@ -162,6 +162,17 @@ footer a{color:var(--clin)}
       <div class="ch"><canvas id="cYoyPl"></canvas></div></div>
   </div>
   <div class="card"><h3>Comparativo mensal</h3><div class="sub">Mesmos meses, ano contra ano</div><div class="tw"><table id="tYoy"></table></div></div>
+  <div class="card">
+    <div class="toolbar"><div><h3>Comparativo mensal por unidade</h3><div class="sub" id="yuSub">Mesmos meses, ano contra ano</div></div>
+      <label class="na">Unidade <select id="yuSel"></select></label></div>
+    <div class="seg" id="yuSeg"><button class="on" data-m="planos">Planos vendidos</button><button data-m="fatTot">Fat. total</button><button data-m="fatClin">Fat. Clínica</button><button data-m="fatPlano">Fat. Plano</button></div>
+    <div class="legend"><span><i id="yuSw" style="background:var(--plano)"></i>2026</span><span><i style="background:var(--gray)"></i>2025</span></div>
+    <div class="ch"><canvas id="cYoyUn"></canvas></div>
+    <div class="tw" style="margin-top:12px"><table id="tYoyUn"></table></div>
+  </div>
+  <div class="card"><h3>Acumulado por unidade · 2025 × 2026</h3><div class="sub" id="yaSub"></div>
+    <div class="tw"><table id="tYoyAc"></table></div>
+    <div class="note"><b>Como ler:</b> o comparativo usa só os meses em que a unidade operava nos dois anos (mesma base). <b>n.c.</b> = não comparável: a unidade não operava no mês de 2025 ou estava em implantação (valor de 2025 abaixo de 10% do de 2026). <b>Base parcial</b> = unidade que começou a operar no meio de 2025: a variação compara meses de implantação e tende a sair inflada ou distorcida. Unidades inauguradas em 2026 aparecem sem base 2025. <b>Pontos a conferir na planilha:</b> a soma das unidades em 2025 difere do total da rede da aba YoY em Jul–Out/25 (a tabela da rede acima segue a aba YoY); Itaim Paulista Jul/25 Fat. Clínica consta R$ 137.420 na aba por unidade e é citado como atípico (R$ 13.741) na aba YoY; São Miguel Paulista tem Fat. Plano idêntico em Jun/25 e Jul/25 (R$ 95.551,96); Sorocaba Out–Dez/25 tem Fat. Plano igual ao nº de planos (R$ 23, 44, 48).</div></div>
 </section>
 </main>
 
@@ -183,6 +194,7 @@ footer a{color:var(--clin)}
       banho = BI Uso Clínica, safra do mês, M0.
    5. CAMPANHAS: incluir a(s) campanha(s) do mês.
    6. ANO_2025: preencher o mês correspondente de 2025 se ainda estiver null.
+      UN_2025 já traz Jan–Dez/25 por unidade (nada a preencher).
    Nunca apagar meses anteriores. Dado ausente = null (nunca estimar).
    ════════════════════════════════════════════════════════════════════ */
 const ATUALIZADO_EM = '06/11/2026';
@@ -197,6 +209,16 @@ const ANO_2025 = {  // mesmos meses de 2025 (aba YoY da planilha) · Nov–Dez a
   planos:  [556,585,378,709,538,581,505,804,1342,1045,null,null],
   fatPlano:[306822,322137,317288,295881,297331,336386,341650,334526,311331,366280,null,null],
   fatClin: [654432,623604,620829,592541,684530,581020,578155,669286,707000,781457,null,null]
+};
+// 2025 por unidade (planilha "Venda e Fat.", bloco 2025 · Jan–Dez) · null = unidade não operava / sem dado
+const UN_2025 = {
+ 'Barreiro':           {planos:[165,179,116,183,136,132,160,130,207,137,220,172], fatPlano:[94280.63,101023.2,99109.83,90800.61,97109.43,104174.05,112901.07,104684,95310.04,109284.77,98435.34,102902.54], fatClin:[178744.98,185805.27,176579.36,154412.25,200257.83,158068.59,195168,181732.95,179182.06,177345.92,166366.03,175501.22]},
+ 'Dona Clara':         {planos:[128,124,90,145,122,121,123,102,195,125,133,127], fatPlano:[43296.4,45068.7,45206.5,43586.5,50069.72,59124.49,55664.69,56691.48,53960.36,60731.04,54088.39,57788.53], fatClin:[139831.19,119735.29,119707.11,101312.78,122608.72,132859.61,181088.27,150209.09,146348.04,167619.09,130144.84,122679.91]},
+ 'Itaim Paulista':     {planos:[107,154,97,204,111,164,109,104,194,80,140,90], fatPlano:[73731.77,78281.37,76134.37,72103.09,59307.7,77535.62,77532.62,73108.86,67717.14,60743.77,61857.36,62797.92], fatClin:[142768.31,144494.02,162703.46,154222.43,144524.63,126847.18,137419.81,122316.84,122260.96,118275.58,102041,113790.68]},
+ 'São Miguel Paulista':{planos:[156,128,75,177,169,164,113,133,190,119,184,110], fatPlano:[95513.5,97763.35,96837.57,89391.25,90844.47,95551.96,95551.96,100373.48,88852.87,96280.39,92091.77,96885.88], fatClin:[193087.4,173569.1,161838.91,182593.54,217138.79,163244.35,188156.83,164438.23,176518.83,167290.41,154654.86,161000.23]},
+ 'Campina Grande':     {planos:[null,null,null,null,null,null,192,308,429,246,364,262], fatPlano:[null,null,null,null,null,null,2024,173.81,5778.84,39192.03,39668.99,53582.91], fatClin:[null,null,null,null,null,null,9218.39,50588.86,82690.28,150295.65,185361.38,223615.41]},
+ 'Ipatinga':           {planos:[null,null,null,null,null,null,null,null,123,315,229,276], fatPlano:[null,null,null,null,null,null,null,null,120.79,315,5176.28,25452.2], fatClin:[null,null,null,null,null,null,null,null,null,null,70371.41,100371.41]},
+ 'Sorocaba':           {planos:[null,null,null,null,null,null,null,null,null,23,44,48], fatPlano:[null,null,null,null,null,null,null,null,null,23,44,48], fatClin:[null,null,null,null,null,null,null,null,null,null,null,null]}
 };
 const UNIDADES = [
  {n:'Barreiro',            inaug:'2022-11', planos:[159,159,161,201,176,197,243,212,271,186], fatPlano:[109252.52,102674.09,106864.19,108185.91,113360.48,106714.25,107547.73,115141.94,108221.63,119068.04], fatClin:[162016.03,154269.16,205525.8,195764.41,189228.05,201803.76,196594.66,194975.72,172527.35,200217.62]},
@@ -456,15 +478,58 @@ function renderYoy(){
   document.getElementById('tYoy').innerHTML=t;
 }
 
+/* ═════════ 2025 × 2026 · por unidade ═════════ */
+let YU='planos';
+const YU_LB={planos:'Planos vendidos',fatTot:'Fat. total (Clínica + Plano)',fatClin:'Fat. Clínica',fatPlano:'Fat. Plano'};
+const YU_COR={planos:C.pl,fatTot:C.navy,fatClin:C.clin,fatPlano:C.pl};
+function v26(u,k,i){ return k==='fatTot'?u.fatClin[i]+u.fatPlano[i]:u[k][i]; }
+function v25(n,k,i){ const b=UN_2025[n]; if(!b) return null; if(k==='fatTot'){ const c=b.fatClin[i],p=b.fatPlano[i]; return c==null&&p==null?null:(c||0)+(p||0);} return b[k][i]; }
+function comparavel(a25,a26){ return a25!=null&&a25>0&&a26!=null&&a26>0&&a25>=0.1*a26; }
+const fmtK=k=>k==='planos'?int:brl;
+function renderYoyUn(){
+  const sel=document.getElementById('yuSel'), u=UNIDADES.find(x=>x.n===sel.value)||UNIDADES[0], k=YU, f=fmtK(k);
+  const lab=MESES.map(m=>m.slice(0,3)), d26=MESES.map((_,i)=>v26(u,k,i)), d25=MESES.map((_,i)=>v25(u.n,k,i));
+  document.getElementById('yuSw').style.background=YU_COR[k];
+  document.getElementById('yuSub').textContent=YU_LB[k]+' · mesmos meses, ano contra ano · inaugurada em '+u.inaug.split('-').reverse().join('/')+(UN_2025[u.n]?'':' · sem operação em 2025');
+  mk('cYoyUn',{type:'bar',data:{labels:lab,datasets:[{label:'2025',data:d25,backgroundColor:C.gray,...BAR},{label:'2026',data:d26,backgroundColor:YU_COR[k],...BAR}]},
+    options:{maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.raw==null?'sem operação':f(c.raw)),
+      footer:it=>{const i=it[0].dataIndex; return comparavel(d25[i],d26[i])?'Δ '+((d26[i]/d25[i]-1)*100).toFixed(1).replace('.',',')+'%':'Δ n.c.';}}}},
+      scales:{x:{grid:{display:false}},y:{grid:GRID,border:{display:false},beginAtZero:true,ticks:{callback:v=>k==='planos'?v:brlK(v)}}}}});
+  const dc=i=>comparavel(d25[i],d26[i])?dl(vr(d26[i],d25[i])):'<span class="na">n.c.</span>';
+  const ix=MESES.map((_,i)=>i).filter(i=>comparavel(d25[i],d26[i]));
+  const a25=sum(ix.map(i=>d25[i])), a26=sum(ix.map(i=>d26[i]));
+  let t='<thead><tr><th></th>'+lab.map(l=>`<th>${l}</th>`).join('')+'<th>Mesma base</th></tr></thead><tbody>';
+  t+='<tr><td class="u">2025</td>'+d25.map(v=>`<td>${v==null?'<span class="na">—</span>':f(v)}</td>`).join('')+`<td>${ix.length?f(a25):'—'}</td></tr>`;
+  t+='<tr><td class="u">2026</td>'+d26.map(v=>`<td>${f(v)}</td>`).join('')+`<td>${ix.length?f(a26):'—'}</td></tr>`;
+  t+='<tr class="tot"><td>Δ</td>'+MESES.map((_,i)=>`<td>${dc(i)}</td>`).join('')+`<td>${ix.length?dl(vr(a26,a25)):'<span class="na">n.c.</span>'}</td></tr></tbody>`;
+  document.getElementById('tYoyUn').innerHTML=t;
+}
+function renderYoyAc(){
+  const k=YU, f=fmtK(k);
+  document.getElementById('yaSub').textContent=YU_LB[k]+' · Jan–'+MESES[N-1].slice(0,3)+' · só meses comparáveis (mesma base) · primeiro as unidades com o período completo, depois as de base parcial, cada grupo ordenado pela variação';
+  const rows=UNIDADES.map(u=>{ const ix=MESES.map((_,i)=>i).filter(i=>comparavel(v25(u.n,k,i),v26(u,k,i)));
+    const a25=sum(ix.map(i=>v25(u.n,k,i))), a26=sum(ix.map(i=>v26(u,k,i))), tot26=sum(MESES.map((_,i)=>v26(u,k,i)));
+    return {u,ix,a25,a26,tot26,v:ix.length?vr(a26,a25):null}; });
+  const grp=r=>r.ix.length===N?0:r.ix.length?1:2; rows.sort((a,b)=>grp(a)-grp(b)||(b.v??-99)-(a.v??-99)||b.tot26-a.tot26);
+  let t='<thead><tr><th>Unidade</th><th>Meses comparados</th><th>2025</th><th>2026 (mesmos meses)</th><th>Δ</th><th>2026 total Jan–'+MESES[N-1].slice(0,3)+'</th></tr></thead><tbody>';
+  rows.forEach(r=>{ const per=r.ix.length?(r.ix.length===N?'Jan–'+MESES[N-1].slice(0,3):MESES[r.ix[0]].slice(0,3)+'–'+MESES[r.ix[r.ix.length-1]].slice(0,3)+(r.ix.length<r.ix[r.ix.length-1]-r.ix[0]+1?' (parcial)':'')):'';
+    t+=`<tr><td class="u">${r.u.n}${r.ix.length===N?'':r.ix.length?'<span class="tag">base parcial</span>':'<span class="tag nova">sem base 2025</span>'}</td><td>${r.ix.length?per+' · '+r.ix.length+(r.ix.length>1?' meses':' mês'):'<span class="na">—</span>'}</td><td>${r.ix.length?f(r.a25):'<span class="na">—</span>'}</td><td>${r.ix.length?f(r.a26):'<span class="na">—</span>'}</td><td>${r.ix.length?dl(r.v):'<span class="na">n.c.</span>'}</td><td>${f(r.tot26)}</td></tr>`; });
+  const c=rows.filter(r=>r.ix.length), s25=sum(c.map(r=>r.a25)), s26=sum(c.map(r=>r.a26));
+  t+=`<tr class="tot"><td>Unidades comparáveis (${c.length})</td><td></td><td>${f(s25)}</td><td>${f(s26)}</td><td>${dl(vr(s26,s25))}</td><td>${f(sum(rows.map(r=>r.tot26)))}</td></tr></tbody>`;
+  document.getElementById('tYoyAc').innerHTML=t;
+}
+
 /* ═══════════════════════ navegação ═══════════════════════ */
 let TAB='geral';
-const R={geral:renderGeral,unidades:()=>{renderRank();renderQuadro();renderFicha();},evolucao:renderEvolucao,utilizacao:renderUtil,yoy:renderYoy};
+const R={geral:renderGeral,unidades:()=>{renderRank();renderQuadro();renderFicha();},evolucao:renderEvolucao,utilizacao:renderUtil,yoy:()=>{renderYoy();renderYoyUn();renderYoyAc();}};
 function show(t){ TAB=t; document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t)); document.querySelectorAll('.tab').forEach(s=>s.classList.toggle('on',s.id==='t-'+t)); R[t](); try{localStorage.setItem('pdt-tab',t)}catch(e){} }
 document.getElementById('nav').addEventListener('click',e=>{const b=e.target.closest('button'); if(b) show(b.dataset.t);});
 document.getElementById('rkSeg').addEventListener('click',e=>{const b=e.target.closest('button'); if(!b) return; RK=b.dataset.m; document.querySelectorAll('#rkSeg button').forEach(x=>x.classList.toggle('on',x===b)); renderRank();});
 const ms=document.getElementById('mesSel'); MESES.forEach((m,i)=>ms.add(new Option(m,i))); ms.value=M;
 ms.addEventListener('change',()=>{M=+ms.value; R[TAB]();});
 const usel=document.getElementById('unSel'); UNIDADES.forEach(u=>usel.add(new Option(u.n,u.n))); usel.addEventListener('change',renderFicha);
+const ysel=document.getElementById('yuSel'); [...UNIDADES].sort((a,b)=>a.n.localeCompare(b.n,'pt')).forEach(u=>ysel.add(new Option(u.n,u.n))); ysel.value='Barreiro'; ysel.addEventListener('change',renderYoyUn);
+document.getElementById('yuSeg').addEventListener('click',e=>{const b=e.target.closest('button'); if(!b) return; YU=b.dataset.m; document.querySelectorAll('#yuSeg button').forEach(x=>x.classList.toggle('on',x===b)); renderYoyUn(); renderYoyAc();});
 document.getElementById('hsub').textContent='Dados até '+MESES[N-1]+' · atualizado em '+ATUALIZADO_EM;
 document.getElementById('fontes').textContent=FONTES;
 let t0='geral'; try{const s=localStorage.getItem('pdt-tab'); if(s&&R[s]) t0=s;}catch(e){}
