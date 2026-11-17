@@ -129,6 +129,14 @@ footer a{color:var(--clin)}
 
 <!-- ═════════ EVOLUÇÃO MENSAL ═════════ -->
 <section class="tab" id="t-evolucao">
+  <div class="card">
+    <div class="toolbar"><div><h3>Faturamento × planos vendidos</h3><div class="sub" id="cbSub"></div></div>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <label class="na"><input type="checkbox" id="cb25"> Planos 2025</label>
+        <label class="na">Visão <select id="cbSel"></select></label></div></div>
+    <div class="legend"><span><i style="background:var(--clin)"></i>Fat. Clínica (R$)</span><span><i style="background:var(--plano)"></i>Fat. Plano (R$)</span><span><i style="background:var(--navy);height:3px;width:16px;border-radius:2px;vertical-align:3px"></i>Planos vendidos (eixo direito)</span><span id="cb25Lg" style="display:none"><i style="background:none;border-top:2px dashed #9AA3AF;height:0;width:16px;border-radius:0;vertical-align:3px"></i>Planos vendidos 2025</span></div>
+    <div class="ch tall"><canvas id="cCombo"></canvas></div>
+  </div>
   <div class="card"><h3>Resultado mensal da rede</h3><div class="sub">Meses fechados · variação sobre o mês anterior</div>
     <div class="tw"><table id="tMensal"></table></div></div>
   <div class="card"><h3>Planos vendidos por unidade · mês a mês</h3><div class="sub">Cor mais intensa = maior volume na linha da unidade</div>
@@ -401,6 +409,26 @@ function renderFicha(){
 }
 
 /* ═══════════════════════ EVOLUÇÃO MENSAL ═══════════════════════ */
+function renderCombo(){
+  const v=document.getElementById('cbSel').value, rede=v==='__rede', u=rede?null:UNIDADES.find(x=>x.n===v);
+  const clin=MESES.map((_,i)=>rede?REDE.fatClinica[i]:u.fatClin[i]), plano=MESES.map((_,i)=>rede?REDE.fatPlano[i]:u.fatPlano[i]), pl=MESES.map((_,i)=>rede?REDE.vendaPlanos[i]:u.planos[i]);
+  const ver25=document.getElementById('cb25').checked, pl25=MESES.map((_,i)=>rede?ANO_2025.planos[i]:(UN_2025[v]?UN_2025[v].planos[i]:null));
+  document.getElementById('cb25Lg').style.display=ver25?'':'none';
+  const tc=sum(clin), tp=sum(plano), tpl=sum(pl);
+  document.getElementById('cbSub').textContent=(rede?'Rede':v)+' · '+MESES[0]+' a '+MESES[N-1]+' · Clínica '+brlK(tc)+' · Plano '+brlK(tp)+' · '+int(tpl)+' planos vendidos'+(ver25&&!rede&&!UN_2025[v]?' · sem vendas em 2025':'');
+  const ds=[
+    {type:'line',label:'Planos vendidos',data:pl,yAxisID:'y2',borderColor:C.navy,backgroundColor:C.navy,borderWidth:2.5,pointRadius:4,pointHoverRadius:6,cubicInterpolationMode:'monotone',order:0},
+    {type:'bar',label:'Fat. Clínica',data:clin,yAxisID:'y',backgroundColor:C.clin,...BAR,order:2},
+    {type:'bar',label:'Fat. Plano',data:plano,yAxisID:'y',backgroundColor:C.pl,...BAR,order:2}];
+  if(ver25) ds.splice(1,0,{type:'line',label:'Planos vendidos 2025',data:pl25,yAxisID:'y2',borderColor:'#9AA3AF',backgroundColor:'#9AA3AF',borderDash:[5,4],borderWidth:2,pointRadius:3,cubicInterpolationMode:'monotone',spanGaps:false,order:1});
+  mk('cCombo',{type:'bar',data:{labels:MESES.map(m=>m.slice(0,3)),datasets:ds},
+    options:{maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.raw==null?'—':c.dataset.yAxisID==='y2'?int(c.raw):brl(c.raw)),
+        footer:it=>{const i=it[0].dataIndex; return 'Fat. total: '+brl(clin[i]+plano[i]);}}}},
+      scales:{x:{grid:{display:false}},
+        y:{position:'left',grid:GRID,border:{display:false},beginAtZero:true,ticks:{callback:v=>brlK(v)},title:{display:true,text:'Faturamento (R$)',color:'#8A93A3',font:{size:11}}},
+        y2:{position:'right',grid:{display:false},border:{display:false},beginAtZero:true,ticks:{precision:0},title:{display:true,text:'Planos vendidos',color:'#8A93A3',font:{size:11}}}}}});
+}
 function renderEvolucao(){
   let h=`<thead><tr><th>Mês</th><th>Campanhas</th><th>Planos</th><th>Δ</th><th>Fat. Clínica</th><th>Δ</th><th>Fat. Plano</th><th>Δ</th><th>Fat. Total</th><th>Δ</th><th>Total / dia útil</th></tr></thead><tbody>`;
   MESES.forEach((m,i)=>{ const t=REDE.fatClinica[i]+REDE.fatPlano[i], tp=i?REDE.fatClinica[i-1]+REDE.fatPlano[i-1]:null;
@@ -521,13 +549,14 @@ function renderYoyAc(){
 
 /* ═══════════════════════ navegação ═══════════════════════ */
 let TAB='geral';
-const R={geral:renderGeral,unidades:()=>{renderRank();renderQuadro();renderFicha();},evolucao:renderEvolucao,utilizacao:renderUtil,yoy:()=>{renderYoy();renderYoyUn();renderYoyAc();}};
+const R={geral:renderGeral,unidades:()=>{renderRank();renderQuadro();renderFicha();},evolucao:()=>{renderCombo();renderEvolucao();},utilizacao:renderUtil,yoy:()=>{renderYoy();renderYoyUn();renderYoyAc();}};
 function show(t){ TAB=t; document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t)); document.querySelectorAll('.tab').forEach(s=>s.classList.toggle('on',s.id==='t-'+t)); R[t](); try{localStorage.setItem('pdt-tab',t)}catch(e){} }
 document.getElementById('nav').addEventListener('click',e=>{const b=e.target.closest('button'); if(b) show(b.dataset.t);});
 document.getElementById('rkSeg').addEventListener('click',e=>{const b=e.target.closest('button'); if(!b) return; RK=b.dataset.m; document.querySelectorAll('#rkSeg button').forEach(x=>x.classList.toggle('on',x===b)); renderRank();});
 const ms=document.getElementById('mesSel'); MESES.forEach((m,i)=>ms.add(new Option(m,i))); ms.value=M;
 ms.addEventListener('change',()=>{M=+ms.value; R[TAB]();});
 const usel=document.getElementById('unSel'); UNIDADES.forEach(u=>usel.add(new Option(u.n,u.n))); usel.addEventListener('change',renderFicha);
+const csel=document.getElementById('cbSel'); csel.add(new Option('Rede (todas as unidades)','__rede')); [...UNIDADES].sort((a,b)=>a.n.localeCompare(b.n,'pt')).forEach(u=>csel.add(new Option(u.n,u.n))); csel.addEventListener('change',renderCombo); document.getElementById('cb25').addEventListener('change',renderCombo);
 const ysel=document.getElementById('yuSel'); [...UNIDADES].sort((a,b)=>a.n.localeCompare(b.n,'pt')).forEach(u=>ysel.add(new Option(u.n,u.n))); ysel.value='Barreiro'; ysel.addEventListener('change',renderYoyUn);
 document.getElementById('yuSeg').addEventListener('click',e=>{const b=e.target.closest('button'); if(!b) return; YU=b.dataset.m; document.querySelectorAll('#yuSeg button').forEach(x=>x.classList.toggle('on',x===b)); renderYoyUn(); renderYoyAc();});
 document.getElementById('hsub').textContent='Dados até '+MESES[N-1]+' · atualizado em '+ATUALIZADO_EM;
